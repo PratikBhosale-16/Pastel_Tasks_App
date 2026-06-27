@@ -16,6 +16,10 @@
 - Updated logger levels to suppress verbose output in release builds.
 
 ## [Unreleased]
+- M1.4: Completed Developer Preview & Validation.
+- Added `DevPreviewScreen` showcasing all typography, colors, layout components, and widgets.
+- Updated `AppRouter` to default to developer preview route.
+- Validated complete design system via passing widget tests.
 - M1.3: Completed Application Shell.
 - Added reusable layout components: `AppScaffold`, `AppAppBar`, `AppBottomNavigation`, `AppFab`, `SectionHeader`, and `PageContainer`.
 - M1.2: Completed Component Library.

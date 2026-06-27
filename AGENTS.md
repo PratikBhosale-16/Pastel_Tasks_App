@@ -42,6 +42,49 @@ Never invent APIs.
 
 Never invent models.
 
+## Git Workflow
+
+Every completed milestone must follow:
+
+1. flutter analyze
+2. flutter test
+3. flutter build apk --debug
+
+If all pass:
+
+4. Update brain.md
+5. Update project_status.md
+6. Update changelog.md
+7. Update decision_log.md
+
+8. git status
+9. git diff
+10. git add .
+11. git commit
+
+Semantic commit examples:
+
+feat(...)
+fix(...)
+refactor(...)
+docs(...)
+build(...)
+test(...)
+chore(...)
+
+12. git push
+
+If push fails,
+stop immediately and report the error.
+
+Never force push.
+
+Never rewrite history.
+
+Never create a fork unless explicitly instructed.
+
+Never commit failing code.
+
 ## Purpose
 This file is the operating manual for AI coding assistants working in the
 PastelTasks repository.

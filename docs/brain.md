@@ -35,11 +35,10 @@
 
 # Current Milestone
 
-- Current milestone: M1.4 Developer Preview & Validation.
-- Status: Ready to begin M1.4.
-- Validation: M1.3 Application Shell is fully implemented and passes all checks.
-- Shared base components and layouts (scaffolds, app bars, bottom navigation, section headers) exist in `lib/shared/`.
-- No app features have been implemented.
+- Current milestone: M2 Task Management Core.
+- Status: Ready to begin M2.
+- Validation: M1.4 Developer Preview & Validation is fully implemented and passes all checks.
+- Developer Preview screen showcases all design system components for visual validation.
 
 # Completed
 
@@ -49,6 +48,7 @@
 - M1.1 Theme Foundation (implementation complete).
 - M1.2 Component Library (implementation complete).
 - M1.3 Application Shell (implementation complete).
+- M1.4 Developer Preview & Validation (implementation complete).
 - `main.dart` calls `bootstrap()` only.
 - `bootstrap.dart` initializes Flutter bindings, logger, Isar setup, notification service structure, ProviderScope, and App.
 - `App` uses `MaterialApp.router`.

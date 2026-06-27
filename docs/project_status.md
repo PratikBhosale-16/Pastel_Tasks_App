@@ -2,11 +2,11 @@
 
 ## Current Milestone
 
-- Milestone: M1.4
-- Name: Developer Preview & Validation
+- Milestone: M2
+- Name: Task Management Core
 - Status: Ready to start
-- Validation: M1.3 completed and verified with passing builds and tests.
-- Overall completion: 30%.
+- Validation: M1.4 completed and verified with passing builds and tests.
+- Overall completion: 40%.
 
 ## Completed
 
@@ -16,6 +16,7 @@
 - M1.1 Theme Foundation.
 - M1.2 Component Library.
 - M1.3 Application Shell.
+- M1.4 Developer Preview & Validation.
 - `lib/main.dart` calls `bootstrap()` only.
 - `lib/bootstrap/bootstrap.dart` initializes Flutter bindings, logger, Isar setup, notification service structure, ProviderScope, and App.
 - `lib/app/app.dart` provides `MaterialApp.router` with title, theme, and router config.
@@ -43,13 +44,10 @@
 - [x] M1.1: Theme Foundation (Colors, typography, spacing, radius, and Material 3 AppTheme injection)
 - [x] M1.2: Component Library (Reusable buttons, inputs, cards)
 - [x] M1.3: Application Shell (Scaffolds, app bars, nav bars)
-- [ ] M1.4: Developer Preview & Validation
+- [x] M1.4: Developer Preview & Validation
 
 ## Pending
 
-- M1.2 Base Components.
-- M1.3 Feedback Components.
-- M1.4 Validation.
 - M2 Task Management Core.
 - M3 Task Organization.
 - M4 Calendar and Reminders.
