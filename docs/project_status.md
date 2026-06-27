@@ -2,11 +2,11 @@
 
 ## Current Milestone
 
-- Milestone: M1.3
-- Name: Layouts
+- Milestone: M1.4
+- Name: Developer Preview & Validation
 - Status: Ready to start
-- Validation: M1.2 completed and verified with passing builds and tests.
-- Overall completion: 25%.
+- Validation: M1.3 completed and verified with passing builds and tests.
+- Overall completion: 30%.
 
 ## Completed
 
@@ -15,6 +15,7 @@
 - M0.3 Core Infrastructure.
 - M1.1 Theme Foundation.
 - M1.2 Component Library.
+- M1.3 Application Shell.
 - `lib/main.dart` calls `bootstrap()` only.
 - `lib/bootstrap/bootstrap.dart` initializes Flutter bindings, logger, Isar setup, notification service structure, ProviderScope, and App.
 - `lib/app/app.dart` provides `MaterialApp.router` with title, theme, and router config.
@@ -41,7 +42,8 @@
 ## Phase 1: Presentation Foundation (In Progress)
 - [x] M1.1: Theme Foundation (Colors, typography, spacing, radius, and Material 3 AppTheme injection)
 - [x] M1.2: Component Library (Reusable buttons, inputs, cards)
-- [ ] M1.3: Layouts (Scaffolds, app bars, nav bars)
+- [x] M1.3: Application Shell (Scaffolds, app bars, nav bars)
+- [ ] M1.4: Developer Preview & Validation
 
 ## Pending
 
@@ -60,9 +62,9 @@
 
 ## Next Milestone
 
-- Milestone: M1.3
-- Name: Layouts
-- Description: Scaffolds, app bars, nav bars, and structural page components.
+- Milestone: M1.4
+- Name: Developer Preview & Validation
+- Description: Theme Preview Screen, Component Gallery, Accessibility verification, Widget tests, Golden tests.
 - Constraint: Do not implement features or navigation yet.
 
 ## Development Order

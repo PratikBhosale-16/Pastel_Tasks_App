@@ -16,6 +16,8 @@
 - Updated logger levels to suppress verbose output in release builds.
 
 ## [Unreleased]
+- M1.3: Completed Application Shell.
+- Added reusable layout components: `AppScaffold`, `AppAppBar`, `AppBottomNavigation`, `AppFab`, `SectionHeader`, and `PageContainer`.
 - M1.2: Completed Component Library.
 - Added base buttons, cards, chips, text fields, icons, and layout helpers to `lib/shared/`.
 - Added `shared_preferences` for non-sensitive application preferences.

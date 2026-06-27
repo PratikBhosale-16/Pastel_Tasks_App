@@ -23,6 +23,10 @@ Living documents remain in `docs/`.
 - **Decision:** The 'Outfit' font family will be downloaded and bundled locally as static `.ttf` assets in `assets/fonts/` rather than using the `google_fonts` package.
 - **Reason:** PastelTasks is an offline-first app. Bundling the fonts locally ensures the typography is available instantly upon the first offline launch, without requiring a network fetch and without introducing a new third-party dependency.
 
+## M1.3 Application Shell
+- **Decision:** Use standard stateless wrappers for layout components (`AppScaffold`, `AppAppBar`, `PageContainer`) to enforce design system spacing and theming.
+- **Rationale:** Prevents drift by hiding raw Flutter primitives and ensures features never hardcode layout behavior.
+
 ## Material 3 Theme Injection
 - **Decision:** All design tokens (Colors, Typography, Spacing, Radius) are directly injected into standard Material 3 components within `AppTheme` (`ThemeData`).
 - **Reason:** Reduces boilerplate at the widget level. Custom components automatically inherit the design system constraints without needing to read custom theme extensions manually for standard properties.

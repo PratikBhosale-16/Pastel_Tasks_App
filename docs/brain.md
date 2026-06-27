@@ -35,11 +35,10 @@
 
 # Current Milestone
 
-- Current milestone: M1.3 Layouts.
-- Status: Ready to begin M1.3.
-- Validation: M1.2 Component Library is fully implemented and passes all checks.
-- Material 3 theme properties have been customized according to the design system.
-- Shared base components (buttons, cards, chips, text fields, icons, layout helpers) exist in `lib/shared/`.
+- Current milestone: M1.4 Developer Preview & Validation.
+- Status: Ready to begin M1.4.
+- Validation: M1.3 Application Shell is fully implemented and passes all checks.
+- Shared base components and layouts (scaffolds, app bars, bottom navigation, section headers) exist in `lib/shared/`.
 - No app features have been implemented.
 
 # Completed
@@ -49,6 +48,7 @@
 - M0.3 Core Infrastructure (implementation and validation complete).
 - M1.1 Theme Foundation (implementation complete).
 - M1.2 Component Library (implementation complete).
+- M1.3 Application Shell (implementation complete).
 - `main.dart` calls `bootstrap()` only.
 - `bootstrap.dart` initializes Flutter bindings, logger, Isar setup, notification service structure, ProviderScope, and App.
 - `App` uses `MaterialApp.router`.
@@ -142,9 +142,9 @@
 
 # Next Milestone
 
-- Next milestone: M1.3 Layouts.
-- Scope: Build scaffolds, app bars, and navigation bars according to the design system.
-- Constraint: do not begin feature implementation during M1.3.
+- Next milestone: M1.4 Developer Preview & Validation.
+- Scope: Theme preview screen, component gallery, accessibility verification, and tests.
+- Constraint: do not begin feature implementation during M1.4.
 
 # Notes
 
