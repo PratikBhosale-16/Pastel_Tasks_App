@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Onboarding - Organize</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-background": "#1a1c1b",
+                      "surface-container": "#eeeeec",
+                      "on-surface": "#1a1c1b",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container-low": "#f4f4f2",
+                      "on-primary-container": "#3c1989",
+                      "tertiary": "#0060ac",
+                      "on-secondary-fixed-variant": "#005137",
+                      "error": "#ba1a1a",
+                      "secondary-fixed-dim": "#45dfa4",
+                      "on-secondary-container": "#00714e",
+                      "on-error": "#ffffff",
+                      "primary-fixed-dim": "#cebdff",
+                      "on-error-container": "#93000a",
+                      "background": "#f9f9f7",
+                      "on-primary-fixed": "#21005e",
+                      "on-tertiary-fixed": "#001c39",
+                      "on-secondary": "#ffffff",
+                      "surface-dim": "#dadad8",
+                      "tertiary-container": "#5a9ff4",
+                      "surface-tint": "#674bb5",
+                      "on-tertiary": "#ffffff",
+                      "outline": "#7a7583",
+                      "surface-container-high": "#e8e8e6",
+                      "inverse-surface": "#2f3130",
+                      "on-tertiary-container": "#003563",
+                      "tertiary-fixed-dim": "#a4c9ff",
+                      "surface": "#f9f9f7",
+                      "error-container": "#ffdad6",
+                      "primary-fixed": "#e8ddff",
+                      "tertiary-fixed": "#d4e3ff",
+                      "surface-variant": "#e2e3e1",
+                      "surface-container-highest": "#e2e3e1",
+                      "on-secondary-fixed": "#002114",
+                      "primary-container": "#a78bfa",
+                      "on-primary": "#ffffff",
+                      "surface-bright": "#f9f9f7",
+                      "on-surface-variant": "#494552",
+                      "secondary-fixed": "#68fcbf",
+                      "on-primary-fixed-variant": "#4f319c",
+                      "on-tertiary-fixed-variant": "#004883",
+                      "outline-variant": "#cac4d4",
+                      "inverse-primary": "#cebdff",
+                      "secondary-container": "#64f9bc",
+                      "primary": "#674bb5",
+                      "inverse-on-surface": "#f1f1ef",
+                      "secondary": "#006c4b"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-padding": "20px",
+                      "gutter": "16px",
+                      "xs": "4px",
+                      "base": "8px",
+                      "xl": "32px",
+                      "sm": "8px",
+                      "lg": "24px",
+                      "md": "16px"
+              },
+              "fontFamily": {
+                      "label-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "title-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "headline-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "display-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "body-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "headline-lg-mobile": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "body-md": [
+                              "Plus Jakarta Sans"
+                      ]
+              },
+              "fontSize": {
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "title-md": [
+                              "18px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "40px",
+                              {
+                                      "lineHeight": "48px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col items-center justify-center p-container-padding font-body-lg">
+<!-- Main Container -->
+<div class="w-full max-w-[800px] flex flex-col h-full md:h-auto min-h-[707px] md:min-h-0 bg-surface-container-lowest rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.04)] overflow-hidden relative">
+<!-- Skip Button (Top Right) -->
+<div class="absolute top-container-padding right-container-padding z-10">
+<button class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors py-2 px-4 rounded-full bg-surface/50 backdrop-blur-sm">
+                Skip
+            </button>
+</div>
+<!-- Content Area -->
+<div class="flex-1 flex flex-col items-center justify-center p-xl gap-xl mt-12 md:mt-0">
+<!-- Visual Element: Tags Showcase -->
+<div class="relative w-full max-w-sm h-64 flex items-center justify-center">
+<!-- Abstract visual representation of organization -->
+<div class="absolute inset-0 bg-gradient-to-br from-primary-fixed to-secondary-fixed/30 rounded-full blur-3xl opacity-30 transform -translate-y-4"></div>
+<div class="relative w-full h-full flex flex-col items-center justify-center gap-md">
+<!-- Bento-style tag arrangement -->
+<div class="flex flex-wrap justify-center gap-sm">
+<!-- Tag 1 -->
+<div class="bg-secondary-container/20 text-secondary border border-secondary-container/50 px-4 py-2 rounded-full flex items-center gap-xs shadow-sm transform -rotate-2 hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[16px]">shopping_cart</span>
+<span class="font-label-md text-label-md">Shopping</span>
+</div>
+<!-- Tag 2 -->
+<div class="bg-tertiary-container/20 text-tertiary border border-tertiary-container/50 px-4 py-2 rounded-full flex items-center gap-xs shadow-sm transform rotate-3 hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[16px]">work</span>
+<span class="font-label-md text-label-md">Work</span>
+</div>
+<!-- Tag 3 -->
+<div class="bg-primary-container/20 text-primary border border-primary-container/50 px-4 py-2 rounded-full flex items-center gap-xs shadow-sm transform -rotate-1 hover:scale-105 transition-transform mt-2">
+<span class="material-symbols-outlined text-[16px]">person</span>
+<span class="font-label-md text-label-md">Personal</span>
+</div>
+<!-- Tag 4 -->
+<div class="bg-error-container/20 text-error border border-error-container/50 px-4 py-2 rounded-full flex items-center gap-xs shadow-sm transform rotate-2 hover:scale-105 transition-transform mt-2">
+<span class="material-symbols-outlined text-[16px]">priority_high</span>
+<span class="font-label-md text-label-md">High Priority</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Text Content -->
+<div class="text-center flex flex-col gap-base max-w-md">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-on-surface">
+                    Organize with Ease
+                </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">
+                    Use tags and priority levels to keep your tasks in order and your mind clear.
+                </p>
+</div>
+</div>
+<!-- Bottom Actions & Progress -->
+<div class="p-xl flex flex-col items-center gap-xl bg-surface-container-lowest border-t border-surface-container/50">
+<!-- Progress Indicators -->
+<div class="flex gap-2 justify-center">
+<div class="w-2 h-2 rounded-full bg-surface-variant"></div>
+<div class="w-8 h-2 rounded-full bg-primary transition-all duration-300"></div>
+<div class="w-2 h-2 rounded-full bg-surface-variant"></div>
+<div class="w-2 h-2 rounded-full bg-surface-variant"></div>
+</div>
+<!-- Next Button -->
+<button class="w-full md:w-auto min-w-[200px] bg-primary-container text-on-primary-container font-title-md text-title-md py-3 px-8 rounded-full shadow-[0_8px_24px_rgba(167,139,250,0.15)] hover:bg-primary hover:text-on-primary hover:shadow-none hover:scale-98 transition-all duration-200 active:scale-95 flex items-center justify-center gap-2">
+                Next
+                <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</body></html>

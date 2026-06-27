@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pastel Tasks - Profile &amp; Settings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-background": "#1a1c1b",
+                        "surface-container": "#eeeeec",
+                        "on-surface": "#1a1c1b",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f4f4f2",
+                        "on-primary-container": "#3c1989",
+                        "tertiary": "#0060ac",
+                        "on-secondary-fixed-variant": "#005137",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#45dfa4",
+                        "on-secondary-container": "#00714e",
+                        "on-error": "#ffffff",
+                        "primary-fixed-dim": "#cebdff",
+                        "on-error-container": "#93000a",
+                        "background": "#f9f9f7",
+                        "on-primary-fixed": "#21005e",
+                        "on-tertiary-fixed": "#001c39",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#dadad8",
+                        "tertiary-container": "#5a9ff4",
+                        "surface-tint": "#674bb5",
+                        "on-tertiary": "#ffffff",
+                        "outline": "#7a7583",
+                        "surface-container-high": "#e8e8e6",
+                        "inverse-surface": "#2f3130",
+                        "on-tertiary-container": "#003563",
+                        "tertiary-fixed-dim": "#a4c9ff",
+                        "surface": "#f9f9f7",
+                        "error-container": "#ffdad6",
+                        "primary-fixed": "#e8ddff",
+                        "tertiary-fixed": "#d4e3ff",
+                        "surface-variant": "#e2e3e1",
+                        "surface-container-highest": "#e2e3e1",
+                        "on-secondary-fixed": "#002114",
+                        "primary-container": "#a78bfa",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#f9f9f7",
+                        "on-surface-variant": "#494552",
+                        "secondary-fixed": "#68fcbf",
+                        "on-primary-fixed-variant": "#4f319c",
+                        "on-tertiary-fixed-variant": "#004883",
+                        "outline-variant": "#cac4d4",
+                        "inverse-primary": "#cebdff",
+                        "secondary-container": "#64f9bc",
+                        "primary": "#674bb5",
+                        "inverse-on-surface": "#f1f1ef",
+                        "secondary": "#006c4b"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "container-padding": "20px",
+                        "gutter": "16px",
+                        "xs": "4px",
+                        "base": "8px",
+                        "xl": "32px",
+                        "sm": "8px",
+                        "lg": "24px",
+                        "md": "16px"
+                    },
+                    fontFamily: {
+                        "label-md": ["Plus Jakarta Sans"],
+                        "title-md": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"]
+                    },
+                    fontSize: {
+                        "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "500" }],
+                        "title-md": ["18px", { lineHeight: "24px", fontWeight: "600" }],
+                        "headline-lg": ["28px", { lineHeight: "36px", letterSpacing: "-0.01em", fontWeight: "600" }],
+                        "display-lg": ["40px", { lineHeight: "48px", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+                        "headline-lg-mobile": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+                        "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #f9f9f7; /* background */
+            color: #1a1c1b; /* on-background */
+        }
+        
+        .soft-shadow {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Checkbox styling */
+        .pastel-toggle {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+        .pastel-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #dadad8; /* surface-dim */
+            transition: .4s;
+            border-radius: 24px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        input:checked + .slider {
+            background-color: #a78bfa; /* primary-container */
+        }
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="antialiased font-body-md text-on-background pb-24 md:pb-0 md:pt-20">
+<!-- TopAppBar Mobile (Visible only on mobile) -->
+<header class="md:hidden sticky top-0 w-full bg-background z-40 px-container-padding py-base flex justify-between items-center transition-all duration-300" id="mobile-header">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-variant flex items-center justify-center">
+<img alt="User profile photo" class="object-cover w-full h-full" data-alt="A close-up portrait of a professional looking directly at the camera, soft natural lighting, light cream background, minimalist pastel aesthetic, calm and focused expression, 8k resolution, high quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCy4OdoIn4CoNbi0O8rCcBMi-zuEh5dX2ZsC2t6XXBIM04LmxZAolIBRAEbmkLsNwOvzvBvjSAwDv5nI0gH5MXPGwG0pJCFqH5QPl4S3ePsW0dELMNH0b_rdEpo3jrO9ev3-pL9nOp9_LIBTQSX4BFimyJw2t_Y7prTnRx4WuwfF80K4g-FvjEykTEUQqdM4Cx83gaVDRpuEOe04VDujdMOHA7V8_8DMn6xCikTDgAKL6MjnkVcD9KGokXeHjFAv8J7ZeOmNZJaqHQ"/>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">Pastel Tasks</h1>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-primary hover:opacity-80 transition-opacity scale-98 active:scale-95 duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">search</span>
+</button>
+</header>
+<!-- TopAppBar Desktop (Visible only on desktop) -->
+<header class="hidden md:flex fixed top-0 w-full bg-background/80 backdrop-blur-md z-40 px-container-padding py-base justify-between items-center border-b border-surface-variant/50">
+<div class="flex items-center gap-4">
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">Pastel Tasks</h1>
+</div>
+<nav class="flex items-center gap-8">
+<a class="flex items-center gap-2 text-on-surface-variant hover:opacity-80 transition-opacity font-title-md text-title-md scale-98 active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined">home</span> Home
+            </a>
+<a class="flex items-center gap-2 text-on-surface-variant hover:opacity-80 transition-opacity font-title-md text-title-md scale-98 active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined">calendar_month</span> Calendar
+            </a>
+<a class="flex items-center gap-2 text-on-surface-variant hover:opacity-80 transition-opacity font-title-md text-title-md scale-98 active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined">label</span> Tags
+            </a>
+<a class="flex items-center gap-2 text-on-surface-variant hover:opacity-80 transition-opacity font-title-md text-title-md scale-98 active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined">check_circle</span> Done
+            </a>
+<a class="flex items-center gap-2 text-primary font-title-md text-title-md scale-98 active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span> Profile
+            </a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-primary hover:opacity-80 transition-opacity scale-98 active:scale-95 duration-200">
+<span class="material-symbols-outlined">search</span>
+</button>
+</div>
+</header>
+<!-- Main Content Container -->
+<main class="max-w-[800px] mx-auto px-container-padding pt-6 md:pt-12 pb-xl space-y-xl">
+<!-- Profile Header Section -->
+<section class="flex flex-col md:flex-row items-center md:items-start gap-gutter bg-surface-container-lowest p-md rounded-xl soft-shadow glass-card">
+<div class="relative">
+<div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-surface-container-lowest soft-shadow">
+<img alt="Profile Picture" class="object-cover w-full h-full" data-alt="A portrait of an individual in a bright, modern setting. Soft pastel lighting, light mode aesthetic. The subject is wearing neutral clothing. The background is slightly blurred showing a minimalist workspace. High-end photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRFYDnNrLqSNyss5d0dFTyQtWGwrpBVat7qsbZQqhZ92P2oJcWEgIj7C2NFE2z9VO7W20Nh9YhbeYRderBpDIKiyzhBg1p3_Ggijkxee2oboBn2kXet6fPA-BR1ameYIaoIdc2JWuv0sG3FAnvAc-suqzy-7ED4BZOBOFrnKzS_Qcix5EU1C6PmoADdioaTa_tmWNCFBPD45Td5OQQ7LvrO_7-XHe8oDV380e16sl_j6bzTkoaq2w8AlXi6gcDujEo7IQv6TNeJ3A"/>
+</div>
+<div class="absolute bottom-0 right-0 bg-secondary-container text-on-secondary-container font-label-md text-label-md px-2 py-1 rounded-full border-2 border-surface-container-lowest shadow-sm">
+                    PRO
+                </div>
+</div>
+<div class="flex-1 text-center md:text-left flex flex-col justify-center h-full pt-2">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Alex Mercer</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-1">alex.mercer@example.com</p>
+<div class="mt-4 flex justify-center md:justify-start gap-sm">
+<button class="bg-primary-container text-on-primary-container font-label-md text-label-md px-4 py-2 rounded-full hover:opacity-80 transition-opacity scale-98 active:scale-95 duration-200">Edit Profile</button>
+</div>
+</div>
+</section>
+<!-- Productivity Summary (Bento Grid) -->
+<section>
+<h3 class="font-title-md text-title-md text-on-surface mb-md">Productivity Summary</h3>
+<div class="grid grid-cols-2 gap-gutter">
+<!-- Streak Card -->
+<div class="bg-surface-container-lowest p-md rounded-xl soft-shadow glass-card flex flex-col items-center justify-center text-center scale-98 active:scale-95 duration-200 transition-transform cursor-default">
+<div class="w-12 h-12 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary mb-2">
+<span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+</div>
+<span class="font-display-lg text-display-lg text-on-surface">5</span>
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Day Streak</span>
+</div>
+<!-- Completed Card -->
+<div class="bg-surface-container-lowest p-md rounded-xl soft-shadow glass-card flex flex-col items-center justify-center text-center scale-98 active:scale-95 duration-200 transition-transform cursor-default">
+<div class="w-12 h-12 rounded-full bg-primary-container/20 flex items-center justify-center text-primary mb-2">
+<span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">task_alt</span>
+</div>
+<span class="font-display-lg text-display-lg text-on-surface">124</span>
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Tasks Done</span>
+</div>
+</div>
+</section>
+<!-- Settings List -->
+<section>
+<h3 class="font-title-md text-title-md text-on-surface mb-md">Settings</h3>
+<div class="bg-surface-container-lowest rounded-xl soft-shadow glass-card overflow-hidden">
+<!-- Theme Select -->
+<div class="flex items-center justify-between p-md border-b border-surface-container-low hover:bg-surface-container-low/50 transition-colors cursor-pointer group">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">palette</span>
+</div>
+<div>
+<p class="font-body-lg text-body-lg text-on-surface">Theme</p>
+<p class="font-body-md text-body-md text-on-surface-variant">Lavender Glow</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</div>
+<!-- Dark Mode Toggle -->
+<div class="flex items-center justify-between p-md border-b border-surface-container-low hover:bg-surface-container-low/50 transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">dark_mode</span>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface">Dark Mode</p>
+</div>
+<label class="pastel-toggle">
+<input type="checkbox"/>
+<span class="slider"></span>
+</label>
+</div>
+<!-- Notifications Toggle -->
+<div class="flex items-center justify-between p-md border-b border-surface-container-low hover:bg-surface-container-low/50 transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">notifications_active</span>
+</div>
+<div>
+<p class="font-body-lg text-body-lg text-on-surface">Notifications</p>
+<p class="font-body-md text-body-md text-on-surface-variant">Daily reminders &amp; updates</p>
+</div>
+</div>
+<label class="pastel-toggle">
+<input checked="" type="checkbox"/>
+<span class="slider"></span>
+</label>
+</div>
+<!-- Backup & Export -->
+<div class="flex items-center justify-between p-md border-b border-surface-container-low hover:bg-surface-container-low/50 transition-colors cursor-pointer group">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">cloud_download</span>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface">Backup &amp; Export</p>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</div>
+<!-- About -->
+<div class="flex items-center justify-between p-md hover:bg-surface-container-low/50 transition-colors cursor-pointer group">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">info</span>
+</div>
+<div>
+<p class="font-body-lg text-body-lg text-on-surface">About Pastel Tasks</p>
+<p class="font-body-md text-body-md text-on-surface-variant">Version 2.4.1</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</div>
+</div>
+</section>
+<!-- Logout Button -->
+<section class="pt-4 pb-8">
+<button class="w-full flex items-center justify-center gap-2 p-md bg-surface-container-lowest border border-error/20 text-error rounded-xl hover:bg-error-container/50 transition-colors font-title-md text-title-md scale-98 active:scale-95 duration-200">
+<span class="material-symbols-outlined">logout</span>
+                Sign Out
+            </button>
+</section>
+</main>
+<!-- BottomNavBar Mobile (Visible only on mobile) -->
+<nav class="md:hidden fixed bottom-0 w-full rounded-t-xl z-50 bg-surface-container-lowest shadow-[0_-4px_20px_rgba(0,0,0,0.04)] shadow-sm flex justify-around items-center px-2 pb-6 pt-2 transition-transform duration-300" id="bottom-nav">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors scale-98 active:scale-95 duration-200 rounded-lg p-2 w-16" href="#">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="font-label-md text-label-md">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors scale-98 active:scale-95 duration-200 rounded-lg p-2 w-16" href="#">
+<span class="material-symbols-outlined mb-1">calendar_month</span>
+<span class="font-label-md text-label-md">Calendar</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors scale-98 active:scale-95 duration-200 rounded-lg p-2 w-16" href="#">
+<span class="material-symbols-outlined mb-1">label</span>
+<span class="font-label-md text-label-md">Tags</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors scale-98 active:scale-95 duration-200 rounded-lg p-2 w-16" href="#">
+<span class="material-symbols-outlined mb-1">check_circle</span>
+<span class="font-label-md text-label-md">Done</span>
+</a>
+<!-- Active Tab -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 scale-98 active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-md text-label-md">Profile</span>
+</a>
+</nav>
+<script>
+        // Simple scroll behavior to slightly hide nav/header on scroll down for more immersive feel
+        let lastScrollY = window.scrollY;
+        const bottomNav = document.getElementById('bottom-nav');
+        const mobileHeader = document.getElementById('mobile-header');
+
+        window.addEventListener('scroll', () => {
+            if (window.innerWidth < 768) { // Only on mobile
+                const currentScrollY = window.scrollY;
+                if (currentScrollY > lastScrollY && currentScrollY > 50) {
+                    // Scrolling down - slight dim/translate
+                    bottomNav.style.transform = 'translateY(10px)';
+                    bottomNav.style.opacity = '0.9';
+                    mobileHeader.style.transform = 'translateY(-10px)';
+                    mobileHeader.style.opacity = '0.9';
+                } else {
+                    // Scrolling up
+                    bottomNav.style.transform = 'translateY(0)';
+                    bottomNav.style.opacity = '1';
+                    mobileHeader.style.transform = 'translateY(0)';
+                    mobileHeader.style.opacity = '1';
+                }
+                lastScrollY = currentScrollY;
+            }
+        });
+    </script>
+</body></html>

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pastel Tasks - Home</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-background": "#1a1c1b",
+                      "surface-container": "#eeeeec",
+                      "on-surface": "#1a1c1b",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container-low": "#f4f4f2",
+                      "on-primary-container": "#3c1989",
+                      "tertiary": "#0060ac",
+                      "on-secondary-fixed-variant": "#005137",
+                      "error": "#ba1a1a",
+                      "secondary-fixed-dim": "#45dfa4",
+                      "on-secondary-container": "#00714e",
+                      "on-error": "#ffffff",
+                      "primary-fixed-dim": "#cebdff",
+                      "on-error-container": "#93000a",
+                      "background": "#f9f9f7",
+                      "on-primary-fixed": "#21005e",
+                      "on-tertiary-fixed": "#001c39",
+                      "on-secondary": "#ffffff",
+                      "surface-dim": "#dadad8",
+                      "tertiary-container": "#5a9ff4",
+                      "surface-tint": "#674bb5",
+                      "on-tertiary": "#ffffff",
+                      "outline": "#7a7583",
+                      "surface-container-high": "#e8e8e6",
+                      "inverse-surface": "#2f3130",
+                      "on-tertiary-container": "#003563",
+                      "tertiary-fixed-dim": "#a4c9ff",
+                      "surface": "#f9f9f7",
+                      "error-container": "#ffdad6",
+                      "primary-fixed": "#e8ddff",
+                      "tertiary-fixed": "#d4e3ff",
+                      "surface-variant": "#e2e3e1",
+                      "surface-container-highest": "#e2e3e1",
+                      "on-secondary-fixed": "#002114",
+                      "primary-container": "#a78bfa",
+                      "on-primary": "#ffffff",
+                      "surface-bright": "#f9f9f7",
+                      "on-surface-variant": "#494552",
+                      "secondary-fixed": "#68fcbf",
+                      "on-primary-fixed-variant": "#4f319c",
+                      "on-tertiary-fixed-variant": "#004883",
+                      "outline-variant": "#cac4d4",
+                      "inverse-primary": "#cebdff",
+                      "secondary-container": "#64f9bc",
+                      "primary": "#674bb5",
+                      "inverse-on-surface": "#f1f1ef",
+                      "secondary": "#006c4b"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-padding": "20px",
+                      "gutter": "16px",
+                      "xs": "4px",
+                      "base": "8px",
+                      "xl": "32px",
+                      "sm": "8px",
+                      "lg": "24px",
+                      "md": "16px"
+              },
+              "fontFamily": {
+                      "label-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "title-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "headline-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "display-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "body-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "headline-lg-mobile": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "body-md": [
+                              "Plus Jakarta Sans"
+                      ]
+              },
+              "fontSize": {
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "title-md": [
+                              "18px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "40px",
+                              {
+                                      "lineHeight": "48px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+          body {
+              font-family: 'Plus Jakarta Sans', sans-serif;
+              background-color: #FAFAF8; /* Soft cream background */
+          }
+          
+          /* Custom Checkbox Morphing */
+          .task-checkbox:checked + div {
+              background-color: theme('colors.secondary-fixed-dim');
+              border-color: theme('colors.secondary-fixed-dim');
+          }
+          .task-checkbox:checked + div .check-icon {
+              opacity: 1;
+              transform: scale(1);
+          }
+          
+          .shadow-soft {
+              box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.04);
+          }
+          
+          .shadow-float {
+              box-shadow: 0px 8px 24px rgba(167, 139, 250, 0.15);
+          }
+
+          .chip-sky {
+              background-color: rgba(90, 159, 244, 0.1);
+              color: theme('colors.tertiary-container');
+          }
+          
+          .chip-mint {
+              background-color: rgba(69, 223, 164, 0.1);
+              color: theme('colors.secondary-fixed-dim');
+          }
+          
+          .chip-peach {
+              background-color: rgba(255, 218, 214, 0.3); /* Adjusted for error container matching */
+              color: theme('colors.error');
+          }
+          
+          /* Hide scrollbar for clean aesthetic */
+          ::-webkit-scrollbar {
+              display: none;
+          }
+      </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen relative pb-24 md:pb-8 flex flex-col items-center">
+<!-- Top App Bar (Desktop Context) -->
+<header class="hidden md:flex justify-between items-center px-container-padding py-base w-full max-w-[800px] sticky top-0 bg-background z-40">
+<div class="flex items-center gap-4 cursor-pointer scale-98 active:scale-95 duration-200 hover:opacity-80 transition-opacity">
+<img alt="User profile photo" class="w-10 h-10 rounded-full object-cover border-2 border-surface-container-lowest shadow-sm" data-alt="A small, soft-lit professional headshot of a person with a warm smile, placed within a circular frame against a minimal pastel background, conveying a friendly and modern aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuChsoI_brgFmVzgx_BvzLg4lkxODAgnDf_8SoLYpzdhqkQdAChtj-_mJY8Vn3g1xP0FzdlC99UxO-qxZW_J6urGUK9lHK6Fl40uFFhN4eV4btMjd7zMttgNwt2vepQJcWFxBvJd-z_CfA9sLI8ljnJAGFD10Y2GqIvEugVy3H-rrB7vM83AZE2GLZNakWaohVVxfHggn73IvkMYr-iONTroKWb4cjSLMjmPU7NMjwgS19FrD26V2SsKdv_JbLE3nT2ZFGRe0JU5R8Q"/>
+<div>
+<h1 class="font-headline-lg text-headline-lg text-primary">Pastel Tasks</h1>
+</div>
+</div>
+<button class="text-on-surface-variant hover:opacity-80 transition-opacity scale-98 active:scale-95 duration-200 flex items-center justify-center p-2 rounded-full hover:bg-surface-container-low">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">search</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="w-full max-w-[800px] px-container-padding flex-1 mt-8">
+<!-- Greeting Section -->
+<section class="mb-xl flex justify-between items-center md:hidden">
+<div>
+<h2 class="font-title-md text-title-md text-on-surface-variant mb-1">Good Morning,</h2>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-background">Alex</h1>
+</div>
+<img alt="User profile photo" class="w-12 h-12 rounded-full object-cover border-2 border-surface-container-lowest shadow-sm" data-alt="A small, soft-lit professional headshot of a person with a warm smile, placed within a circular frame against a minimal pastel background, conveying a friendly and modern aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWoBSl3bxvyxjg8RHM_ZJbiv1IWHaz4mz46dNS12miWNPchNWLM8GRNZxXLp289Qaz2lSmyAM-TdE4xFLF971YCfxINWOr6L4g4OGDv_vYb06P0ktpp5pd98jIPKsw8qn4QFo5_sgo4JSphSozspRh3VCPYuXtcnp6PcER_V2J_UlHHS3bnfqRxN90m2_zWjWSsqz6JxXJhPuJk-2KD1bReWf1FP9j352JVIY-JRx4TL2qpCXpTWsTHZJpayRQLgXct3A2U-Jmso4"/>
+</section>
+<!-- Greeting Section Desktop -->
+<section class="mb-xl hidden md:block">
+<h2 class="font-title-md text-title-md text-on-surface-variant mb-1">Good Morning,</h2>
+<h1 class="font-headline-lg text-headline-lg text-on-background">Alex</h1>
+</section>
+<!-- Bento Grid Top Section -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md mb-xl">
+<!-- Date & Focus Card -->
+<div class="md:col-span-2 bg-surface-container-lowest rounded-[24px] p-6 shadow-soft relative overflow-hidden flex flex-col justify-between">
+<div class="absolute -right-10 -top-10 w-40 h-40 bg-primary-fixed opacity-30 rounded-full blur-2xl"></div>
+<div>
+<p class="font-label-md text-label-md text-outline uppercase tracking-wider mb-2">Today</p>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-on-background">Monday, March 18</h3>
+</div>
+<div class="mt-8 flex items-center gap-4 bg-background p-4 rounded-xl">
+<div class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<div>
+<p class="font-body-md text-body-md text-on-background font-medium">Deep Work Session</p>
+<p class="font-label-md text-label-md text-on-surface-variant">10:00 AM - 12:00 PM</p>
+</div>
+</div>
+</div>
+<!-- Progress Card -->
+<div class="bg-surface-container-lowest rounded-[24px] p-6 shadow-soft flex flex-col items-center justify-center relative">
+<h3 class="font-label-md text-label-md text-outline absolute top-6 left-6 uppercase tracking-wider">Progress</h3>
+<!-- Circular Progress Ring (CSS implementation) -->
+<div class="relative w-32 h-32 mt-6">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 100 100">
+<circle class="text-surface-container-high" cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-primary-container" cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" stroke-dasharray="251.2" stroke-dashoffset="62.8" stroke-linecap="round" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-background">75%</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Done</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Add Input -->
+<div class="mb-xl relative group">
+<input class="w-full bg-surface-container-lowest border border-surface-variant rounded-xl py-4 pl-12 pr-4 font-body-lg text-body-lg text-on-background placeholder-outline focus:outline-none focus:border-primary-container focus:ring-4 focus:ring-primary-fixed shadow-sm transition-all duration-300" placeholder="Add a quick task..." type="text"/>
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary-container transition-colors">add</span>
+</div>
+<!-- Tasks Section -->
+<section>
+<div class="flex justify-between items-end mb-md">
+<h3 class="font-title-md text-title-md text-on-background">Today's Tasks</h3>
+<button class="font-label-md text-label-md text-primary hover:opacity-80 transition-opacity">View All</button>
+</div>
+<div class="flex flex-col gap-base">
+<!-- Pinned Task -->
+<label class="group bg-surface-container-lowest rounded-xl p-4 shadow-soft flex items-start gap-4 cursor-pointer scale-100 active:scale-98 transition-transform border border-primary-fixed-dim/30 relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary-container"></div>
+<div class="relative flex items-center justify-center pt-1">
+<input class="task-checkbox opacity-0 absolute w-full h-full cursor-pointer z-10" type="checkbox"/>
+<div class="w-5 h-5 rounded border-2 border-outline-variant flex items-center justify-center transition-all duration-300">
+<span class="material-symbols-outlined check-icon text-[14px] text-white opacity-0 transform scale-50 transition-all duration-300" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-[16px] text-primary-container" style="font-variation-settings: 'FILL' 1;">push_pin</span>
+<span class="font-body-lg text-body-lg text-on-background font-medium group-has-[:checked]:line-through group-has-[:checked]:text-on-surface-variant transition-colors">Finalize Q3 Presentation</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-2">Review slides 10-15 with Sarah before sending.</p>
+<div class="flex gap-2">
+<span class="px-3 py-1 rounded-full chip-sky font-label-md text-label-md">Work</span>
+<span class="px-3 py-1 rounded-full chip-peach font-label-md text-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">priority_high</span> High
+                            </span>
+</div>
+</div>
+</label>
+<!-- Task 2 -->
+<label class="group bg-surface-container-lowest rounded-xl p-4 shadow-soft flex items-center gap-4 cursor-pointer scale-100 active:scale-98 transition-transform">
+<div class="relative flex items-center justify-center">
+<input class="task-checkbox opacity-0 absolute w-full h-full cursor-pointer z-10" type="checkbox"/>
+<div class="w-5 h-5 rounded border-2 border-outline-variant flex items-center justify-center transition-all duration-300">
+<span class="material-symbols-outlined check-icon text-[14px] text-white opacity-0 transform scale-50 transition-all duration-300" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+</div>
+<div class="flex-1 flex justify-between items-center">
+<span class="font-body-lg text-body-lg text-on-background group-has-[:checked]:line-through group-has-[:checked]:text-on-surface-variant transition-colors">Buy Groceries</span>
+<span class="px-3 py-1 rounded-full chip-mint font-label-md text-label-md">Shopping</span>
+</div>
+</label>
+<!-- Task 3 -->
+<label class="group bg-surface-container-lowest rounded-xl p-4 shadow-soft flex items-center gap-4 cursor-pointer scale-100 active:scale-98 transition-transform">
+<div class="relative flex items-center justify-center">
+<input class="task-checkbox opacity-0 absolute w-full h-full cursor-pointer z-10" type="checkbox"/>
+<div class="w-5 h-5 rounded border-2 border-outline-variant flex items-center justify-center transition-all duration-300">
+<span class="material-symbols-outlined check-icon text-[14px] text-white opacity-0 transform scale-50 transition-all duration-300" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+</div>
+<div class="flex-1 flex justify-between items-center">
+<span class="font-body-lg text-body-lg text-on-background group-has-[:checked]:line-through group-has-[:checked]:text-on-surface-variant transition-colors">Call Mom</span>
+<span class="font-label-md text-label-md text-outline">Evening</span>
+</div>
+</label>
+<!-- Task 4 (Completed state demo) -->
+<label class="group bg-surface-container-lowest rounded-xl p-4 shadow-soft flex items-center gap-4 cursor-pointer scale-100 active:scale-98 transition-transform opacity-70">
+<div class="relative flex items-center justify-center">
+<input checked="" class="task-checkbox opacity-0 absolute w-full h-full cursor-pointer z-10" type="checkbox"/>
+<div class="w-5 h-5 rounded border-2 border-outline-variant flex items-center justify-center transition-all duration-300">
+<span class="material-symbols-outlined check-icon text-[14px] text-white opacity-0 transform scale-50 transition-all duration-300" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+</div>
+<div class="flex-1 flex justify-between items-center">
+<span class="font-body-lg text-body-lg text-on-background line-through text-on-surface-variant transition-colors">Morning Yoga</span>
+<span class="font-label-md text-label-md text-outline">Done</span>
+</div>
+</label>
+</div>
+</section>
+</main>
+<!-- Floating Action Button -->
+<button class="fixed bottom-[100px] md:bottom-8 right-6 w-14 h-14 bg-primary-container text-on-primary-container rounded-full shadow-float flex items-center justify-center scale-100 active:scale-95 hover:bg-surface-tint hover:text-white transition-all z-40 group">
+<span class="material-symbols-outlined text-[28px] group-hover:rotate-90 transition-transform duration-300">add</span>
+</button>
+<!-- Bottom Navigation Bar (Mobile Context) -->
+<nav class="md:hidden fixed bottom-0 w-full rounded-t-xl z-50 bg-surface-container-lowest shadow-[0_-4px_20px_rgba(0,0,0,0.04)] pb-6 pt-2 px-2 flex justify-around items-center">
+<!-- Active: Home -->
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 scale-98 active:scale-95 duration-200 hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-md text-label-md mt-1">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant scale-98 active:scale-95 duration-200 hover:bg-surface-container-low transition-colors px-4 py-1 rounded-full">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">calendar_month</span>
+<span class="font-label-md text-label-md mt-1">Calendar</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant scale-98 active:scale-95 duration-200 hover:bg-surface-container-low transition-colors px-4 py-1 rounded-full">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">label</span>
+<span class="font-label-md text-label-md mt-1">Tags</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant scale-98 active:scale-95 duration-200 hover:bg-surface-container-low transition-colors px-4 py-1 rounded-full">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">check_circle</span>
+<span class="font-label-md text-label-md mt-1">Done</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant scale-98 active:scale-95 duration-200 hover:bg-surface-container-low transition-colors px-4 py-1 rounded-full">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">person</span>
+<span class="font-label-md text-label-md mt-1">Profile</span>
+</button>
+</nav>
+<script>
+        // Simple script to handle checkbox visual state logic if needed beyond CSS, 
+        // though CSS sibling selectors handle the main styling here.
+        document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                // Optional: trigger subtle particle effect or sound here in a real app
+            });
+        });
+    </script>
+</body></html>

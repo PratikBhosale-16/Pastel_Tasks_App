@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pastel Tasks - Calendar</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-background": "#1a1c1b",
+                    "surface-container": "#eeeeec",
+                    "on-surface": "#1a1c1b",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-low": "#f4f4f2",
+                    "on-primary-container": "#3c1989",
+                    "tertiary": "#0060ac",
+                    "on-secondary-fixed-variant": "#005137",
+                    "error": "#ba1a1a",
+                    "secondary-fixed-dim": "#45dfa4",
+                    "on-secondary-container": "#00714e",
+                    "on-error": "#ffffff",
+                    "primary-fixed-dim": "#cebdff",
+                    "on-error-container": "#93000a",
+                    "background": "#f9f9f7",
+                    "on-primary-fixed": "#21005e",
+                    "on-tertiary-fixed": "#001c39",
+                    "on-secondary": "#ffffff",
+                    "surface-dim": "#dadad8",
+                    "tertiary-container": "#5a9ff4",
+                    "surface-tint": "#674bb5",
+                    "on-tertiary": "#ffffff",
+                    "outline": "#7a7583",
+                    "surface-container-high": "#e8e8e6",
+                    "inverse-surface": "#2f3130",
+                    "on-tertiary-container": "#003563",
+                    "tertiary-fixed-dim": "#a4c9ff",
+                    "surface": "#f9f9f7",
+                    "error-container": "#ffdad6",
+                    "primary-fixed": "#e8ddff",
+                    "tertiary-fixed": "#d4e3ff",
+                    "surface-variant": "#e2e3e1",
+                    "surface-container-highest": "#e2e3e1",
+                    "on-secondary-fixed": "#002114",
+                    "primary-container": "#a78bfa",
+                    "on-primary": "#ffffff",
+                    "surface-bright": "#f9f9f7",
+                    "on-surface-variant": "#494552",
+                    "secondary-fixed": "#68fcbf",
+                    "on-primary-fixed-variant": "#4f319c",
+                    "on-tertiary-fixed-variant": "#004883",
+                    "outline-variant": "#cac4d4",
+                    "inverse-primary": "#cebdff",
+                    "secondary-container": "#64f9bc",
+                    "primary": "#674bb5",
+                    "inverse-on-surface": "#f1f1ef",
+                    "secondary": "#006c4b"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-padding": "20px",
+                    "gutter": "16px",
+                    "xs": "4px",
+                    "base": "8px",
+                    "xl": "32px",
+                    "sm": "8px",
+                    "lg": "24px",
+                    "md": "16px"
+            },
+            "fontFamily": {
+                    "label-md": ["Plus Jakarta Sans"],
+                    "title-md": ["Plus Jakarta Sans"],
+                    "headline-lg": ["Plus Jakarta Sans"],
+                    "display-lg": ["Plus Jakarta Sans"],
+                    "body-lg": ["Plus Jakarta Sans"],
+                    "headline-lg-mobile": ["Plus Jakarta Sans"],
+                    "body-md": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "headline-lg": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body {
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* Custom scrollbar for web view */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #e2e3e1;
+            border-radius: 9999px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen font-body-md flex flex-col items-center">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky bg-background dark:bg-background flex justify-between items-center px-container-padding py-base max-w-[800px] z-40">
+<div class="h-10 w-10 rounded-full overflow-hidden shrink-0 shadow-[0_4px_20px_rgba(0,0,0,0.04)] bg-surface-container-low">
+<img class="w-full h-full object-cover" data-alt="A minimal portrait photograph of a young professional in a brightly lit, modern environment. High key lighting, airy atmosphere, with soft pastel lavender tones in the background to match a calming digital feng shui aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlQYEGTQMY9r_LZ3tMLwkAmnqgS2IqJ8x-8eFpRk0bbbkFbUVLlSeTKJp2tlKkN3JzR5MzlD3foJW9CvzA0SY3RdbPRaEZxt_lIURusZCWGITgq1gpcLSX15uUkTkTW20jt6mDkOrs0Kk1rpbPO4PAd4lys3iuFqeAO2M_XiQNfX2A521wishhK7ntfN6LwVNjEcIOtg8rj86Tqh9w16AffU4xP2DQ-VxYL6qRrU1T7ZjMsIzZ8bDBHpkZIRXh-wdnWWNCA2_UZQc"/>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary dark:text-primary-fixed-dim">Pastel Tasks</h1>
+<button class="h-10 w-10 flex items-center justify-center text-primary dark:text-primary-fixed-dim hover:opacity-80 transition-opacity scale-98 active:scale-95 duration-200">
+<span class="material-symbols-outlined">search</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="w-full max-w-[800px] px-container-padding pb-[120px] pt-md flex flex-col gap-xl">
+<!-- Calendar Section -->
+<section class="flex flex-col gap-md">
+<div class="flex justify-between items-center">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-background">March 2024</h2>
+<div class="flex gap-xs bg-surface-container-lowest rounded-full p-xs shadow-[0_4px_20px_rgba(0,0,0,0.04)]">
+<button class="h-8 w-8 rounded-full flex items-center justify-center hover:bg-surface-container-low text-on-surface-variant transition-colors"><span class="material-symbols-outlined">chevron_left</span></button>
+<button class="h-8 w-8 rounded-full flex items-center justify-center hover:bg-surface-container-low text-on-surface-variant transition-colors"><span class="material-symbols-outlined">chevron_right</span></button>
+</div>
+</div>
+<!-- Calendar Grid -->
+<div class="bg-surface-container-lowest rounded-xl p-md shadow-[0_4px_20px_rgba(0,0,0,0.04)] flex flex-col gap-sm">
+<!-- Days of Week -->
+<div class="grid grid-cols-7 text-center font-label-md text-label-md text-outline mb-xs">
+<div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div>
+</div>
+<!-- Dates -->
+<div class="grid grid-cols-7 gap-y-sm text-center font-body-md text-body-md text-on-surface">
+<!-- Padding for March 2024 (Starts on Friday) -->
+<div></div><div></div><div></div><div></div><div></div>
+<!-- Week 1 -->
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors cursor-pointer group">
+                        1
+                    </div>
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors cursor-pointer group">
+                        2
+                    </div>
+<!-- Week 2 -->
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors cursor-pointer group">
+                        3
+                        <div class="absolute bottom-[2px] w-1 h-1 rounded-full bg-tertiary-container"></div>
+</div>
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors cursor-pointer group">4</div>
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors cursor-pointer group">
+                        5
+                        <div class="absolute bottom-[2px] w-1 h-1 rounded-full bg-secondary-container"></div>
+</div>
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors cursor-pointer group">6</div>
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors cursor-pointer group">7</div>
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors cursor-pointer group">8</div>
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors cursor-pointer group">9</div>
+<!-- Week 3 -->
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors cursor-pointer group">10</div>
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors cursor-pointer group">11</div>
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors cursor-pointer group">12</div>
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors cursor-pointer group">13</div>
+<!-- Current Date: 14 -->
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full bg-primary-container text-on-primary-container font-title-md text-title-md shadow-[0_8px_24px_rgba(167,139,250,0.15)] cursor-pointer scale-105">
+                        14
+                        <div class="absolute bottom-[2px] w-[5px] h-[5px] rounded-full bg-on-primary-container"></div>
+</div>
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors cursor-pointer group">15</div>
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors cursor-pointer group">
+                        16
+                        <div class="absolute bottom-[2px] w-1 h-1 rounded-full bg-primary-container"></div>
+</div>
+<!-- Week 4 -->
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors cursor-pointer group">17</div>
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors cursor-pointer group">18</div>
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors cursor-pointer group">
+                        19
+                        <div class="absolute bottom-[2px] w-1 h-1 rounded-full bg-tertiary-container"></div>
+</div>
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors cursor-pointer group">20</div>
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors cursor-pointer group">21</div>
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors cursor-pointer group">22</div>
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors cursor-pointer group">23</div>
+<!-- Week 5 -->
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors cursor-pointer group">24</div>
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors cursor-pointer group">25</div>
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors cursor-pointer group">26</div>
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors cursor-pointer group">27</div>
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors cursor-pointer group">28</div>
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors cursor-pointer group">29</div>
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors cursor-pointer group">30</div>
+<!-- Week 6 -->
+<div class="relative h-10 w-10 mx-auto flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors cursor-pointer group">31</div>
+</div>
+</div>
+</section>
+<!-- Agenda Section -->
+<section class="flex flex-col gap-md">
+<h2 class="font-title-md text-title-md text-on-background px-xs">Agenda for Today</h2>
+<div class="flex flex-col gap-md">
+<!-- Task Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-md shadow-[0_4px_20px_rgba(0,0,0,0.04)] flex flex-col md:flex-row items-start gap-md active:scale-[0.98] transition-transform cursor-pointer relative overflow-hidden group">
+<div class="w-full md:w-[90px] shrink-0 pt-xs flex flex-row md:flex-col justify-between md:justify-start items-center md:items-start border-b md:border-b-0 border-surface-variant pb-sm md:pb-0 mb-sm md:mb-0">
+<p class="font-label-md text-label-md text-on-surface-variant font-semibold">10:00 AM</p>
+<p class="font-label-md text-label-md text-outline opacity-70">1 hr</p>
+</div>
+<div class="flex-1 flex flex-col gap-xs w-full">
+<div class="flex items-start gap-sm">
+<div class="w-5 h-5 mt-[2px] rounded-[6px] border border-outline flex items-center justify-center text-transparent group-hover:border-primary transition-colors shrink-0">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-background leading-tight">Design System Review</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant pl-[28px]">Go over the new navigation patterns and shadow depths with the engineering team.</p>
+<div class="ml-[28px] mt-xs inline-flex items-center px-3 py-1 rounded-full bg-tertiary-container/20 text-tertiary font-label-md text-label-md w-max">
+                            Work
+                        </div>
+</div>
+</div>
+<!-- Task Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-md shadow-[0_4px_20px_rgba(0,0,0,0.04)] flex flex-col md:flex-row items-start gap-md active:scale-[0.98] transition-transform cursor-pointer relative overflow-hidden group">
+<div class="w-full md:w-[90px] shrink-0 pt-xs flex flex-row md:flex-col justify-between md:justify-start items-center md:items-start border-b md:border-b-0 border-surface-variant pb-sm md:pb-0 mb-sm md:mb-0">
+<p class="font-label-md text-label-md text-on-surface-variant font-semibold">2:30 PM</p>
+<p class="font-label-md text-label-md text-outline opacity-70">30 min</p>
+</div>
+<div class="flex-1 flex flex-col gap-xs w-full">
+<div class="flex items-start gap-sm">
+<div class="w-5 h-5 mt-[2px] rounded-[6px] border border-outline flex items-center justify-center text-transparent group-hover:border-primary transition-colors shrink-0">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-background leading-tight">Walk the Dog</h3>
+</div>
+<div class="ml-[28px] mt-xs inline-flex items-center px-3 py-1 rounded-full bg-secondary-container/20 text-secondary font-label-md text-label-md w-max">
+                            Personal
+                        </div>
+</div>
+</div>
+<!-- Task Card 3 (Completed Example) -->
+<div class="bg-surface-container-lowest rounded-xl p-md shadow-[0_4px_20px_rgba(0,0,0,0.04)] flex flex-col md:flex-row items-start gap-md active:scale-[0.98] transition-transform cursor-pointer relative overflow-hidden group opacity-60">
+<div class="w-full md:w-[90px] shrink-0 pt-xs flex flex-row md:flex-col justify-between md:justify-start items-center md:items-start border-b md:border-b-0 border-surface-variant pb-sm md:pb-0 mb-sm md:mb-0">
+<p class="font-label-md text-label-md text-on-surface-variant line-through">8:00 AM</p>
+</div>
+<div class="flex-1 flex flex-col gap-xs w-full">
+<div class="flex items-start gap-sm">
+<div class="w-5 h-5 mt-[2px] rounded-[6px] bg-secondary border-secondary flex items-center justify-center text-on-secondary shrink-0">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface-variant line-through leading-tight">Morning Meditation</h3>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Floating Action Button (Contextual to Calendar/Agenda) -->
+<button class="fixed bottom-[104px] right-container-padding h-14 w-14 bg-primary-container text-on-primary-container rounded-full shadow-[0_8px_24px_rgba(167,139,250,0.15)] flex items-center justify-center hover:scale-105 active:scale-95 transition-transform z-40 md:right-[calc(50%-400px+20px)]">
+<span class="material-symbols-outlined text-[24px]">add</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full rounded-t-xl z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.04)] bg-surface-container-lowest dark:bg-surface-dim flex justify-around items-center px-2 pb-6 pt-2 md:max-w-[800px]">
+<!-- Home (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:bg-surface-container-low transition-colors scale-98 active:scale-95 duration-200 p-2 rounded-xl min-w-[64px]" href="#">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="font-label-md text-label-md">Home</span>
+</a>
+<!-- Calendar (Active) -->
+<a class="flex flex-col items-center justify-center bg-primary-container dark:bg-on-primary-fixed-variant text-on-primary-container dark:text-primary-fixed rounded-full px-4 py-1 hover:bg-surface-container-low transition-colors scale-98 active:scale-95 duration-200 min-w-[64px]" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">calendar_month</span>
+<span class="font-label-md text-label-md">Calendar</span>
+</a>
+<!-- Tags (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:bg-surface-container-low transition-colors scale-98 active:scale-95 duration-200 p-2 rounded-xl min-w-[64px]" href="#">
+<span class="material-symbols-outlined mb-1">label</span>
+<span class="font-label-md text-label-md">Tags</span>
+</a>
+<!-- Done (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:bg-surface-container-low transition-colors scale-98 active:scale-95 duration-200 p-2 rounded-xl min-w-[64px]" href="#">
+<span class="material-symbols-outlined mb-1">check_circle</span>
+<span class="font-label-md text-label-md">Done</span>
+</a>
+<!-- Profile (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:bg-surface-container-low transition-colors scale-98 active:scale-95 duration-200 p-2 rounded-xl min-w-[64px]" href="#">
+<span class="material-symbols-outlined mb-1">person</span>
+<span class="font-label-md text-label-md">Profile</span>
+</a>
+</nav>
+<script>
+        // Simple script to handle checkbox interaction visually
+        document.querySelectorAll('.group').forEach(card => {
+            const checkbox = card.querySelector('.border-outline');
+            if(checkbox && !checkbox.classList.contains('bg-secondary')) {
+                card.addEventListener('click', () => {
+                    checkbox.classList.toggle('bg-secondary-container');
+                    checkbox.classList.toggle('border-secondary-container');
+                    checkbox.classList.toggle('text-transparent');
+                    checkbox.classList.toggle('text-secondary');
+                });
+            }
+        });
+    </script>
+</body></html>

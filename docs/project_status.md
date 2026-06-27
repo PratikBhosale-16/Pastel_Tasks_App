@@ -1,0 +1,87 @@
+# Project Status
+
+## Current Milestone
+
+- Milestone: M1.3
+- Name: Layouts
+- Status: Ready to start
+- Validation: M1.2 completed and verified with passing builds and tests.
+- Overall completion: 25%.
+
+## Completed
+
+- M0.1 Project Foundation.
+- M0.2 Application Bootstrap.
+- M0.3 Core Infrastructure.
+- M1.1 Theme Foundation.
+- M1.2 Component Library.
+- `lib/main.dart` calls `bootstrap()` only.
+- `lib/bootstrap/bootstrap.dart` initializes Flutter bindings, logger, Isar setup, notification service structure, ProviderScope, and App.
+- `lib/app/app.dart` provides `MaterialApp.router` with title, theme, and router config.
+- `lib/app/config`, `lib/app/constants`, and `lib/app/environment` contain minimal app configuration.
+- `lib/app/router` contains a single bootstrap splash route.
+- `lib/app/theme` contains minimal working theme tokens and theme setup.
+- `lib/core/logging` contains the single global logger service.
+- `lib/core/result` contains `Result<T>`, `Success`, and `Failure`.
+- `lib/core/errors` contains the base application exception hierarchy.
+- `lib/core/storage` contains Isar setup without collections.
+- `lib/core/services` retains the notification service structure from M0.2.
+- `lib/core/config` contains reusable application environment and build metadata configuration.
+- `lib/core/services` contains date/time, UUID, connectivity, and haptic abstractions.
+- `lib/core/storage` contains secure storage and application preferences abstractions.
+- `lib/core/validators` contains general email, required, string length, and date validators.
+- `lib/core/extensions` contains small reusable String and DateTime helpers.
+- `lib/core/utils` contains debounce, throttle, timing constants, and formatter helpers.
+- `lib/core/repositories` contains the common repository marker contract.
+- `lib/core/errors` contains typed validation, storage, network, and unknown failures integrated with `Result<T>`.
+- Release builds suppress verbose logger output.
+- Added `shared_preferences` for non-sensitive application preferences.
+- No features, screens, feature repositories, models, collections, task logic, backup, or authentication were implemented.
+
+## Phase 1: Presentation Foundation (In Progress)
+- [x] M1.1: Theme Foundation (Colors, typography, spacing, radius, and Material 3 AppTheme injection)
+- [x] M1.2: Component Library (Reusable buttons, inputs, cards)
+- [ ] M1.3: Layouts (Scaffolds, app bars, nav bars)
+
+## Pending
+
+- M1.2 Base Components.
+- M1.3 Feedback Components.
+- M1.4 Validation.
+- M2 Task Management Core.
+- M3 Task Organization.
+- M4 Calendar and Reminders.
+- M5 Search and Statistics.
+- M6 Backup and Restore.
+- M7 Settings and Personalization.
+- M8 Performance and Polish.
+- M9 Testing and QA.
+- M10 Release Candidate.
+
+## Next Milestone
+
+- Milestone: M1.3
+- Name: Layouts
+- Description: Scaffolds, app bars, nav bars, and structural page components.
+- Constraint: Do not implement features or navigation yet.
+
+## Development Order
+
+- M0.1 Project Foundation.
+- M0.2 Application Bootstrap.
+- M0.3 Core Infrastructure.
+- M1.1 Theme Foundation.
+- M1.2 Base Components.
+- M1.3 Feedback Components.
+- M1.4 Validation.
+- M2 Task Management Core.
+
+## Notes
+
+- Frozen specifications are stored in `docs/specs/`.
+- Living documents are stored directly in `docs/`.
+- The documentation split exists for Windows case-insensitive filesystem compatibility.
+- Flutter is available locally.
+- `flutter pub get`, `flutter analyze`, and `flutter test` pass.
+- The obsolete default `test/widget_test.dart` template has been replaced with a minimal root `App` smoke test.
+- `flutter build apk --debug` succeeds due to configuration workarounds for `isar_flutter_libs` and core library desugaring in Gradle.
