@@ -21,6 +21,8 @@ class AddTaskFormData {
     this.color,
     required this.isPinned,
     this.isDelete = false,
+    this.isArchive = false,
+    this.isRestore = false,
   });
 
   final String title;
@@ -33,6 +35,8 @@ class AddTaskFormData {
   final Color? color;
   final bool isPinned;
   final bool isDelete;
+  final bool isArchive;
+  final bool isRestore;
 }
 
 /// A bottom sheet for adding or editing a task.
@@ -209,6 +213,38 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       color: _selectedColor,
       isPinned: _isPinned,
       isDelete: true,
+    );
+    Navigator.of(context).pop(formData);
+  }
+
+  void _archive() {
+    final formData = AddTaskFormData(
+      title: _titleController.text.trim(),
+      description: _descriptionController.text.trim(),
+      priority: _priority,
+      tag: _tag,
+      dueDate: _dueDate,
+      reminder: _reminder,
+      repeatRule: _repeatRule,
+      color: _selectedColor,
+      isPinned: _isPinned,
+      isArchive: true,
+    );
+    Navigator.of(context).pop(formData);
+  }
+
+  void _restore() {
+    final formData = AddTaskFormData(
+      title: _titleController.text.trim(),
+      description: _descriptionController.text.trim(),
+      priority: _priority,
+      tag: _tag,
+      dueDate: _dueDate,
+      reminder: _reminder,
+      repeatRule: _repeatRule,
+      color: _selectedColor,
+      isPinned: _isPinned,
+      isRestore: true,
     );
     Navigator.of(context).pop(formData);
   }
@@ -450,15 +486,20 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                     Row(
                       children: [
                         if (isEditMode) ...[
-                          Expanded(
-                            child: SecondaryButton(
-                              label: 'Delete',
-                              onPressed: _delete,
-                            ),
+                          IconButton(
+                            icon: Icon(Icons.delete_outline_rounded, color: Theme.of(context).colorScheme.error),
+                            onPressed: _delete,
+                            tooltip: 'Delete',
                           ),
-                          const SizedBox(width: 8),
+                          IconButton(
+                            icon: Icon(widget.existingTask!.isArchived ? Icons.unarchive_outlined : Icons.archive_outlined),
+                            onPressed: widget.existingTask!.isArchived ? _restore : _archive,
+                            tooltip: widget.existingTask!.isArchived ? 'Restore' : 'Archive',
+                          ),
+                          const Spacer(),
                         ],
                         Expanded(
+                          flex: 2,
                           child: SecondaryButton(
                             label: 'Cancel',
                             onPressed: () async {

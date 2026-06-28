@@ -35,9 +35,9 @@
 
 # Current Milestone
 
-- Current milestone: M3.8 Swipe Actions
+- Current milestone: M3.10 Archive Task
 - Status: Completed.
-- Validation: Created custom `SwipeableCard` to provide a non-destructive action pane for Swipe Left. Swipe Right maintains instant Complete/Restore. Long press menu ensures accessibility. Tested successfully via APK build.
+- Validation: Implemented `ArchiveScreen` with `AnimatedList` for material motion. Updated `TaskCard` for archived UI and swipe logic. Added Archive/Restore support to `AddTaskBottomSheet` and `home_screen.dart`. Full device validation, CRUD and persistence checked. Tests pass.
 
 # Completed
 
@@ -50,6 +50,7 @@
 - M1.4 Developer Preview & Validation (implementation complete).
 - M1.5 Device Validation & UX Polish (implementation complete).
 - M2.1 Domain Architecture (implementation complete).
+- M3.1 to M3.9 Home & Task interaction (implementation complete).
 - `main.dart` calls `bootstrap()` only.
 - `bootstrap.dart` initializes Flutter bindings, logger, Isar setup, notification service structure, ProviderScope, and App.
 - `App` uses `MaterialApp.router`.
@@ -67,12 +68,11 @@
 - `AppTheme` implements Material 3 theme injection for the design system.
 - `AppColors`, `AppTypography`, `AppSpacing`, `AppRadius`, `AppShadows`, and `PastelThemeExtension` tokens exist.
 - `assets/fonts/` contains the Outfit variable font.
-- `lib/features/` remains empty.
+- `lib/features/` contains tasks, home, and presentation components.
 
 # Not Started
 
 - M2.5 Domain Validation.
-- M3 Home Experience.
 - M4 Organization.
 - M5 Time Management.
 - M6 Notes & Rich Content.
@@ -145,9 +145,9 @@
 
 # Next Milestone
 
-- Next milestone: M3.9 Delete Task
+- Next milestone: M3.11 Drag & Drop Reordering
 - Scope: Not specified.
-- Constraint: Do not implement M3.9 until authorized.
+- Constraint: Do not implement M3.11 until authorized.
 
 # Notes
 

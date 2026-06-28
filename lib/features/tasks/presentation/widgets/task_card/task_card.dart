@@ -58,14 +58,15 @@ class TaskCard extends StatelessWidget {
                   onEdit?.call();
                 },
               ),
-              ListTile(
-                leading: const Icon(Icons.archive_outlined, color: Colors.orange),
-                title: const Text('Archive Task'),
-                onTap: () {
-                  Navigator.pop(context);
-                  onArchive?.call();
-                },
-              ),
+              if (!task.isArchived)
+                ListTile(
+                  leading: const Icon(Icons.archive_outlined, color: Colors.orange),
+                  title: const Text('Archive Task'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    onArchive?.call();
+                  },
+                ),
               ListTile(
                 leading: Icon(Icons.delete_outline_rounded, color: colorScheme.error),
                 title: const Text('Delete Task'),
@@ -136,15 +137,17 @@ class TaskCard extends StatelessWidget {
                     child: SizedBox(
                       width: 48,
                       height: 48,
-                      child: Checkbox(
-                        value: isCompleted,
-                        onChanged: (_) {
-                          if (onSwipeRight != null) onSwipeRight!();
-                        },
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(AppRadius.sm),
-                        ),
-                      ),
+                      child: isArchived 
+                        ? const Icon(Icons.archive_outlined, size: 24, color: Colors.grey)
+                        : Checkbox(
+                            value: isCompleted,
+                            onChanged: (_) {
+                              if (onSwipeRight != null) onSwipeRight!();
+                            },
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(AppRadius.sm),
+                            ),
+                          ),
                     ),
                   ),
                   const SizedBox(width: AppSpacing.sm),

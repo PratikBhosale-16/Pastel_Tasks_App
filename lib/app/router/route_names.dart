@@ -13,4 +13,10 @@ abstract final class RouteNames {
 
   /// Home route path.
   static const homePath = '/';
+
+  /// Archive route name.
+  static const archive = 'archive';
+
+  /// Archive route path.
+  static const archivePath = '/archive';
 }

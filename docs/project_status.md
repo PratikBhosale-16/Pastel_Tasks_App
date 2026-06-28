@@ -2,11 +2,11 @@
 
 ## Current Milestone
 
-- Milestone: M3.8
-- Name: Swipe Actions
+- Milestone: M3.9
+- Name: Delete Task
 - Status: Completed
-- Validation: The custom `SwipeableCard` allows smooth swipe interactions. Left swipe exposes an action pane (Edit, Archive, Delete) requiring explicit tap. Right swipe handles immediate completion/restoration.
-- Overall Progress: Home experience interactions are heavily polished.
+- Validation: The ConfirmationDialog manages deletion flows. An AnimatedList correctly diffs UI rendering. Undo restores to Isar with the exact same ID for 5 seconds. All entry points covered.
+- Overall Progress: Task life cycle interaction is heavily polished.
 
 ## Completed
 
@@ -70,8 +70,8 @@
 - [x] M3.6: Edit Task
 - [x] M3.7: Complete / Restore
 - [x] M3.8: Swipe Actions
-- [ ] M3.9: Delete
-- [ ] M3.10: Archive
+- [x] M3.9: Delete
+- [x] M3.10: Archive
 - [ ] M3.11: Reorder (Drag & Drop)
 - [ ] M3.12: Home Validation
 - [ ] M3.13: UX Polish
@@ -89,7 +89,9 @@
 
 ## Next Milestone
 
-- Milestone: M2.2 — Database Layer
+## Next Milestone
+
+- Milestone: M3.10 — Archive
 
 ## Development Order
 
