@@ -64,13 +64,16 @@
 ## Phase 3: Home Experience (In Progress)
 - [x] M3.1: Home Screen
 - [x] M3.2: Task Card
-- [x] M3.3: Add Task
-- [x] M3.4: Edit Task
-- [x] M3.5: Delete & Archive
+- [x] M3.3: Empty State
+- [x] M3.4: Add Task Bottom Sheet
+- [x] M3.5: Create Task Flow
 - [x] M3.6: Edit Task
-- [ ] M3.7: Complete Task
-- [ ] M3.8: Drag & Drop
-- [ ] M3.9: Home Validation
+- [ ] M3.7: Complete / Restore
+- [ ] M3.8: Swipe Actions
+- [ ] M3.9: Delete
+- [ ] M3.10: Archive
+- [ ] M3.11: Reorder (Drag & Drop)
+- [ ] M3.12: Home Validation
 
 ## Pending
 

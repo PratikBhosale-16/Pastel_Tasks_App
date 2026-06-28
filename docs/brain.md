@@ -145,7 +145,7 @@
 
 # Next Milestone
 
-- Next milestone: M3.7 Complete Task
+- Next milestone: M3.7 Complete / Restore
 - Scope: Not specified.
 - Constraint: Do not implement M3.7 until authorized.
 
