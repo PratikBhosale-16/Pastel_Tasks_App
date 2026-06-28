@@ -273,7 +273,6 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final bottomPadding = MediaQuery.of(context).viewInsets.bottom;
     final isEditMode = widget.existingTask != null;
     
     return PopScope(
@@ -291,10 +290,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
         maxChildSize: 0.95,
         expand: false,
         builder: (context, scrollController) {
-          return AnimatedPadding(
-            padding: EdgeInsets.only(bottom: bottomPadding),
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeOutCubic,
+          return _KeyboardPadding(
             child: SafeArea(
               child: Form(
                 key: _formKey,
@@ -553,3 +549,22 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   }
 }
 
+/// A wrapper that applies bottom padding for the keyboard, 
+/// isolated in its own widget to prevent the entire bottom sheet
+/// from rebuilding 60 times a second during the keyboard animation.
+class _KeyboardPadding extends StatelessWidget {
+  const _KeyboardPadding({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final bottomPadding = MediaQuery.of(context).viewInsets.bottom;
+    return AnimatedPadding(
+      padding: EdgeInsets.only(bottom: bottomPadding),
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOutCubic,
+      child: child,
+    );
+  }
+}

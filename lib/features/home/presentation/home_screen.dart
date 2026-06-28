@@ -96,175 +96,7 @@ class HomeScreen extends ConsumerWidget {
     }
   }
 
-  Future<void> _editTask(BuildContext context, WidgetRef ref, Task existingTask) async {
-    final formData = await AddTaskBottomSheet.show(context, existingTask: existingTask);
-    if (formData == null || !context.mounted) return;
 
-    if (formData.isDelete) {
-      _confirmAndDeleteTask(context, ref, existingTask);
-      return;
-    }
-    if (formData.isArchive) {
-      _archiveTask(context, ref, existingTask);
-      return;
-    }
-    if (formData.isRestore) {
-      ref.read(taskNotifierProvider.notifier).restore(existingTask.id);
-      return;
-    }
-
-    Priority parsePriority(String p) {
-      switch (p) {
-        case 'Low': return Priority.low;
-        case 'High': return Priority.high;
-        case 'Critical': return Priority.critical;
-        case 'Medium':
-        default: return Priority.medium;
-      }
-    }
-
-    RepeatRule parseRepeatRule(String r) {
-      switch (r) {
-        case 'Daily': return RepeatRule.daily;
-        case 'Weekly': return RepeatRule.weekly;
-        case 'Monthly': return RepeatRule.monthly;
-        case 'Yearly': return RepeatRule.yearly;
-        case 'None':
-        default: return RepeatRule.none;
-      }
-    }
-
-    final updatedTask = existingTask.copyWith(
-      title: formData.title,
-      description: formData.description,
-      priority: parsePriority(formData.priority),
-      tags: formData.tag != null ? [formData.tag!] : [],
-      updatedAt: DateTime.now().toUtc(),
-      dueDate: formData.dueDate,
-      repeatRule: parseRepeatRule(formData.repeatRule),
-      isPinned: formData.isPinned,
-      color: formData.color?.value.toRadixString(16) ?? '',
-    );
-
-    await ref.read(taskNotifierProvider.notifier).updateTask(updatedTask);
-    if (!context.mounted) return;
-
-    final state = ref.read(taskNotifierProvider);
-    if (state.hasError) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to update task')),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Task updated successfully')),
-      );
-    }
-  }
-
-  Future<void> _confirmAndDeleteTask(BuildContext context, WidgetRef ref, Task task) async {
-    final confirm = await ConfirmationDialog.show(
-      context: context,
-      title: 'Delete Task',
-      message: 'Delete this task?\nThis action cannot be undone after the timeout.',
-      confirmText: 'Delete',
-      cancelText: 'Cancel',
-      isDestructive: true,
-    );
-
-    if (confirm && context.mounted) {
-      final taskCopy = task;
-      final messenger = ScaffoldMessenger.of(context);
-      final themeContext = Theme.of(context);
-      
-      await ref.read(taskNotifierProvider.notifier).delete(task.id);
-      
-      messenger.clearSnackBars();
-      messenger.showSnackBar(
-        SnackBar(
-          content: Row(
-            children: [
-              const Text('Task deleted'),
-              const Spacer(),
-              TextButton(
-                style: TextButton.styleFrom(
-                  foregroundColor: themeContext.colorScheme.inversePrimary,
-                ),
-                onPressed: () {
-                  messenger.hideCurrentSnackBar();
-                  ref.read(taskNotifierProvider.notifier).create(taskCopy);
-                },
-                child: const Text('UNDO'),
-              ),
-            ],
-          ),
-          duration: const Duration(seconds: 5),
-        ),
-      );
-    }
-  }
-
-  Future<void> _archiveTask(BuildContext context, WidgetRef ref, Task task) async {
-    final taskCopy = task;
-    final messenger = ScaffoldMessenger.of(context);
-    final themeContext = Theme.of(context);
-
-    await ref.read(taskNotifierProvider.notifier).archive(task.id);
-    
-    messenger.clearSnackBars();
-    messenger.showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            const Text('Task archived'),
-            const Spacer(),
-            TextButton(
-              style: TextButton.styleFrom(
-                foregroundColor: themeContext.colorScheme.inversePrimary,
-              ),
-              onPressed: () {
-                messenger.hideCurrentSnackBar();
-                ref.read(taskNotifierProvider.notifier).restore(taskCopy.id);
-              },
-              child: const Text('UNDO'),
-            ),
-          ],
-        ),
-        duration: const Duration(seconds: 5),
-      ),
-    );
-  }
-
-  Widget _buildTaskCard(BuildContext context, WidgetRef ref, Task task) {
-    return TaskCard(
-      task: task,
-      onTap: () => _editTask(context, ref, task),
-      onEdit: () => _editTask(context, ref, task),
-      onArchive: () => _archiveTask(context, ref, task),
-      onDelete: () => _confirmAndDeleteTask(context, ref, task),
-      onSwipeRight: () {
-        final newStatus = task.status == TaskStatus.completed 
-            ? TaskStatus.pending 
-            : TaskStatus.completed;
-        
-        final updatedTask = task.copyWith(
-          status: newStatus,
-          updatedAt: DateTime.now().toUtc(),
-          completedAt: newStatus == TaskStatus.completed 
-              ? DateTime.now().toUtc() 
-              : null,
-          clearCompletedAt: newStatus != TaskStatus.completed,
-        );
-        
-        ref.read(taskNotifierProvider.notifier).updateTask(updatedTask);
-
-        if (newStatus == TaskStatus.completed) {
-          SemanticsService.announce('Task completed', ui.TextDirection.ltr);
-        } else {
-          SemanticsService.announce('Task restored', ui.TextDirection.ltr);
-        }
-      },
-    );
-  }
 
   String _getGreeting() {
     final hour = DateTime.now().hour;
@@ -400,7 +232,7 @@ class HomeScreen extends ConsumerWidget {
                         index: index,
                         child: Padding(
                           padding: const EdgeInsets.only(bottom: 12, left: 16, right: 16),
-                          child: _buildTaskCard(context, ref, task),
+                          child: TaskCard(task: task),
                         ),
                       );
                     },
@@ -432,7 +264,7 @@ class HomeScreen extends ConsumerWidget {
                         index: index,
                         child: Padding(
                           padding: const EdgeInsets.only(bottom: 12, left: 16, right: 16),
-                          child: _buildTaskCard(context, ref, task),
+                          child: TaskCard(task: task),
                         ),
                       );
                     },
@@ -472,7 +304,7 @@ class HomeScreen extends ConsumerWidget {
                         index: index,
                         child: Padding(
                           padding: const EdgeInsets.only(bottom: 12, left: 16, right: 16),
-                          child: _buildTaskCard(context, ref, task),
+                          child: TaskCard(task: task),
                         ),
                       );
                     },

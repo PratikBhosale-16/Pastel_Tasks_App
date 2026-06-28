@@ -1,4 +1,7 @@
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:pastel_tasks/app/theme/radius.dart';
 import 'package:pastel_tasks/app/theme/spacing.dart';
@@ -6,41 +9,20 @@ import 'package:pastel_tasks/features/tasks/domain/enums/priority.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/repeat_rule.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/task_status.dart';
 import 'package:pastel_tasks/features/tasks/domain/models/task.dart';
+import 'package:pastel_tasks/features/tasks/presentation/providers/task_notifier.dart';
+import 'package:pastel_tasks/features/tasks/presentation/widgets/add_task_bottom_sheet/add_task_bottom_sheet.dart';
+import 'package:pastel_tasks/shared/widgets/dialogs/confirmation_dialog.dart';
 import 'package:pastel_tasks/shared/widgets/swipeable/swipeable_card.dart';
 
 /// Reusable Task Card component for the application.
-class TaskCard extends StatelessWidget {
+class TaskCard extends ConsumerWidget {
   const TaskCard({
     required this.task,
-    this.onTap,
-    this.onSwipeRight,
-    this.onEdit,
-    this.onArchive,
-    this.onRestore,
-    this.onDelete,
     super.key,
   });
 
   /// The task domain model to display.
   final Task task;
-
-  /// Callback when the card is tapped.
-  final VoidCallback? onTap;
-
-  /// Callback when swiped right (e.g., Complete).
-  final VoidCallback? onSwipeRight;
-
-  /// Callback when Edit is selected.
-  final VoidCallback? onEdit;
-
-  /// Callback when Archive is selected.
-  final VoidCallback? onArchive;
-
-  /// Callback when Restore is selected.
-  final VoidCallback? onRestore;
-
-  /// Callback when Delete is selected.
-  final VoidCallback? onDelete;
 
   String _formatReminderTime(DateTime time) {
     final now = DateTime.now();
@@ -61,8 +43,169 @@ class TaskCard extends StatelessWidget {
     }
   }
 
+  Future<void> _editTask(BuildContext context, WidgetRef ref) async {
+    final formData = await AddTaskBottomSheet.show(context, existingTask: task);
+    if (formData == null || !context.mounted) return;
+
+    if (formData.isDelete) {
+      _confirmAndDeleteTask(context, ref);
+      return;
+    }
+    if (formData.isArchive) {
+      _archiveTask(context, ref);
+      return;
+    }
+    if (formData.isRestore) {
+      ref.read(taskNotifierProvider.notifier).restore(task.id);
+      return;
+    }
+
+    Priority parsePriority(String p) {
+      switch (p) {
+        case 'Low': return Priority.low;
+        case 'High': return Priority.high;
+        case 'Critical': return Priority.critical;
+        case 'Medium':
+        default: return Priority.medium;
+      }
+    }
+
+    RepeatRule parseRepeatRule(String r) {
+      switch (r) {
+        case 'Daily': return RepeatRule.daily;
+        case 'Weekly': return RepeatRule.weekly;
+        case 'Monthly': return RepeatRule.monthly;
+        case 'Yearly': return RepeatRule.yearly;
+        case 'None':
+        default: return RepeatRule.none;
+      }
+    }
+
+    final updatedTask = task.copyWith(
+      title: formData.title,
+      description: formData.description,
+      priority: parsePriority(formData.priority),
+      tags: formData.tag != null ? [formData.tag!] : [],
+      updatedAt: DateTime.now().toUtc(),
+      dueDate: formData.dueDate,
+      repeatRule: parseRepeatRule(formData.repeatRule),
+      isPinned: formData.isPinned,
+      color: formData.color?.value.toRadixString(16) ?? '',
+    );
+
+    await ref.read(taskNotifierProvider.notifier).updateTask(updatedTask);
+    if (!context.mounted) return;
+
+    final state = ref.read(taskNotifierProvider);
+    if (state.hasError) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to update task')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Task updated successfully')),
+      );
+    }
+  }
+
+  Future<void> _confirmAndDeleteTask(BuildContext context, WidgetRef ref) async {
+    final confirm = await ConfirmationDialog.show(
+      context: context,
+      title: 'Delete Task',
+      message: 'Delete this task?\nThis action cannot be undone after the timeout.',
+      confirmText: 'Delete',
+      cancelText: 'Cancel',
+      isDestructive: true,
+    );
+
+    if (confirm && context.mounted) {
+      final taskCopy = task;
+      final messenger = ScaffoldMessenger.of(context);
+      final themeContext = Theme.of(context);
+      
+      await ref.read(taskNotifierProvider.notifier).delete(task.id);
+      
+      messenger.clearSnackBars();
+      messenger.showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              const Text('Task deleted'),
+              const Spacer(),
+              TextButton(
+                style: TextButton.styleFrom(
+                  foregroundColor: themeContext.colorScheme.inversePrimary,
+                ),
+                onPressed: () {
+                  messenger.hideCurrentSnackBar();
+                  ref.read(taskNotifierProvider.notifier).create(taskCopy);
+                },
+                child: const Text('UNDO'),
+              ),
+            ],
+          ),
+          duration: const Duration(seconds: 5),
+        ),
+      );
+    }
+  }
+
+  Future<void> _archiveTask(BuildContext context, WidgetRef ref) async {
+    final taskCopy = task;
+    final messenger = ScaffoldMessenger.of(context);
+    final themeContext = Theme.of(context);
+
+    await ref.read(taskNotifierProvider.notifier).archive(task.id);
+    
+    messenger.clearSnackBars();
+    messenger.showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const Text('Task archived'),
+            const Spacer(),
+            TextButton(
+              style: TextButton.styleFrom(
+                foregroundColor: themeContext.colorScheme.inversePrimary,
+              ),
+              onPressed: () {
+                messenger.hideCurrentSnackBar();
+                ref.read(taskNotifierProvider.notifier).restore(taskCopy.id);
+              },
+              child: const Text('UNDO'),
+            ),
+          ],
+        ),
+        duration: const Duration(seconds: 5),
+      ),
+    );
+  }
+
+  void _toggleStatus(BuildContext context, WidgetRef ref) {
+    final newStatus = task.status == TaskStatus.completed 
+        ? TaskStatus.pending 
+        : TaskStatus.completed;
+    
+    final updatedTask = task.copyWith(
+      status: newStatus,
+      updatedAt: DateTime.now().toUtc(),
+      completedAt: newStatus == TaskStatus.completed 
+          ? DateTime.now().toUtc() 
+          : null,
+      clearCompletedAt: newStatus != TaskStatus.completed,
+    );
+    
+    ref.read(taskNotifierProvider.notifier).updateTask(updatedTask);
+
+    if (newStatus == TaskStatus.completed) {
+      SemanticsService.announce('Task completed', ui.TextDirection.ltr);
+    } else {
+      SemanticsService.announce('Task restored', ui.TextDirection.ltr);
+    }
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     
@@ -108,8 +251,8 @@ class TaskCard extends StatelessWidget {
         ),
         color: cardColor,
         child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadius.xl),
+          onTap: () => _editTask(context, ref),
+          borderRadius: BorderRadius.circular(AppRadius.xl),
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(AppRadius.xl),
@@ -127,157 +270,145 @@ class TaskCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Semantics(
-                    label: isCompleted ? 'Mark incomplete' : 'Mark complete',
-                    button: true,
-                    child: SizedBox(
-                      width: 48,
-                      height: 48,
-                      child: isArchived 
-                        ? const Icon(Icons.archive_outlined, size: 24, color: Colors.grey)
-                        : Checkbox(
-                            value: isCompleted,
-                            onChanged: (_) {
-                              if (onSwipeRight != null) onSwipeRight!();
-                            },
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(AppRadius.sm),
-                            ),
-                          ),
-                    ),
-                  ),
-                  const SizedBox(width: AppSpacing.sm),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: AppSpacing.sm),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          AnimatedDefaultTextStyle(
-                            duration: const Duration(milliseconds: 300),
-                            style: theme.textTheme.titleMedium!.copyWith(
-                              decoration: isCompleted ? TextDecoration.lineThrough : null,
-                              color: isArchived ? colorScheme.onSurface.withValues(alpha: 0.6) : colorScheme.onSurface,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            child: Text(task.title),
-                          ),
-                          if (task.description.isNotEmpty) ...[
-                            const SizedBox(height: AppSpacing.xs),
-                            Text(
-                              task.description,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
-                              ),
-                            ),
-                          ],
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: AppSpacing.sm),
-                  Padding(
-                    padding: const EdgeInsets.only(top: AppSpacing.sm),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (task.isPinned)
-                          Icon(Icons.push_pin_rounded, size: 20, color: colorScheme.secondary),
-                        if (task.isPinned)
-                          const SizedBox(width: AppSpacing.xs),
-                        Icon(
-                          Icons.circle,
-                          size: 16,
-                          color: priorityColor,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              if (task.dueDate != null || task.tags.isNotEmpty || task.reminder != null || task.repeatRule != RepeatRule.none) ...[
-                const SizedBox(height: AppSpacing.md),
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // LEFT: Tags
-                    Expanded(
-                      child: Wrap(
-                        spacing: AppSpacing.xs,
-                        runSpacing: AppSpacing.xs,
-                        children: task.tags.map((tagId) {
-                          // NOTE: In M4.1 Tags, we will load tag names. For now, it's just ID.
-                          return Container(
-                            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: 2),
-                            decoration: BoxDecoration(
-                              color: colorScheme.secondaryContainer.withValues(alpha: 0.5),
-                              borderRadius: BorderRadius.circular(AppRadius.sm),
-                            ),
-                            child: Text(
-                              tagId,
-                              style: theme.textTheme.labelSmall?.copyWith(
-                                color: colorScheme.onSecondaryContainer,
+                    Semantics(
+                      label: isCompleted ? 'Mark incomplete' : 'Mark complete',
+                      button: true,
+                      child: SizedBox(
+                        width: 48,
+                        height: 48,
+                        child: isArchived 
+                          ? const Icon(Icons.archive_outlined, size: 24, color: Colors.grey)
+                          : Checkbox(
+                              value: isCompleted,
+                              onChanged: (_) => _toggleStatus(context, ref),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(AppRadius.sm),
                               ),
                             ),
-                          );
-                        }).toList(),
                       ),
                     ),
                     const SizedBox(width: AppSpacing.sm),
-                    // RIGHT: Repeat, Due Date, Reminder
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (task.repeatRule != RepeatRule.none) ...[
-                          Text(
-                            _getRepeatLabel(task.repeatRule),
-                            style: theme.textTheme.labelMedium?.copyWith(
-                              color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: AppSpacing.sm),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            AnimatedDefaultTextStyle(
+                              duration: const Duration(milliseconds: 300),
+                              style: theme.textTheme.titleMedium!.copyWith(
+                                decoration: isCompleted ? TextDecoration.lineThrough : null,
+                                color: isArchived ? colorScheme.onSurface.withValues(alpha: 0.6) : colorScheme.onSurface,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              child: Text(task.title),
                             ),
-                          ),
-                          const SizedBox(width: AppSpacing.md),
-                        ],
-                        if (task.dueDate != null && task.reminder != null)
-                          Text(
-                            '${DateFormat.MMMd().format(task.dueDate!)} • ${DateFormat.jm().format(task.reminder!.triggerTime)}',
-                            style: theme.textTheme.labelMedium?.copyWith(
-                              color: isOverdue ? colorScheme.error : (isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant),
-                              fontWeight: isOverdue ? FontWeight.w600 : FontWeight.normal,
-                            ),
-                          )
-                        else if (task.dueDate != null)
-                          Text(
-                            DateFormat.MMMd().format(task.dueDate!),
-                            style: theme.textTheme.labelMedium?.copyWith(
-                              color: isOverdue ? colorScheme.error : (isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant),
-                              fontWeight: isOverdue ? FontWeight.w600 : FontWeight.normal,
-                            ),
-                          )
-                        else if (task.reminder != null)
-                          Text(
-                            _formatReminderTime(task.reminder!.triggerTime),
-                            style: theme.textTheme.labelMedium?.copyWith(
-                              color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
-                            ),
-                          ),
-                      ],
+                            if (task.description.isNotEmpty) ...[
+                              const SizedBox(height: AppSpacing.xs),
+                              Text(
+                                task.description,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: AppSpacing.sm),
+                    Padding(
+                      padding: const EdgeInsets.only(top: AppSpacing.md),
+                      child: Container(
+                        width: 12,
+                        height: 12,
+                        decoration: BoxDecoration(
+                          color: isArchived ? Colors.grey : priorityColor,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
                     ),
                   ],
                 ),
+                if (task.tags.isNotEmpty || task.dueDate != null || task.reminder != null || task.repeatRule != RepeatRule.none) ...[
+                  const SizedBox(height: AppSpacing.md),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Wrap(
+                          spacing: AppSpacing.xs,
+                          runSpacing: AppSpacing.xs,
+                          children: task.tags.map((tag) {
+                            return Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: isArchived 
+                                  ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.5) 
+                                  : colorScheme.surfaceContainerHighest,
+                                borderRadius: BorderRadius.circular(AppRadius.sm),
+                              ),
+                              child: Text(
+                                tag,
+                                style: theme.textTheme.labelSmall?.copyWith(
+                                  color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (task.repeatRule != RepeatRule.none)
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: Text(
+                                _getRepeatLabel(task.repeatRule),
+                                style: theme.textTheme.labelMedium?.copyWith(
+                                  color: isArchived ? colorScheme.primary.withValues(alpha: 0.6) : colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          if (task.dueDate != null)
+                            Text(
+                              DateFormat.MMMd().format(task.dueDate!),
+                              style: theme.textTheme.labelMedium?.copyWith(
+                                color: isArchived 
+                                    ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) 
+                                    : (isOverdue ? colorScheme.error : colorScheme.onSurfaceVariant),
+                                fontWeight: isOverdue ? FontWeight.bold : FontWeight.normal,
+                              ),
+                            )
+                          else if (task.reminder != null)
+                            Text(
+                              _formatReminderTime(task.reminder!.triggerTime),
+                              style: theme.textTheme.labelMedium?.copyWith(
+                                color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),
-    ));
+    );
 
     return SwipeableCard(
-      onSwipeRight: onSwipeRight,
+      onSwipeRight: () => _toggleStatus(context, ref),
       rightActionBackground: Container(
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
         alignment: Alignment.centerLeft,
@@ -302,18 +433,16 @@ class TaskCard extends StatelessWidget {
                 color: colorScheme.primary,
                 onPressed: () {
                   close();
-                  onEdit?.call();
+                  _editTask(context, ref);
                 },
               ),
-              if (isArchived || onRestore != null)
+              if (isArchived)
                 IconButton(
                   icon: const Icon(Icons.unarchive_outlined),
                   color: Colors.green,
                   onPressed: () {
                     close();
-                    if (onRestore != null) {
-                      onRestore?.call();
-                    }
+                    ref.read(taskNotifierProvider.notifier).restore(task.id);
                   },
                 )
               else
@@ -322,7 +451,7 @@ class TaskCard extends StatelessWidget {
                   color: Colors.orange,
                   onPressed: () {
                     close();
-                    onArchive?.call();
+                    _archiveTask(context, ref);
                   },
                 ),
               IconButton(
@@ -330,7 +459,7 @@ class TaskCard extends StatelessWidget {
                 color: colorScheme.error,
                 onPressed: () {
                   close();
-                  onDelete?.call();
+                  _confirmAndDeleteTask(context, ref);
                 },
               ),
             ],
