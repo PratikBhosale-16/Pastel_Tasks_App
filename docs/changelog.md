@@ -16,6 +16,7 @@
 - Updated logger levels to suppress verbose output in release builds.
 
 ## [Unreleased]
+- M3.3: Rebuilt the reusable `EmptyState` component with comprehensive named constructor presets (taskList, search, tag, etc.) and Material motion.
 - M3.2: Implemented the reusable `TaskCard` component with Swipe Actions (Dismissible) and integrated it into the `HomeScreen`.
 - M3.1: Completed Home Screen implementation. Introduced EmptyState reusable widget, created initial app bar, navigation bar, and hooked up the Home Screen to `taskListProvider`.
 - Updated overarching project roadmap in living documentation to outline M3 (Home Experience) through M11 (Release Candidate) granular milestones.

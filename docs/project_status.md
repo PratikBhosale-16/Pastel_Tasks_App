@@ -2,11 +2,11 @@
 
 ## Current Milestone
 
-- Milestone: M3.2
-- Name: Task Card
+- Milestone: M3.3
+- Name: Empty State
 - Status: Completed
-- Validation: Implemented `TaskCard` as a pure, stateless reusable component with `Dismissible` swipe actions and Material animations. Integrated into `HomeScreen`.
-- Overall Progress: The core UI unit of the application has been built and rendered successfully, adhering to UX specs without invoking side effects.
+- Validation: Created reusable `EmptyState` widget in `lib/shared/widgets/empty_state/` with named presets. Integrated into `HomeScreen`.
+- Overall Progress: UI foundations for Home are solid.
 
 ## Completed
 
@@ -64,7 +64,7 @@
 ## Phase 3: Home Experience (In Progress)
 - [x] M3.1: Home Screen
 - [x] M3.2: Task Card
-- [ ] M3.3: Add Task
+- [x] M3.3: Add Task
 - [ ] M3.4: Edit Task
 - [ ] M3.5: Delete & Archive
 - [ ] M3.6: Complete Task

@@ -35,9 +35,9 @@
 
 # Current Milestone
 
-- Current milestone: M3.2 Task Card.
+- Current milestone: M3.3 Empty State.
 - Status: Completed.
-- Validation: Implemented the pure `TaskCard` component with `onSwipe`, `onTap` callbacks. Replaced `HomeScreen`'s placeholder layout with this new widget.
+- Validation: Implemented `EmptyState` component with named constructor presets for various empty scenarios.
 
 # Completed
 
@@ -145,9 +145,9 @@
 
 # Next Milestone
 
-- Next milestone: M3.3 Empty State
+- Next milestone: M3.4 Add Task Bottom Sheet
 - Scope: Not specified.
-- Constraint: Do not implement M3.3 until authorized.
+- Constraint: Do not implement M3.4 until authorized.
 
 # Notes
 

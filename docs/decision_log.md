@@ -39,9 +39,10 @@ Living documents remain in `docs/`.
 - **Decision:** Database initialization is deferred until M2.
 - **Reason:** No Isar collections exist during M1. Avoid blocking application startup.
 
-### 8. Reusable Empty State created during M3.1 (2026-06-28)
-- **Context:** M3.1 (Home Screen) requested use of the `EmptyState` widget, which had not yet been created in M1.2.
-- **Decision:** Built the `EmptyState` reusable layout inside `lib/shared/widgets/layout/empty_state.dart` alongside the home screen to ensure minimal friction and adhere to PRD specifications without blocking the milestone.
+### 012. Reusable Layout Components
+- **Date:** 2026-06-28
+- **Context:** Building the Home Screen requires standard layout components (AppBar, Scaffold wrapper, Empty State) that will be reused across the application.
+- **Decision:** Built the `EmptyState` reusable layout inside `lib/shared/widgets/empty_state/empty_state.dart` alongside the home screen. Refactored it into a highly reusable system with named constructor presets (e.g. `EmptyState.taskList()`) to prevent duplication of layout logic across different features.
 
 ### 7. Riverpod State Management without Generator (2026-06-28)
 - **Context:** M2.4 needed complete state management using Riverpod.

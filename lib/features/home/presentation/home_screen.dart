@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:pastel_tasks/features/tasks/presentation/providers/task_providers.dart';
 import 'package:pastel_tasks/features/tasks/presentation/widgets/task_card/task_card.dart';
-import 'package:pastel_tasks/shared/widgets/layout/empty_state.dart';
+import 'package:pastel_tasks/shared/widgets/empty_state/empty_state.dart';
 
 /// Primary entry point for the task management application.
 class HomeScreen extends ConsumerWidget {
@@ -57,10 +57,10 @@ class HomeScreen extends ConsumerWidget {
         child: taskListAsync.when(
           data: (tasks) {
             if (tasks.isEmpty) {
-              return const EmptyState(
-                title: 'Nothing here yet.',
-                subtitle: 'Tap the + button to create your first task.',
-                icon: Icons.inbox_rounded,
+              return EmptyState.taskList(
+                onPrimaryAction: () {
+                  // TODO(M3.x): Implement quick add bottom sheet
+                },
               );
             }
 
