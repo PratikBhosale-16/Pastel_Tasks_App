@@ -2,11 +2,11 @@
 
 ## Current Milestone
 
-- Milestone: M3.3
-- Name: Empty State
+- Milestone: M3.4
+- Name: Add Task Bottom Sheet
 - Status: Completed
-- Validation: Created reusable `EmptyState` widget in `lib/shared/widgets/empty_state/` with named presets. Integrated into `HomeScreen`.
-- Overall Progress: UI foundations for Home are solid.
+- Validation: Built `AddTaskBottomSheet` UI component in `lib/features/tasks/presentation/widgets/add_task_bottom_sheet/`. Contains title, description, priority, tags, dates, and color picker. Validates title locally. No business logic side-effects.
+- Overall Progress: Home experience UI is nearly complete.
 
 ## Completed
 
@@ -65,7 +65,7 @@
 - [x] M3.1: Home Screen
 - [x] M3.2: Task Card
 - [x] M3.3: Add Task
-- [ ] M3.4: Edit Task
+- [x] M3.4: Edit Task
 - [ ] M3.5: Delete & Archive
 - [ ] M3.6: Complete Task
 - [ ] M3.7: Drag & Drop

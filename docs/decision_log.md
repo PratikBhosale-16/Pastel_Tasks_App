@@ -39,7 +39,12 @@ Living documents remain in `docs/`.
 - **Decision:** Database initialization is deferred until M2.
 - **Reason:** No Isar collections exist during M1. Avoid blocking application startup.
 
-### 012. Reusable Layout Components
+### 013. UI-Only Bottom Sheet State Management
+- **Date:** 2026-06-28
+- **Context:** Implementing the Add Task bottom sheet for M3.4 without triggering business logic, Isar, or Riverpod dependencies.
+- **Decision:** Built `AddTaskBottomSheet` as a `StatefulWidget` to handle purely local state (e.g. text controllers, selected chips, date pickers) and return a custom `AddTaskFormData` object via `Navigator.pop`. This decouples the UI from the domain layer entirely.
+
+## 012. Reusable Layout Components
 - **Date:** 2026-06-28
 - **Context:** Building the Home Screen requires standard layout components (AppBar, Scaffold wrapper, Empty State) that will be reused across the application.
 - **Decision:** Built the `EmptyState` reusable layout inside `lib/shared/widgets/empty_state/empty_state.dart` alongside the home screen. Refactored it into a highly reusable system with named constructor presets (e.g. `EmptyState.taskList()`) to prevent duplication of layout logic across different features.

@@ -35,9 +35,9 @@
 
 # Current Milestone
 
-- Current milestone: M3.3 Empty State.
+- Current milestone: M3.4 Add Task Bottom Sheet
 - Status: Completed.
-- Validation: Implemented `EmptyState` component with named constructor presets for various empty scenarios.
+- Validation: Implemented `AddTaskBottomSheet` with UI validation, responsive layout, and stateless data return via callback.
 
 # Completed
 
@@ -145,9 +145,9 @@
 
 # Next Milestone
 
-- Next milestone: M3.4 Add Task Bottom Sheet
+- Next milestone: M3.5 Create Task Flow
 - Scope: Not specified.
-- Constraint: Do not implement M3.4 until authorized.
+- Constraint: Do not implement M3.5 until authorized.
 
 # Notes
 
