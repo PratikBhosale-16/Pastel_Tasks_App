@@ -61,10 +61,7 @@
 
 ## Next Milestone
 
-- Milestone: M1.4
-- Name: Developer Preview & Validation
-- Description: Theme Preview Screen, Component Gallery, Accessibility verification, Widget tests, Golden tests.
-- Constraint: Do not implement features or navigation yet.
+- Milestone: M2 — Task Management Core
 
 ## Development Order
 
@@ -72,10 +69,19 @@
 - M0.2 Application Bootstrap.
 - M0.3 Core Infrastructure.
 - M1.1 Theme Foundation.
-- M1.2 Base Components.
-- M1.3 Feedback Components.
-- M1.4 Validation.
+- M1.2 Component Library.
+- M1.3 Application Shell.
+- M1.4 Developer Preview & Validation.
+- M1.5 Device Validation & UX Polish.
 - M2 Task Management Core.
+- M3 Task Organization.
+- M4 Calendar & Reminders.
+- M5 Search & Statistics.
+- M6 Backup & Restore.
+- M7 Settings.
+- M8 Performance & Polish.
+- M9 Testing & QA.
+- M10 Release Candidate.
 
 ## Notes
 

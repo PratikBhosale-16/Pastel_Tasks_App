@@ -36,8 +36,8 @@ Living documents remain in `docs/`.
 - **Reason:** Ensures that the Design System and Application Shell behave exactly as expected on physical Android devices. Catching layout, spacing, accessibility, and performance issues now prevents them from propagating into feature development.
 
 ## Isar Initialization Deferred
-- **Decision:** Database initialization in M1 is skipped if no Isar collections exist.
-- **Reason:** Isar.open() crashes if called without any collections. Since collections are introduced in M2, we temporarily bypass it to allow the application shell to boot without crashing.
+- **Decision:** Database initialization is deferred until M2.
+- **Reason:** No Isar collections exist during M1. Avoid blocking application startup.
 
 
 ### Consequences

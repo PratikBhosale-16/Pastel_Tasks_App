@@ -142,7 +142,7 @@
 
 # Next Milestone
 
-- Next milestone: M1.4 Developer Preview & Validation.
+- Next milestone: M2 — Task Management Core.
 - Scope: Theme preview screen, component gallery, accessibility verification, and tests.
 - Constraint: do not begin feature implementation during M1.4.
 

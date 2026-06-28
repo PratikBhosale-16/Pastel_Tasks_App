@@ -50,7 +50,14 @@
 - Added a minimal app shell smoke test so the test suite has an executable target.
 - Confirmed YouTube playback is not required by the approved PRD, TRD, or roadmap.
 - Removed `youtube_player_flutter` and `flutter_inappwebview` from the resolved dependency graph by updating approved `flutter_quill` to 11.5.1.
-- Android build validation remains blocked: `flutter build apk --debug` reaches Gradle but fails while configuring `isar_flutter_libs` 3.1.0+1 because its Android module does not specify a namespace.
+- Android build validation completed successfully.
+  Validated:
+  ✓ flutter pub get
+  ✓ flutter analyze
+  ✓ flutter test
+  ✓ flutter build apk --debug
+- Fixed startup crash caused by Isar initialization before any collections existed.
+- Database initialization is intentionally deferred until M2 because no collections currently exist.
 
 ### Changed
 
