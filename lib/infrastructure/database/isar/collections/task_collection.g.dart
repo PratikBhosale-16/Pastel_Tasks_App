@@ -17,90 +17,101 @@ const TaskCollectionSchema = CollectionSchema(
   name: r'TaskCollection',
   id: 5562253486380726738,
   properties: {
-    r'color': PropertySchema(
+    r'attachments': PropertySchema(
       id: 0,
+      name: r'attachments',
+      type: IsarType.stringList,
+    ),
+    r'color': PropertySchema(
+      id: 1,
       name: r'color',
       type: IsarType.string,
     ),
     r'completedAt': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'completedAt',
       type: IsarType.dateTime,
     ),
     r'createdAt': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'createdAt',
       type: IsarType.dateTime,
     ),
     r'description': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'description',
       type: IsarType.string,
     ),
     r'dueDate': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'dueDate',
       type: IsarType.dateTime,
     ),
     r'estimatedMinutes': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'estimatedMinutes',
       type: IsarType.long,
     ),
     r'isArchived': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'isArchived',
       type: IsarType.bool,
     ),
     r'isPinned': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'isPinned',
       type: IsarType.bool,
     ),
-    r'orderIndex': PropertySchema(
-      id: 8,
-      name: r'orderIndex',
+    r'position': PropertySchema(
+      id: 9,
+      name: r'position',
       type: IsarType.double,
     ),
     r'priority': PropertySchema(
-      id: 9,
+      id: 10,
       name: r'priority',
       type: IsarType.byte,
       enumMap: _TaskCollectionpriorityEnumValueMap,
     ),
     r'reminderId': PropertySchema(
-      id: 10,
+      id: 11,
       name: r'reminderId',
       type: IsarType.long,
     ),
+    r'repeatRule': PropertySchema(
+      id: 12,
+      name: r'repeatRule',
+      type: IsarType.byte,
+      enumMap: _TaskCollectionrepeatRuleEnumValueMap,
+    ),
     r'richText': PropertySchema(
-      id: 11,
+      id: 13,
       name: r'richText',
       type: IsarType.string,
     ),
     r'status': PropertySchema(
-      id: 12,
+      id: 14,
       name: r'status',
       type: IsarType.byte,
       enumMap: _TaskCollectionstatusEnumValueMap,
     ),
     r'tags': PropertySchema(
-      id: 13,
+      id: 15,
       name: r'tags',
       type: IsarType.stringList,
     ),
     r'title': PropertySchema(
-      id: 14,
+      id: 16,
       name: r'title',
       type: IsarType.string,
     ),
     r'updatedAt': PropertySchema(
-      id: 15,
+      id: 17,
       name: r'updatedAt',
       type: IsarType.dateTime,
     ),
     r'uuid': PropertySchema(
-      id: 16,
+      id: 18,
       name: r'uuid',
       type: IsarType.string,
     )
@@ -163,14 +174,27 @@ const TaskCollectionSchema = CollectionSchema(
         )
       ],
     ),
-    r'orderIndex': IndexSchema(
-      id: -6149432298716175352,
-      name: r'orderIndex',
+    r'position': IndexSchema(
+      id: 5117117876086213592,
+      name: r'position',
       unique: false,
       replace: false,
       properties: [
         IndexPropertySchema(
-          name: r'orderIndex',
+          name: r'position',
+          type: IndexType.value,
+          caseSensitive: false,
+        )
+      ],
+    ),
+    r'repeatRule': IndexSchema(
+      id: 2052812439836789330,
+      name: r'repeatRule',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'repeatRule',
           type: IndexType.value,
           caseSensitive: false,
         )
@@ -204,6 +228,13 @@ int _taskCollectionEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  bytesCount += 3 + object.attachments.length * 3;
+  {
+    for (var i = 0; i < object.attachments.length; i++) {
+      final value = object.attachments[i];
+      bytesCount += value.length * 3;
+    }
+  }
   bytesCount += 3 + object.color.length * 3;
   bytesCount += 3 + object.description.length * 3;
   {
@@ -230,23 +261,25 @@ void _taskCollectionSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.color);
-  writer.writeDateTime(offsets[1], object.completedAt);
-  writer.writeDateTime(offsets[2], object.createdAt);
-  writer.writeString(offsets[3], object.description);
-  writer.writeDateTime(offsets[4], object.dueDate);
-  writer.writeLong(offsets[5], object.estimatedMinutes);
-  writer.writeBool(offsets[6], object.isArchived);
-  writer.writeBool(offsets[7], object.isPinned);
-  writer.writeDouble(offsets[8], object.orderIndex);
-  writer.writeByte(offsets[9], object.priority.index);
-  writer.writeLong(offsets[10], object.reminderId);
-  writer.writeString(offsets[11], object.richText);
-  writer.writeByte(offsets[12], object.status.index);
-  writer.writeStringList(offsets[13], object.tags);
-  writer.writeString(offsets[14], object.title);
-  writer.writeDateTime(offsets[15], object.updatedAt);
-  writer.writeString(offsets[16], object.uuid);
+  writer.writeStringList(offsets[0], object.attachments);
+  writer.writeString(offsets[1], object.color);
+  writer.writeDateTime(offsets[2], object.completedAt);
+  writer.writeDateTime(offsets[3], object.createdAt);
+  writer.writeString(offsets[4], object.description);
+  writer.writeDateTime(offsets[5], object.dueDate);
+  writer.writeLong(offsets[6], object.estimatedMinutes);
+  writer.writeBool(offsets[7], object.isArchived);
+  writer.writeBool(offsets[8], object.isPinned);
+  writer.writeDouble(offsets[9], object.position);
+  writer.writeByte(offsets[10], object.priority.index);
+  writer.writeLong(offsets[11], object.reminderId);
+  writer.writeByte(offsets[12], object.repeatRule.index);
+  writer.writeString(offsets[13], object.richText);
+  writer.writeByte(offsets[14], object.status.index);
+  writer.writeStringList(offsets[15], object.tags);
+  writer.writeString(offsets[16], object.title);
+  writer.writeDateTime(offsets[17], object.updatedAt);
+  writer.writeString(offsets[18], object.uuid);
 }
 
 TaskCollection _taskCollectionDeserialize(
@@ -256,28 +289,32 @@ TaskCollection _taskCollectionDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = TaskCollection();
-  object.color = reader.readString(offsets[0]);
-  object.completedAt = reader.readDateTimeOrNull(offsets[1]);
-  object.createdAt = reader.readDateTime(offsets[2]);
-  object.description = reader.readString(offsets[3]);
-  object.dueDate = reader.readDateTimeOrNull(offsets[4]);
-  object.estimatedMinutes = reader.readLongOrNull(offsets[5]);
+  object.attachments = reader.readStringList(offsets[0]) ?? [];
+  object.color = reader.readString(offsets[1]);
+  object.completedAt = reader.readDateTimeOrNull(offsets[2]);
+  object.createdAt = reader.readDateTime(offsets[3]);
+  object.description = reader.readString(offsets[4]);
+  object.dueDate = reader.readDateTimeOrNull(offsets[5]);
+  object.estimatedMinutes = reader.readLongOrNull(offsets[6]);
   object.id = id;
-  object.isArchived = reader.readBool(offsets[6]);
-  object.isPinned = reader.readBool(offsets[7]);
-  object.orderIndex = reader.readDouble(offsets[8]);
+  object.isArchived = reader.readBool(offsets[7]);
+  object.isPinned = reader.readBool(offsets[8]);
+  object.position = reader.readDouble(offsets[9]);
   object.priority =
-      _TaskCollectionpriorityValueEnumMap[reader.readByteOrNull(offsets[9])] ??
+      _TaskCollectionpriorityValueEnumMap[reader.readByteOrNull(offsets[10])] ??
           Priority.low;
-  object.reminderId = reader.readLongOrNull(offsets[10]);
-  object.richText = reader.readStringOrNull(offsets[11]);
+  object.reminderId = reader.readLongOrNull(offsets[11]);
+  object.repeatRule = _TaskCollectionrepeatRuleValueEnumMap[
+          reader.readByteOrNull(offsets[12])] ??
+      RepeatRule.none;
+  object.richText = reader.readStringOrNull(offsets[13]);
   object.status =
-      _TaskCollectionstatusValueEnumMap[reader.readByteOrNull(offsets[12])] ??
+      _TaskCollectionstatusValueEnumMap[reader.readByteOrNull(offsets[14])] ??
           TaskStatus.pending;
-  object.tags = reader.readStringList(offsets[13]) ?? [];
-  object.title = reader.readString(offsets[14]);
-  object.updatedAt = reader.readDateTime(offsets[15]);
-  object.uuid = reader.readString(offsets[16]);
+  object.tags = reader.readStringList(offsets[15]) ?? [];
+  object.title = reader.readString(offsets[16]);
+  object.updatedAt = reader.readDateTime(offsets[17]);
+  object.uuid = reader.readString(offsets[18]);
   return object;
 }
 
@@ -289,42 +326,48 @@ P _taskCollectionDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringList(offset) ?? []) as P;
     case 1:
-      return (reader.readDateTimeOrNull(offset)) as P;
-    case 2:
-      return (reader.readDateTime(offset)) as P;
-    case 3:
       return (reader.readString(offset)) as P;
-    case 4:
+    case 2:
       return (reader.readDateTimeOrNull(offset)) as P;
+    case 3:
+      return (reader.readDateTime(offset)) as P;
+    case 4:
+      return (reader.readString(offset)) as P;
     case 5:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 6:
-      return (reader.readBool(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 7:
       return (reader.readBool(offset)) as P;
     case 8:
-      return (reader.readDouble(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 9:
+      return (reader.readDouble(offset)) as P;
+    case 10:
       return (_TaskCollectionpriorityValueEnumMap[
               reader.readByteOrNull(offset)] ??
           Priority.low) as P;
-    case 10:
-      return (reader.readLongOrNull(offset)) as P;
     case 11:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 12:
+      return (_TaskCollectionrepeatRuleValueEnumMap[
+              reader.readByteOrNull(offset)] ??
+          RepeatRule.none) as P;
+    case 13:
+      return (reader.readStringOrNull(offset)) as P;
+    case 14:
       return (_TaskCollectionstatusValueEnumMap[
               reader.readByteOrNull(offset)] ??
           TaskStatus.pending) as P;
-    case 13:
-      return (reader.readStringList(offset) ?? []) as P;
-    case 14:
-      return (reader.readString(offset)) as P;
     case 15:
-      return (reader.readDateTime(offset)) as P;
+      return (reader.readStringList(offset) ?? []) as P;
     case 16:
+      return (reader.readString(offset)) as P;
+    case 17:
+      return (reader.readDateTime(offset)) as P;
+    case 18:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -342,6 +385,22 @@ const _TaskCollectionpriorityValueEnumMap = {
   1: Priority.medium,
   2: Priority.high,
   3: Priority.critical,
+};
+const _TaskCollectionrepeatRuleEnumValueMap = {
+  'none': 0,
+  'daily': 1,
+  'weekly': 2,
+  'monthly': 3,
+  'yearly': 4,
+  'custom': 5,
+};
+const _TaskCollectionrepeatRuleValueEnumMap = {
+  0: RepeatRule.none,
+  1: RepeatRule.daily,
+  2: RepeatRule.weekly,
+  3: RepeatRule.monthly,
+  4: RepeatRule.yearly,
+  5: RepeatRule.custom,
 };
 const _TaskCollectionstatusEnumValueMap = {
   'pending': 0,
@@ -454,10 +513,18 @@ extension TaskCollectionQueryWhereSort
     });
   }
 
-  QueryBuilder<TaskCollection, TaskCollection, QAfterWhere> anyOrderIndex() {
+  QueryBuilder<TaskCollection, TaskCollection, QAfterWhere> anyPosition() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
-        const IndexWhereClause.any(indexName: r'orderIndex'),
+        const IndexWhereClause.any(indexName: r'position'),
+      );
+    });
+  }
+
+  QueryBuilder<TaskCollection, TaskCollection, QAfterWhere> anyRepeatRule() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        const IndexWhereClause.any(indexName: r'repeatRule'),
       );
     });
   }
@@ -888,44 +955,44 @@ extension TaskCollectionQueryWhere
   }
 
   QueryBuilder<TaskCollection, TaskCollection, QAfterWhereClause>
-      orderIndexEqualTo(double orderIndex) {
+      positionEqualTo(double position) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: r'orderIndex',
-        value: [orderIndex],
+        indexName: r'position',
+        value: [position],
       ));
     });
   }
 
   QueryBuilder<TaskCollection, TaskCollection, QAfterWhereClause>
-      orderIndexNotEqualTo(double orderIndex) {
+      positionNotEqualTo(double position) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
             .addWhereClause(IndexWhereClause.between(
-              indexName: r'orderIndex',
+              indexName: r'position',
               lower: [],
-              upper: [orderIndex],
+              upper: [position],
               includeUpper: false,
             ))
             .addWhereClause(IndexWhereClause.between(
-              indexName: r'orderIndex',
-              lower: [orderIndex],
+              indexName: r'position',
+              lower: [position],
               includeLower: false,
               upper: [],
             ));
       } else {
         return query
             .addWhereClause(IndexWhereClause.between(
-              indexName: r'orderIndex',
-              lower: [orderIndex],
+              indexName: r'position',
+              lower: [position],
               includeLower: false,
               upper: [],
             ))
             .addWhereClause(IndexWhereClause.between(
-              indexName: r'orderIndex',
+              indexName: r'position',
               lower: [],
-              upper: [orderIndex],
+              upper: [position],
               includeUpper: false,
             ));
       }
@@ -933,14 +1000,14 @@ extension TaskCollectionQueryWhere
   }
 
   QueryBuilder<TaskCollection, TaskCollection, QAfterWhereClause>
-      orderIndexGreaterThan(
-    double orderIndex, {
+      positionGreaterThan(
+    double position, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'orderIndex',
-        lower: [orderIndex],
+        indexName: r'position',
+        lower: [position],
         includeLower: include,
         upper: [],
       ));
@@ -948,33 +1015,126 @@ extension TaskCollectionQueryWhere
   }
 
   QueryBuilder<TaskCollection, TaskCollection, QAfterWhereClause>
-      orderIndexLessThan(
-    double orderIndex, {
+      positionLessThan(
+    double position, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'orderIndex',
+        indexName: r'position',
         lower: [],
-        upper: [orderIndex],
+        upper: [position],
         includeUpper: include,
       ));
     });
   }
 
   QueryBuilder<TaskCollection, TaskCollection, QAfterWhereClause>
-      orderIndexBetween(
-    double lowerOrderIndex,
-    double upperOrderIndex, {
+      positionBetween(
+    double lowerPosition,
+    double upperPosition, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'orderIndex',
-        lower: [lowerOrderIndex],
+        indexName: r'position',
+        lower: [lowerPosition],
         includeLower: includeLower,
-        upper: [upperOrderIndex],
+        upper: [upperPosition],
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<TaskCollection, TaskCollection, QAfterWhereClause>
+      repeatRuleEqualTo(RepeatRule repeatRule) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'repeatRule',
+        value: [repeatRule],
+      ));
+    });
+  }
+
+  QueryBuilder<TaskCollection, TaskCollection, QAfterWhereClause>
+      repeatRuleNotEqualTo(RepeatRule repeatRule) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'repeatRule',
+              lower: [],
+              upper: [repeatRule],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'repeatRule',
+              lower: [repeatRule],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'repeatRule',
+              lower: [repeatRule],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'repeatRule',
+              lower: [],
+              upper: [repeatRule],
+              includeUpper: false,
+            ));
+      }
+    });
+  }
+
+  QueryBuilder<TaskCollection, TaskCollection, QAfterWhereClause>
+      repeatRuleGreaterThan(
+    RepeatRule repeatRule, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'repeatRule',
+        lower: [repeatRule],
+        includeLower: include,
+        upper: [],
+      ));
+    });
+  }
+
+  QueryBuilder<TaskCollection, TaskCollection, QAfterWhereClause>
+      repeatRuleLessThan(
+    RepeatRule repeatRule, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'repeatRule',
+        lower: [],
+        upper: [repeatRule],
+        includeUpper: include,
+      ));
+    });
+  }
+
+  QueryBuilder<TaskCollection, TaskCollection, QAfterWhereClause>
+      repeatRuleBetween(
+    RepeatRule lowerRepeatRule,
+    RepeatRule upperRepeatRule, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'repeatRule',
+        lower: [lowerRepeatRule],
+        includeLower: includeLower,
+        upper: [upperRepeatRule],
         includeUpper: includeUpper,
       ));
     });
@@ -1098,6 +1258,231 @@ extension TaskCollectionQueryWhere
 
 extension TaskCollectionQueryFilter
     on QueryBuilder<TaskCollection, TaskCollection, QFilterCondition> {
+  QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
+      attachmentsElementEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'attachments',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
+      attachmentsElementGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'attachments',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
+      attachmentsElementLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'attachments',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
+      attachmentsElementBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'attachments',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
+      attachmentsElementStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'attachments',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
+      attachmentsElementEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'attachments',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
+      attachmentsElementContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'attachments',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
+      attachmentsElementMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'attachments',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
+      attachmentsElementIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'attachments',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
+      attachmentsElementIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'attachments',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
+      attachmentsLengthEqualTo(int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'attachments',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
+      attachmentsIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'attachments',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
+      attachmentsIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'attachments',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
+      attachmentsLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'attachments',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
+      attachmentsLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'attachments',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
+      attachmentsLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'attachments',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
+    });
+  }
+
   QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
       colorEqualTo(
     String value, {
@@ -1724,13 +2109,13 @@ extension TaskCollectionQueryFilter
   }
 
   QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
-      orderIndexEqualTo(
+      positionEqualTo(
     double value, {
     double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'orderIndex',
+        property: r'position',
         value: value,
         epsilon: epsilon,
       ));
@@ -1738,7 +2123,7 @@ extension TaskCollectionQueryFilter
   }
 
   QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
-      orderIndexGreaterThan(
+      positionGreaterThan(
     double value, {
     bool include = false,
     double epsilon = Query.epsilon,
@@ -1746,7 +2131,7 @@ extension TaskCollectionQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'orderIndex',
+        property: r'position',
         value: value,
         epsilon: epsilon,
       ));
@@ -1754,7 +2139,7 @@ extension TaskCollectionQueryFilter
   }
 
   QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
-      orderIndexLessThan(
+      positionLessThan(
     double value, {
     bool include = false,
     double epsilon = Query.epsilon,
@@ -1762,7 +2147,7 @@ extension TaskCollectionQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'orderIndex',
+        property: r'position',
         value: value,
         epsilon: epsilon,
       ));
@@ -1770,7 +2155,7 @@ extension TaskCollectionQueryFilter
   }
 
   QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
-      orderIndexBetween(
+      positionBetween(
     double lower,
     double upper, {
     bool includeLower = true,
@@ -1779,7 +2164,7 @@ extension TaskCollectionQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'orderIndex',
+        property: r'position',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -1911,6 +2296,62 @@ extension TaskCollectionQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
         property: r'reminderId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
+      repeatRuleEqualTo(RepeatRule value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'repeatRule',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
+      repeatRuleGreaterThan(
+    RepeatRule value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'repeatRule',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
+      repeatRuleLessThan(
+    RepeatRule value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'repeatRule',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
+      repeatRuleBetween(
+    RepeatRule lower,
+    RepeatRule upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'repeatRule',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -2798,17 +3239,16 @@ extension TaskCollectionQuerySortBy
     });
   }
 
-  QueryBuilder<TaskCollection, TaskCollection, QAfterSortBy>
-      sortByOrderIndex() {
+  QueryBuilder<TaskCollection, TaskCollection, QAfterSortBy> sortByPosition() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'orderIndex', Sort.asc);
+      return query.addSortBy(r'position', Sort.asc);
     });
   }
 
   QueryBuilder<TaskCollection, TaskCollection, QAfterSortBy>
-      sortByOrderIndexDesc() {
+      sortByPositionDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'orderIndex', Sort.desc);
+      return query.addSortBy(r'position', Sort.desc);
     });
   }
 
@@ -2836,6 +3276,20 @@ extension TaskCollectionQuerySortBy
       sortByReminderIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'reminderId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TaskCollection, TaskCollection, QAfterSortBy>
+      sortByRepeatRule() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'repeatRule', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TaskCollection, TaskCollection, QAfterSortBy>
+      sortByRepeatRuleDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'repeatRule', Sort.desc);
     });
   }
 
@@ -3024,17 +3478,16 @@ extension TaskCollectionQuerySortThenBy
     });
   }
 
-  QueryBuilder<TaskCollection, TaskCollection, QAfterSortBy>
-      thenByOrderIndex() {
+  QueryBuilder<TaskCollection, TaskCollection, QAfterSortBy> thenByPosition() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'orderIndex', Sort.asc);
+      return query.addSortBy(r'position', Sort.asc);
     });
   }
 
   QueryBuilder<TaskCollection, TaskCollection, QAfterSortBy>
-      thenByOrderIndexDesc() {
+      thenByPositionDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'orderIndex', Sort.desc);
+      return query.addSortBy(r'position', Sort.desc);
     });
   }
 
@@ -3062,6 +3515,20 @@ extension TaskCollectionQuerySortThenBy
       thenByReminderIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'reminderId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TaskCollection, TaskCollection, QAfterSortBy>
+      thenByRepeatRule() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'repeatRule', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TaskCollection, TaskCollection, QAfterSortBy>
+      thenByRepeatRuleDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'repeatRule', Sort.desc);
     });
   }
 
@@ -3131,6 +3598,13 @@ extension TaskCollectionQuerySortThenBy
 
 extension TaskCollectionQueryWhereDistinct
     on QueryBuilder<TaskCollection, TaskCollection, QDistinct> {
+  QueryBuilder<TaskCollection, TaskCollection, QDistinct>
+      distinctByAttachments() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'attachments');
+    });
+  }
+
   QueryBuilder<TaskCollection, TaskCollection, QDistinct> distinctByColor(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -3185,10 +3659,9 @@ extension TaskCollectionQueryWhereDistinct
     });
   }
 
-  QueryBuilder<TaskCollection, TaskCollection, QDistinct>
-      distinctByOrderIndex() {
+  QueryBuilder<TaskCollection, TaskCollection, QDistinct> distinctByPosition() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'orderIndex');
+      return query.addDistinctBy(r'position');
     });
   }
 
@@ -3202,6 +3675,13 @@ extension TaskCollectionQueryWhereDistinct
       distinctByReminderId() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'reminderId');
+    });
+  }
+
+  QueryBuilder<TaskCollection, TaskCollection, QDistinct>
+      distinctByRepeatRule() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'repeatRule');
     });
   }
 
@@ -3251,6 +3731,13 @@ extension TaskCollectionQueryProperty
   QueryBuilder<TaskCollection, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
+    });
+  }
+
+  QueryBuilder<TaskCollection, List<String>, QQueryOperations>
+      attachmentsProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'attachments');
     });
   }
 
@@ -3304,9 +3791,9 @@ extension TaskCollectionQueryProperty
     });
   }
 
-  QueryBuilder<TaskCollection, double, QQueryOperations> orderIndexProperty() {
+  QueryBuilder<TaskCollection, double, QQueryOperations> positionProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'orderIndex');
+      return query.addPropertyName(r'position');
     });
   }
 
@@ -3319,6 +3806,13 @@ extension TaskCollectionQueryProperty
   QueryBuilder<TaskCollection, int?, QQueryOperations> reminderIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'reminderId');
+    });
+  }
+
+  QueryBuilder<TaskCollection, RepeatRule, QQueryOperations>
+      repeatRuleProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'repeatRule');
     });
   }
 

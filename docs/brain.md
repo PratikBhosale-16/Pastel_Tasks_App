@@ -35,9 +35,9 @@
 
 # Current Milestone
 
-- Current milestone: M2.4 State Management.
+- Current milestone: M3.1 Home Screen.
 - Status: Completed.
-- Validation: Riverpod providers mapped repositories to Reactive AsyncValue streams, ensuring complete isolation of Isar exceptions.
+- Validation: Implemented the initial `HomeScreen` layout adhering to the UX design system tokens, empty states, and connected it to the Riverpod domain state properly.
 
 # Completed
 
@@ -71,15 +71,16 @@
 
 # Not Started
 
-- Full design system.
-- Feature folders.
-- Screens and UI components.
-- Task management.
-- Feature repositories and models.
-- Database collections.
-- Notification implementation.
-- Backup and authentication.
-- Code generation.
+- M2.5 Domain Validation.
+- M3 Home Experience.
+- M4 Organization.
+- M5 Time Management.
+- M6 Notes & Rich Content.
+- M7 Statistics.
+- M8 Backup.
+- M9 Settings.
+- M10 Performance.
+- M11 Release Candidate.
 
 # Coding Rules
 
@@ -144,9 +145,9 @@
 
 # Next Milestone
 
-- Next milestone: M2.2 Database Layer.
-- Scope: Implement Isar collections and data sources based on the M2.1 Domain Architecture.
-- Constraint: Do not implement M2.2 until authorized.
+- Next milestone: M3.2 Task Card
+- Scope: Implement the core TaskCard UI representation mapped into the Home Screen.
+- Constraint: Do not implement M3.2 until authorized.
 
 # Notes
 

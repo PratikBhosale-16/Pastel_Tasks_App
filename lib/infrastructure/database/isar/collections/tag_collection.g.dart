@@ -37,8 +37,13 @@ const TagCollectionSchema = CollectionSchema(
       name: r'name',
       type: IsarType.string,
     ),
-    r'uuid': PropertySchema(
+    r'position': PropertySchema(
       id: 4,
+      name: r'position',
+      type: IsarType.double,
+    ),
+    r'uuid': PropertySchema(
+      id: 5,
       name: r'uuid',
       type: IsarType.string,
     )
@@ -74,6 +79,19 @@ const TagCollectionSchema = CollectionSchema(
           caseSensitive: true,
         )
       ],
+    ),
+    r'position': IndexSchema(
+      id: 5117117876086213592,
+      name: r'position',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'position',
+          type: IndexType.value,
+          caseSensitive: false,
+        )
+      ],
     )
   },
   links: {},
@@ -107,7 +125,8 @@ void _tagCollectionSerialize(
   writer.writeDateTime(offsets[1], object.createdAt);
   writer.writeString(offsets[2], object.icon);
   writer.writeString(offsets[3], object.name);
-  writer.writeString(offsets[4], object.uuid);
+  writer.writeDouble(offsets[4], object.position);
+  writer.writeString(offsets[5], object.uuid);
 }
 
 TagCollection _tagCollectionDeserialize(
@@ -122,7 +141,8 @@ TagCollection _tagCollectionDeserialize(
   object.icon = reader.readString(offsets[2]);
   object.id = id;
   object.name = reader.readString(offsets[3]);
-  object.uuid = reader.readString(offsets[4]);
+  object.position = reader.readDouble(offsets[4]);
+  object.uuid = reader.readString(offsets[5]);
   return object;
 }
 
@@ -142,6 +162,8 @@ P _tagCollectionDeserializeProp<P>(
     case 3:
       return (reader.readString(offset)) as P;
     case 4:
+      return (reader.readDouble(offset)) as P;
+    case 5:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -221,6 +243,14 @@ extension TagCollectionQueryWhereSort
   QueryBuilder<TagCollection, TagCollection, QAfterWhere> anyId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(const IdWhereClause.any());
+    });
+  }
+
+  QueryBuilder<TagCollection, TagCollection, QAfterWhere> anyPosition() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        const IndexWhereClause.any(indexName: r'position'),
+      );
     });
   }
 }
@@ -383,6 +413,98 @@ extension TagCollectionQueryWhere
               includeUpper: false,
             ));
       }
+    });
+  }
+
+  QueryBuilder<TagCollection, TagCollection, QAfterWhereClause> positionEqualTo(
+      double position) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'position',
+        value: [position],
+      ));
+    });
+  }
+
+  QueryBuilder<TagCollection, TagCollection, QAfterWhereClause>
+      positionNotEqualTo(double position) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'position',
+              lower: [],
+              upper: [position],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'position',
+              lower: [position],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'position',
+              lower: [position],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'position',
+              lower: [],
+              upper: [position],
+              includeUpper: false,
+            ));
+      }
+    });
+  }
+
+  QueryBuilder<TagCollection, TagCollection, QAfterWhereClause>
+      positionGreaterThan(
+    double position, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'position',
+        lower: [position],
+        includeLower: include,
+        upper: [],
+      ));
+    });
+  }
+
+  QueryBuilder<TagCollection, TagCollection, QAfterWhereClause>
+      positionLessThan(
+    double position, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'position',
+        lower: [],
+        upper: [position],
+        includeUpper: include,
+      ));
+    });
+  }
+
+  QueryBuilder<TagCollection, TagCollection, QAfterWhereClause> positionBetween(
+    double lowerPosition,
+    double upperPosition, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'position',
+        lower: [lowerPosition],
+        includeLower: includeLower,
+        upper: [upperPosition],
+        includeUpper: includeUpper,
+      ));
     });
   }
 }
@@ -905,6 +1027,72 @@ extension TagCollectionQueryFilter
     });
   }
 
+  QueryBuilder<TagCollection, TagCollection, QAfterFilterCondition>
+      positionEqualTo(
+    double value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'position',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<TagCollection, TagCollection, QAfterFilterCondition>
+      positionGreaterThan(
+    double value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'position',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<TagCollection, TagCollection, QAfterFilterCondition>
+      positionLessThan(
+    double value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'position',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<TagCollection, TagCollection, QAfterFilterCondition>
+      positionBetween(
+    double lower,
+    double upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'position',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
   QueryBuilder<TagCollection, TagCollection, QAfterFilterCondition> uuidEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -1098,6 +1286,19 @@ extension TagCollectionQuerySortBy
     });
   }
 
+  QueryBuilder<TagCollection, TagCollection, QAfterSortBy> sortByPosition() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'position', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TagCollection, TagCollection, QAfterSortBy>
+      sortByPositionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'position', Sort.desc);
+    });
+  }
+
   QueryBuilder<TagCollection, TagCollection, QAfterSortBy> sortByUuid() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'uuid', Sort.asc);
@@ -1174,6 +1375,19 @@ extension TagCollectionQuerySortThenBy
     });
   }
 
+  QueryBuilder<TagCollection, TagCollection, QAfterSortBy> thenByPosition() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'position', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TagCollection, TagCollection, QAfterSortBy>
+      thenByPositionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'position', Sort.desc);
+    });
+  }
+
   QueryBuilder<TagCollection, TagCollection, QAfterSortBy> thenByUuid() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'uuid', Sort.asc);
@@ -1216,6 +1430,12 @@ extension TagCollectionQueryWhereDistinct
     });
   }
 
+  QueryBuilder<TagCollection, TagCollection, QDistinct> distinctByPosition() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'position');
+    });
+  }
+
   QueryBuilder<TagCollection, TagCollection, QDistinct> distinctByUuid(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1253,6 +1473,12 @@ extension TagCollectionQueryProperty
   QueryBuilder<TagCollection, String, QQueryOperations> nameProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'name');
+    });
+  }
+
+  QueryBuilder<TagCollection, double, QQueryOperations> positionProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'position');
     });
   }
 

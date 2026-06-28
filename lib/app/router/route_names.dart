@@ -6,5 +6,11 @@ abstract final class RouteNames {
   static const splash = 'splash';
 
   /// Bootstrap splash route path.
-  static const splashPath = '/';
+  static const splashPath = '/splash';
+
+  /// Home route name.
+  static const home = 'home';
+
+  /// Home route path.
+  static const homePath = '/';
 }

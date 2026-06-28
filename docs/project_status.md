@@ -2,11 +2,11 @@
 
 ## Current Milestone
 
-- Milestone: M2.4
-- Name: State Management
+- Milestone: M3.1
+- Name: Home Screen
 - Status: Completed
-- Validation: Implemented core Riverpod providers and domain Notifiers bridging the Repository Layer without UI logic.
-- Overall Progress: Data access patterns and reactive state management established.
+- Validation: Connected `HomeScreen` to `taskListProvider` showing appropriate UI mapping for loading, error, empty (`EmptyState`), and loaded tasks.
+- Overall Progress: The first production UI is live. All data flows correctly from Isar -> Repository -> Riverpod -> UI without breaking architectural boundaries.
 
 ## Completed
 
@@ -54,23 +54,33 @@
 - [x] M1.4: Developer Preview & Validation
 - [x] M1.5: Device Validation & UX Polish
 
-## Phase 2: Domain & Persistence (In Progress)
+## Phase 2: Backend Foundation (In Progress)
 - [x] M2.1: Domain Architecture
 - [x] M2.2: Database Layer
 - [x] M2.3: Repository Layer
 - [x] M2.4: State Management
+- [ ] M2.5: Validation
+
+## Phase 3: Home Experience (In Progress)
+- [x] M3.1: Home Screen
+- [ ] M3.2: Task Card
+- [ ] M3.3: Add Task
+- [ ] M3.4: Edit Task
+- [ ] M3.5: Delete & Archive
+- [ ] M3.6: Complete Task
+- [ ] M3.7: Drag & Drop
+- [ ] M3.8: Home Validation
 
 ## Pending
 
-- M2 Task Management Core.
-- M3 Task Organization.
-- M4 Calendar and Reminders.
-- M5 Search and Statistics.
-- M6 Backup and Restore.
-- M7 Settings and Personalization.
-- M8 Performance and Polish.
-- M9 Testing and QA.
-- M10 Release Candidate.
+- [ ] M4: Organization (M4.1 Tags, M4.2 Filters, M4.3 Search, M4.4 Sorting, M4.5 Bulk Actions, M4.6 Validation)
+- [ ] M5: Time Management (M5.1 Calendar, M5.2 Due Dates, M5.3 Reminders, M5.4 Repeat Rules, M5.5 WorkManager, M5.6 Validation)
+- [ ] M6: Notes & Rich Content (M6.1 Rich Notes, M6.2 Flutter Quill, M6.3 Attachments, M6.4 Validation)
+- [ ] M7: Statistics (M7.1 Dashboard, M7.2 Productivity, M7.3 Charts, M7.4 Insights)
+- [ ] M8: Backup (M8.1 Google Sign In, M8.2 Drive Backup, M8.3 Restore, M8.4 Export, M8.5 Import)
+- [ ] M9: Settings (Theme, Language, Notifications, Backup Settings, About)
+- [ ] M10: Performance (Optimization, Animations, Accessibility, Memory, Battery, Startup)
+- [ ] M11: Release Candidate (Bug fixing, QA, Play Store assets, Documentation, Release)
 
 ## Next Milestone
 
@@ -78,23 +88,19 @@
 
 ## Development Order
 
-- M0.1 Project Foundation.
-- M0.2 Application Bootstrap.
-- M0.3 Core Infrastructure.
-- M1.1 Theme Foundation.
-- M1.2 Component Library.
-- M1.3 Application Shell.
-- M1.4 Developer Preview & Validation.
-- M1.5 Device Validation & UX Polish.
-- M2 Task Management Core.
-- M3 Task Organization.
-- M4 Calendar & Reminders.
-- M5 Search & Statistics.
-- M6 Backup & Restore.
-- M7 Settings.
-- M8 Performance & Polish.
-- M9 Testing & QA.
-- M10 Release Candidate.
+- M0 Foundation
+- M1 Design System
+- M1.5 Device Validation
+- M2 Backend Foundation
+- M3 Home Experience
+- M4 Organization
+- M5 Time Management
+- M6 Notes & Rich Content
+- M7 Statistics
+- M8 Backup
+- M9 Settings
+- M10 Performance
+- M11 Release Candidate
 
 ## Notes
 

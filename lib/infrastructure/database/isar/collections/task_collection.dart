@@ -1,5 +1,6 @@
 import 'package:isar/isar.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/priority.dart';
+import 'package:pastel_tasks/features/tasks/domain/enums/repeat_rule.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/task_status.dart';
 
 part 'task_collection.g.dart';
@@ -16,6 +17,8 @@ class TaskCollection {
   late String description;
 
   List<String> tags = [];
+
+  List<String> attachments = [];
 
   String? richText;
 
@@ -41,7 +44,11 @@ class TaskCollection {
   late bool isArchived;
 
   @Index()
-  late double orderIndex;
+  late double position;
+
+  @enumerated
+  @Index()
+  late RepeatRule repeatRule;
 
   late String color;
 

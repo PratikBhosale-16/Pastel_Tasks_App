@@ -16,5 +16,8 @@ class TagCollection {
 
   late String icon;
 
+  @Index()
+  late double position;
+
   late DateTime createdAt;
 }
