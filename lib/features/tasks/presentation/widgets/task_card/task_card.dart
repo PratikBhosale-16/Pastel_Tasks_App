@@ -201,12 +201,15 @@ class TaskCard extends StatelessWidget {
     return Dismissible(
       key: ValueKey(task.id),
       direction: DismissDirection.horizontal,
-      onDismissed: (direction) {
+      confirmDismiss: (direction) async {
         if (direction == DismissDirection.endToStart) {
           onSwipeLeft?.call();
+          return true; // Item will be deleted, so let it dismiss
         } else if (direction == DismissDirection.startToEnd) {
           onSwipeRight?.call();
+          return false; // Stays in the list (just crossed out), so bounce back
         }
+        return false;
       },
       background: Container(
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
@@ -221,10 +224,10 @@ class TaskCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
         alignment: Alignment.centerRight,
         decoration: BoxDecoration(
-          color: Colors.orange.shade300,
+          color: Colors.red.shade400,
           borderRadius: BorderRadius.circular(AppRadius.xl),
         ),
-        child: const Icon(Icons.archive_rounded, color: Colors.white, size: 32),
+        child: const Icon(Icons.delete_outline_rounded, color: Colors.white, size: 32),
       ),
       child: cardContent,
     );

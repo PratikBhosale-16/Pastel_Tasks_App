@@ -124,28 +124,46 @@ class HomeScreen extends ConsumerWidget {
         duration: const Duration(milliseconds: 300),
         child: taskListAsync.when(
           data: (tasks) {
-            if (tasks.isEmpty) {
+            // Check active/completed tasks only since watchAll doesn't filter.
+            // But if the user expects all tasks to be shown here, we'll leave it.
+            // Wait, if it's the home screen, normally it's active tasks. Let's just use tasks.
+            final displayTasks = tasks.where((t) => !t.isArchived).toList();
+            if (displayTasks.isEmpty) {
               return EmptyState.taskList(
+                key: const ValueKey('empty_state'),
                 onPrimaryAction: () => _showAddTask(context, ref),
               );
             }
 
             return ListView.separated(
+              key: const ValueKey('task_list'),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-              itemCount: tasks.length,
+              itemCount: displayTasks.length,
               separatorBuilder: (_, __) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
-                final task = tasks[index];
+                final task = displayTasks[index];
                 return TaskCard(
                   task: task,
                   onTap: () {
                     // TODO(M3.x): Navigate to task details
                   },
                   onSwipeLeft: () {
-                    // TODO(M3.x): Implement archive action
+                    ref.read(taskNotifierProvider.notifier).delete(task.id);
                   },
                   onSwipeRight: () {
-                    // TODO(M3.x): Implement complete action
+                    final newStatus = task.status == TaskStatus.completed 
+                        ? TaskStatus.pending 
+                        : TaskStatus.completed;
+                    
+                    final updatedTask = task.copyWith(
+                      status: newStatus,
+                      updatedAt: DateTime.now().toUtc(),
+                      completedAt: newStatus == TaskStatus.completed 
+                          ? DateTime.now().toUtc() 
+                          : null,
+                    );
+                    
+                    ref.read(taskNotifierProvider.notifier).updateTask(updatedTask);
                   },
                 );
               },
