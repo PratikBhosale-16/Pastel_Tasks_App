@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:pastel_tasks/features/tasks/presentation/providers/task_providers.dart';
+import 'package:pastel_tasks/features/tasks/presentation/widgets/task_card/task_card.dart';
 import 'package:pastel_tasks/shared/widgets/layout/empty_state.dart';
 
 /// Primary entry point for the task management application.
@@ -69,13 +70,17 @@ class HomeScreen extends ConsumerWidget {
               separatorBuilder: (_, __) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
                 final task = tasks[index];
-                return ListTile(
-                  title: Text(task.title),
-                  subtitle: Text(task.priority.name.toUpperCase()),
-                  tileColor: colorScheme.surface,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
+                return TaskCard(
+                  task: task,
+                  onTap: () {
+                    // TODO(M3.x): Navigate to task details
+                  },
+                  onSwipeLeft: () {
+                    // TODO(M3.x): Implement archive action
+                  },
+                  onSwipeRight: () {
+                    // TODO(M3.x): Implement complete action
+                  },
                 );
               },
             );

@@ -35,9 +35,9 @@
 
 # Current Milestone
 
-- Current milestone: M3.1 Home Screen.
+- Current milestone: M3.2 Task Card.
 - Status: Completed.
-- Validation: Implemented the initial `HomeScreen` layout adhering to the UX design system tokens, empty states, and connected it to the Riverpod domain state properly.
+- Validation: Implemented the pure `TaskCard` component with `onSwipe`, `onTap` callbacks. Replaced `HomeScreen`'s placeholder layout with this new widget.
 
 # Completed
 
@@ -145,9 +145,9 @@
 
 # Next Milestone
 
-- Next milestone: M3.2 Task Card
-- Scope: Implement the core TaskCard UI representation mapped into the Home Screen.
-- Constraint: Do not implement M3.2 until authorized.
+- Next milestone: M3.3 Empty State
+- Scope: Not specified.
+- Constraint: Do not implement M3.3 until authorized.
 
 # Notes
 

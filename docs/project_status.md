@@ -2,11 +2,11 @@
 
 ## Current Milestone
 
-- Milestone: M3.1
-- Name: Home Screen
+- Milestone: M3.2
+- Name: Task Card
 - Status: Completed
-- Validation: Connected `HomeScreen` to `taskListProvider` showing appropriate UI mapping for loading, error, empty (`EmptyState`), and loaded tasks.
-- Overall Progress: The first production UI is live. All data flows correctly from Isar -> Repository -> Riverpod -> UI without breaking architectural boundaries.
+- Validation: Implemented `TaskCard` as a pure, stateless reusable component with `Dismissible` swipe actions and Material animations. Integrated into `HomeScreen`.
+- Overall Progress: The core UI unit of the application has been built and rendered successfully, adhering to UX specs without invoking side effects.
 
 ## Completed
 
@@ -63,7 +63,7 @@
 
 ## Phase 3: Home Experience (In Progress)
 - [x] M3.1: Home Screen
-- [ ] M3.2: Task Card
+- [x] M3.2: Task Card
 - [ ] M3.3: Add Task
 - [ ] M3.4: Edit Task
 - [ ] M3.5: Delete & Archive
