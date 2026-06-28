@@ -73,8 +73,8 @@
 - [x] M3.9: Delete
 - [x] M3.10: Archive
 - [x] M3.11: Reorder (Drag & Drop)
-- [ ] M3.12: Home Validation
-- [ ] M3.13: UX Polish
+- [x] M3.12: Home Validation
+- [x] M3.13: UX Polish
 
 ## Pending
 

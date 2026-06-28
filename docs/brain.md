@@ -139,8 +139,8 @@
 - System: connectivity_plus, device_info_plus, path_provider, path, share_plus, package_info_plus, url_launcher.
 - Preferences: shared_preferences.
 
-# Current Phase: Phase 3 (Home Experience)
-Current Milestone: M3.12 (Home Validation) - pending authorization
+# Current Phase: Phase 4 (Organization)
+Current Milestone: M4.1 (Tags) - pending authorization
 
 Completed Milestones:
 - M0.1 - M0.3
@@ -157,6 +157,7 @@ Completed Milestones:
 - M3.9 Delete Task
 - M3.10 Archive Task
 - M3.11 Drag & Drop Reordering
+- M3.12 Home Validation
 
 # Current Blockers
 

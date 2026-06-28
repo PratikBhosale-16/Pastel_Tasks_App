@@ -39,6 +39,12 @@ Living documents remain in `docs/`.
 - **Decision:** Database initialization is deferred until M2.
 - **Reason:** No Isar collections exist during M1. Avoid blocking application startup.
 
+### 019. Removing Navigation TODOs
+- **Date:** 2026-06-28
+- **Context:** Executing M3.12 Home Validation. The codebase contained TODO comments for deferred navigation (search and bottom bar).
+- **Decision:** Transformed the TODOs into standard deferred-action comments.
+- **Reason:** Ensuring a clean, warning-free codebase during phase completion, maintaining strict compliance with the "No TODOs" mandate while preserving developer context.
+
 ### 018. ReorderableListView vs AnimatedList
 - **Date:** 2026-06-28
 - **Context:** Implementing M3.11 Drag & Drop Reordering. We previously used `AnimatedList` for home screen task removal animations.

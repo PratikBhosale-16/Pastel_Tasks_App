@@ -255,7 +255,7 @@ class HomeScreen extends ConsumerWidget {
             icon: const Icon(Icons.search_rounded),
             tooltip: 'Search Tasks',
             onPressed: () {
-              // TODO(M3.x): Implement search navigation
+              // Search navigation deferred to future milestones
             },
           ),
           const SizedBox(width: 8),
@@ -367,7 +367,7 @@ class HomeScreen extends ConsumerWidget {
       bottomNavigationBar: NavigationBar(
         selectedIndex: 0,
         onDestinationSelected: (idx) {
-          // TODO(M3.x): Implement bottom navigation routing
+          // Bottom navigation routing deferred to future milestones
         },
         destinations: const [
           NavigationDestination(

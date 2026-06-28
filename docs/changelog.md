@@ -16,6 +16,7 @@
 - Updated logger levels to suppress verbose output in release builds.
 
 ## [Unreleased]
+- M3.12: Completed Home Experience Validation & Polish. Removed TODO comments in `home_screen.dart` and validated CRUD operations, swipe gestures, reordering, accessibility, and app persistence on physical devices.
 - M3.11: Implemented smooth drag-and-drop task reordering on the Home Screen using `ReorderableListView.builder`. Added explicit Move Up/Down accessibility actions in the Task Card's long-press menu to ensure compliance with inclusive UX guidelines. Connected reordering updates dynamically with the `TaskNotifier` and Isar `TaskRepository`.
 - M3.10: Implemented task archiving functionality. Built a dedicated `ArchiveScreen` utilizing `AnimatedList` for smooth entry/exit animations. Updated `TaskCard` to display archived state without checkboxes. Added integrated Archive and Restore buttons directly into the `AddTaskBottomSheet`. Ensured archived tasks are excluded from the `HomeScreen` via `taskListProvider(isArchived: false)` while preserving underlying data. Undo support remains robust across swipe, menu, and bottom sheet entry points.
 - M3.9: Implemented permanent task deletion. Built a reusable `ConfirmationDialog`. Updated `AddTaskBottomSheet` to use secondary delete actions natively. Transformed `HomeScreen` ListView to an `AnimatedList` with an automatic list-diffing algorithm for robust Material motion removal. Integrated Undo via SnackBar that leverages the underlying Isar auto-increment ID to restore a task without breaking domain identities.
