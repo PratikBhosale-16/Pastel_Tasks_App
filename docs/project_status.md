@@ -2,11 +2,11 @@
 
 ## Current Milestone
 
-- Milestone: M3.6
-- Name: Edit Task
+- Milestone: M3.7
+- Name: Complete / Restore
 - Status: Completed
-- Validation: End-to-end task editing works. Edits persist in Isar and appear instantly on the Home Screen.
-- Overall Progress: Home experience edit workflows are functional.
+- Validation: Tasks can be checked/unchecked. The state persists to Isar, correctly updating `completedAt`. The UI updates instantly via Riverpod streams with smooth Material transitions.
+- Overall Progress: Home experience basic workflows, edit workflows, and completion workflows are functional.
 
 ## Completed
 
@@ -68,7 +68,7 @@
 - [x] M3.4: Add Task Bottom Sheet
 - [x] M3.5: Create Task Flow
 - [x] M3.6: Edit Task
-- [ ] M3.7: Complete / Restore
+- [x] M3.7: Complete / Restore
 - [ ] M3.8: Swipe Actions
 - [ ] M3.9: Delete
 - [ ] M3.10: Archive

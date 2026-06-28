@@ -48,9 +48,7 @@ class TaskCard extends StatelessWidget {
 
     // Base card color based on states
     Color cardColor = colorScheme.surface;
-    if (isCompleted) {
-      cardColor = colorScheme.surface.withValues(alpha: 0.6);
-    } else if (isArchived) {
+    if (isArchived) {
       cardColor = colorScheme.surfaceVariant.withValues(alpha: 0.5);
     }
     
@@ -58,14 +56,17 @@ class TaskCard extends StatelessWidget {
     // For now we'll just use primary color if it's set to "default"
     final priorityColor = _getPriorityColor(task.priority, colorScheme);
 
-    final cardContent = Card(
-      elevation: 2,
-      margin: EdgeInsets.zero,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppRadius.xl),
-      ),
-      color: cardColor,
-      child: InkWell(
+    final cardContent = AnimatedOpacity(
+      duration: const Duration(milliseconds: 300),
+      opacity: isCompleted ? 0.6 : 1.0,
+      child: Card(
+        elevation: 2,
+        margin: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.xl),
+        ),
+        color: cardColor,
+        child: InkWell(
         onTap: onTap,
         onLongPress: onLongPress,
         borderRadius: BorderRadius.circular(AppRadius.xl),
@@ -102,13 +103,14 @@ class TaskCard extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            task.title,
-                            style: theme.textTheme.titleMedium?.copyWith(
+                          AnimatedDefaultTextStyle(
+                            duration: const Duration(milliseconds: 300),
+                            style: theme.textTheme.titleMedium!.copyWith(
                               decoration: isCompleted ? TextDecoration.lineThrough : null,
-                              color: isCompleted ? colorScheme.onSurface.withValues(alpha: 0.5) : colorScheme.onSurface,
+                              color: colorScheme.onSurface,
                               fontWeight: FontWeight.w600,
                             ),
+                            child: Text(task.title),
                           ),
                           if (task.description.isNotEmpty) ...[
                             const SizedBox(height: AppSpacing.xs),
@@ -196,7 +198,7 @@ class TaskCard extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ));
 
     return Dismissible(
       key: ValueKey(task.id),

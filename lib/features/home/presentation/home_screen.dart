@@ -1,4 +1,6 @@
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:pastel_tasks/features/tasks/presentation/providers/task_providers.dart';
@@ -220,9 +222,16 @@ class HomeScreen extends ConsumerWidget {
                       completedAt: newStatus == TaskStatus.completed 
                           ? DateTime.now().toUtc() 
                           : null,
+                      clearCompletedAt: newStatus != TaskStatus.completed,
                     );
                     
                     ref.read(taskNotifierProvider.notifier).updateTask(updatedTask);
+
+                    if (newStatus == TaskStatus.completed) {
+                      SemanticsService.announce('Task completed', ui.TextDirection.ltr);
+                    } else {
+                      SemanticsService.announce('Task restored', ui.TextDirection.ltr);
+                    }
                   },
                 );
               },

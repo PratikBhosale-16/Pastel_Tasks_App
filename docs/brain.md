@@ -35,9 +35,9 @@
 
 # Current Milestone
 
-- Current milestone: M3.6 Edit Task
+- Current milestone: M3.7 Complete / Restore
 - Status: Completed.
-- Validation: Successfully reused `AddTaskBottomSheet` for editing tasks. Wired pre-filled fields, discard changes dialog, and deletion actions to update Isar and refresh the UI automatically. Tested via APK build.
+- Validation: Successfully implemented task completion using the existing `TaskCard`. Animated `Text` and `Card` opacity, and handled `completedAt` clearing logic. Tested via APK build.
 
 # Completed
 
@@ -145,9 +145,9 @@
 
 # Next Milestone
 
-- Next milestone: M3.7 Complete / Restore
+- Next milestone: M3.8 Swipe Actions
 - Scope: Not specified.
-- Constraint: Do not implement M3.7 until authorized.
+- Constraint: Do not implement M3.8 until authorized.
 
 # Notes
 

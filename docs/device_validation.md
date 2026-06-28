@@ -52,3 +52,11 @@ Build Variant
 - **Unsaved Changes**: The Discard Changes Dialog appears when attempting to close the sheet with modified fields. Discard closes it, Keep Editing dismisses the dialog.
 - **Persistence**: Edits successfully persist through app restart. 
 - **Deletion**: The Delete secondary action successfully removes the task from the database.
+
+## M3.7
+
+### Verification
+- **Create and Complete**: Created task, tapped checkbox, verified strikethrough and opacity animations. Restarted app, state persists.
+- **Restore Task**: Restored completed task by unchecking, verified restoration of default text and opacity. Restarted app, state persists.
+- **Load Testing**: Completed 20 tasks sequentially, restored 10 tasks.
+- **Rapid Tapping**: Rapidly tapped checkbox on a single task. Verified no duplicate state updates, no crashes, and no UI glitches or frozen animations.

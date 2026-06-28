@@ -39,6 +39,11 @@ Living documents remain in `docs/`.
 - **Decision:** Database initialization is deferred until M2.
 - **Reason:** No Isar collections exist during M1. Avoid blocking application startup.
 
+### 016. Task Completion State Management
+- **Date:** 2026-06-28
+- **Context:** Implementing M3.7 Task Completion and Restoration.
+- **Decision:** Modified `Task.copyWith()` to accept `bool clearCompletedAt = false` because Dart's `??` operator prevents nulling out an existing `DateTime?` value. Wrapped `TaskCard` content with `AnimatedOpacity` and `AnimatedDefaultTextStyle` for implicit smooth animations without introducing manual animation controllers or complex transitions.
+
 ### 015. Reusing AddTaskBottomSheet for Editing
 - **Date:** 2026-06-28
 - **Context:** Implementing the Edit Task workflow for M3.6.

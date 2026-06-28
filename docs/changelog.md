@@ -16,6 +16,7 @@
 - Updated logger levels to suppress verbose output in release builds.
 
 ## [Unreleased]
+- M3.7: Implemented task completion and restoration via the existing `TaskCard` checkbox. Added smooth `AnimatedOpacity` and `AnimatedDefaultTextStyle` Material transitions. Used `SemanticsService` to broadcast accessibility announcements on state change. `Task` domain entity updated to properly support clearing `completedAt`.
 - M3.6: Implemented full task editing by reusing `AddTaskBottomSheet`. Added pre-filled fields logic, a discard changes dialog to prevent accidental data loss, and a secondary action button to delete tasks directly from the edit view.
 - M3.5: Connected `AddTaskBottomSheet` to the backend. Created tasks now map local form data to `Task` entities and persist in the local Isar database. The `HomeScreen` reacts automatically via `taskListProvider` stream.
 - M3.4: Added `AddTaskBottomSheet` UI component with local validation, layout structure for task metadata (priority, tags, dates, reminder, repeat rules, color, pinned), and responsive keyboard support.
