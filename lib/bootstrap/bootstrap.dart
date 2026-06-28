@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pastel_tasks/app/app.dart';
 import 'package:pastel_tasks/core/logging/app_logger.dart';
+import 'package:pastel_tasks/core/logging/logger_service.dart';
+import 'package:pastel_tasks/infrastructure/database/isar/isar_service.dart';
 import 'package:pastel_tasks/core/services/notification_service.dart';
-import 'package:pastel_tasks/core/storage/isar_service.dart';
 
 /// Starts the PastelTasks application shell.
 Future<void> bootstrap() async {

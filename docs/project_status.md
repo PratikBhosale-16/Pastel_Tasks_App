@@ -28,11 +28,11 @@
 - `lib/core/logging` contains the single global logger service.
 - `lib/core/result` contains `Result<T>`, `Success`, and `Failure`.
 - `lib/core/errors` contains the base application exception hierarchy.
-- `lib/core/storage` contains Isar setup without collections.
+- `lib/infrastructure/database/isar` contains Isar setup without collections.
 - `lib/core/services` retains the notification service structure from M0.2.
 - `lib/core/config` contains reusable application environment and build metadata configuration.
 - `lib/core/services` contains date/time, UUID, connectivity, and haptic abstractions.
-- `lib/core/storage` contains secure storage and application preferences abstractions.
+- `lib/infrastructure/local_storage` contains secure storage and application preferences abstractions.
 - `lib/core/validators` contains general email, required, string length, and date validators.
 - `lib/core/extensions` contains small reusable String and DateTime helpers.
 - `lib/core/utils` contains debounce, throttle, timing constants, and formatter helpers.

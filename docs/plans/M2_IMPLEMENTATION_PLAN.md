@@ -14,6 +14,7 @@ The repository layer will abstract data access from the rest of the application.
 
 ## 3. Isar Strategy
 Isar will be used as the exclusive offline-first local database.
+- **Architecture**: Isar setup is located at `lib/infrastructure/database/isar/` instead of `lib/core/` to ensure a clean architectural separation.
 - **Collections**: We will map our domain entities to Isar collections (`TaskCollection`, `TagCollection`, `ReminderCollection`) in `lib/features/tasks/data/collections/`.
 - **Mappers**: Data Transfer Objects (DTOs) or extension methods will bridge the gap between pure Dart domain models and Isar annotated classes.
 - **Initialization**: Once the first Isar collections are created in M2.2, the temporary initialization bypass in `IsarService` will be removed.
