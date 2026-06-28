@@ -81,11 +81,13 @@ Build Variant
 2. **Infinite Snackbars:** Embedded the UNDO button within the Snackbar content instead of using `SnackBarAction` to ensure the 5-second timeout applies even with active accessibility services.
 3. **No Separated List Sections:** Discarded the flat `ReorderableListView` in favor of a `CustomScrollView` containing three `SliverReorderableList`s, separating Pinned, Pending, and Completed tasks with correct persistence mappings.
 4. **Drag-and-Drop conflict:** Removed `onLongPress` and the modal menu from `TaskCard` to stop its `InkWell` from consuming long presses, restoring native `ReorderableListView` drag-and-drop.
-5. **Drag-and-Drop distortion:** Removed custom scaling from `proxyDecorator` to ensure native smooth shifting without abrupt swapping artifacts.
+5. **Drag-and-Drop distortion:** Added a custom `proxyDecorator` to `SliverReorderableList` in `HomeScreen` to preserve `DefaultTextStyle` scaling and stabilize card rendering while dragged.
 6. **Static Greeting:** Implemented dynamic greeting string resolving based on the current system time (`DateTime.now().hour`).
-7. **Task Color & Priority mismatch:** Confined indicator dot strictly to priority colors (Red, Orange, Green), applied task color solely as a background tint, and removed the left accent border entirely.
-8. **Hidden Reminder Data:** Formatted the `TaskCard` metadata row so tags align left, and Due Date / Reminder align right with consistent bullet separation.
-9. **Archive Swipes logic:** Disabled the right swipe action on the Archive screen to exactly mimic Inbox swipe mechanics, relying solely on the left action pane's Restore button.
+7. **Task Color & Priority mismatch:** Confined indicator dot strictly to task priority, while applying custom task hex colors as a faint background tint alongside a subtle left border to improve premium aesthetic.
+8. **Hidden Reminder Data:** Enhanced `TaskCard` bottom row to format and render active reminder trigger times using `intl` module.
+9. **Archive Swipes logic:** Changed `ArchiveScreen` left-action pane to exclude "Archive", updated `TaskCard` right background to display an Unarchive icon when archived, and mapped the right swipe action natively to restoration.
+10. **Task Card Metadata & Accent Polish:** Restructured `TaskCard` metadata row to align tags to the left and dates/repeat to the right. Added repeat rule icons. Standardized a 4dp left border using either the custom task color or the default design system accent.
+11. **Keyboard Bottom Sheet Stutter:** Replaced static bottom padding in `AddTaskBottomSheet` with `AnimatedPadding` using `Curves.easeOutCubic` to synchronize flawlessly with the native Android keyboard slide animation.
 
 ## M3.7
 

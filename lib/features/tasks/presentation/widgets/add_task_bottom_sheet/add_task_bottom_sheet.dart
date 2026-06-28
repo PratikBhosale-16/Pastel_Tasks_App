@@ -291,8 +291,10 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
         maxChildSize: 0.95,
         expand: false,
         builder: (context, scrollController) {
-          return Padding(
+          return AnimatedPadding(
             padding: EdgeInsets.only(bottom: bottomPadding),
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOutCubic,
             child: SafeArea(
               child: Form(
                 key: _formKey,

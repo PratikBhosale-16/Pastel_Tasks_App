@@ -35,9 +35,9 @@
 
 # Current Milestone
 
-- Current milestone: M4.1 Tags
-- Status: Ready to start.
-- Validation: M3.12 validated CRUD operations, swipe gestures, list reordering, accessibility, and app persistence on physical devices. Fixed Archive screen initialization. Addressed Snackbar timeout accessibility overrides. Reordered Home Screen into Pinned, Pending, and Completed sections using `CustomScrollView`. Fixed drag & drop proxyDecorator, added top action button to task sheet, corrected task color indicators, fixed reminder display, and preserved Undo context. Tests and analysis passed.
+- Current milestone: M3.12 Home Validation & Bug Fixes
+- Status: Completed.
+- Validation: Validated CRUD operations, swipe gestures, list reordering, accessibility, and app persistence on physical devices. Fixed Archive screen initialization. Addressed Snackbar timeout accessibility overrides. Reordered Home Screen into Pinned, Pending, and Completed sections using `CustomScrollView`. Fixed drag & drop proxyDecorator, added top action button to task sheet, corrected task color indicators, fixed reminder display, and preserved Undo context. Finalized UX polish for TaskCard metadata layout, default accent borders, repeat indicators, and optimized bottom sheet keyboard animation for smooth 60fps Material 3 transitions. Tests and analysis passed.
 
 # Completed
 
@@ -165,9 +165,9 @@ Completed Milestones:
 
 # Next Milestone
 
-- Next milestone: M4.1 Tags
-- Scope: Implementation of Tag domain, database, and UI logic.
-- Constraint: Do not implement M4.1 until authorized.
+- Next milestone: M3.12 Home Validation
+- Scope: Verification of overall Home screen flow and interactions.
+- Constraint: Do not implement M3.12 until authorized.
 
 # Notes
 

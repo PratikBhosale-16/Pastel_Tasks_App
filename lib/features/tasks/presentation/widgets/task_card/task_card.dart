@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:pastel_tasks/app/theme/radius.dart';
 import 'package:pastel_tasks/app/theme/spacing.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/priority.dart';
+import 'package:pastel_tasks/features/tasks/domain/enums/repeat_rule.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/task_status.dart';
 import 'package:pastel_tasks/features/tasks/domain/models/task.dart';
 import 'package:pastel_tasks/shared/widgets/swipeable/swipeable_card.dart';
@@ -44,9 +45,20 @@ class TaskCard extends StatelessWidget {
   String _formatReminderTime(DateTime time) {
     final now = DateTime.now();
     if (time.year == now.year && time.month == now.month && time.day == now.day) {
-      return 'Today ${DateFormat.jm().format(time)}';
+      return 'Today • ${DateFormat.jm().format(time)}';
     }
     return '${DateFormat.MMMd().format(time)} • ${DateFormat.jm().format(time)}';
+  }
+
+  String _getRepeatLabel(RepeatRule rule) {
+    switch (rule) {
+      case RepeatRule.daily: return '🔁 D';
+      case RepeatRule.weekly: return '🔁 W';
+      case RepeatRule.monthly: return '🔁 M';
+      case RepeatRule.yearly: return '🔁 Y';
+      case RepeatRule.custom: return '🔁 C';
+      case RepeatRule.none: return '';
+    }
   }
 
   @override
@@ -101,6 +113,14 @@ class TaskCard extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(AppRadius.xl),
+              border: !isArchived
+                  ? Border(
+                      left: BorderSide(
+                        color: parsedTaskColor ?? colorScheme.secondary, 
+                        width: 4,
+                      ),
+                    )
+                  : null,
             ),
             padding: const EdgeInsets.all(AppSpacing.lg),
             child: Column(
@@ -180,70 +200,73 @@ class TaskCard extends StatelessWidget {
                   ),
                 ],
               ),
-              if (task.dueDate != null || task.tags.isNotEmpty || task.reminder != null) ...[
+              if (task.dueDate != null || task.tags.isNotEmpty || task.reminder != null || task.repeatRule != RepeatRule.none) ...[
                 const SizedBox(height: AppSpacing.md),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    if (task.tags.isNotEmpty)
-                      Expanded(
-                        child: Wrap(
-                          spacing: AppSpacing.xs,
-                          runSpacing: AppSpacing.xs,
-                          children: task.tags.map((tagId) {
-                            return Container(
-                              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: colorScheme.secondaryContainer.withValues(alpha: 0.5),
-                                borderRadius: BorderRadius.circular(AppRadius.sm),
-                              ),
-                              child: Text(
-                                tagId,
-                                style: theme.textTheme.labelSmall?.copyWith(
-                                  color: colorScheme.onSecondaryContainer,
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      )
-                    else
-                      const Spacer(),
-                      
-                    if (task.dueDate != null || task.reminder != null)
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          if (task.dueDate != null) ...[
-                            Text(
-                              DateFormat.yMMMd().format(task.dueDate!),
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: isOverdue ? colorScheme.error : colorScheme.onSurfaceVariant,
-                                fontWeight: isOverdue ? FontWeight.w600 : FontWeight.normal,
-                              ),
+                    // LEFT: Tags
+                    Expanded(
+                      child: Wrap(
+                        spacing: AppSpacing.xs,
+                        runSpacing: AppSpacing.xs,
+                        children: task.tags.map((tagId) {
+                          // NOTE: In M4.1 Tags, we will load tag names. For now, it's just ID.
+                          return Container(
+                            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: colorScheme.secondaryContainer.withValues(alpha: 0.5),
+                              borderRadius: BorderRadius.circular(AppRadius.sm),
                             ),
-                          ],
-                          if (task.dueDate != null && task.reminder != null) ...[
-                            const SizedBox(width: AppSpacing.xs),
-                            Text(
-                              '•',
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: colorScheme.onSurfaceVariant,
-                              ),
-                            ),
-                            const SizedBox(width: AppSpacing.xs),
-                          ],
-                          if (task.reminder != null) ...[
-                            Text(
-                              _formatReminderTime(task.reminder!.triggerTime),
+                            child: Text(
+                              tagId,
                               style: theme.textTheme.labelSmall?.copyWith(
-                                color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
+                                color: colorScheme.onSecondaryContainer,
                               ),
                             ),
-                          ],
-                        ],
+                          );
+                        }).toList(),
                       ),
+                    ),
+                    const SizedBox(width: AppSpacing.sm),
+                    // RIGHT: Repeat, Due Date, Reminder
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (task.repeatRule != RepeatRule.none) ...[
+                          Text(
+                            _getRepeatLabel(task.repeatRule),
+                            style: theme.textTheme.labelMedium?.copyWith(
+                              color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                          const SizedBox(width: AppSpacing.md),
+                        ],
+                        if (task.dueDate != null && task.reminder != null)
+                          Text(
+                            '${DateFormat.MMMd().format(task.dueDate!)} • ${DateFormat.jm().format(task.reminder!.triggerTime)}',
+                            style: theme.textTheme.labelMedium?.copyWith(
+                              color: isOverdue ? colorScheme.error : (isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant),
+                              fontWeight: isOverdue ? FontWeight.w600 : FontWeight.normal,
+                            ),
+                          )
+                        else if (task.dueDate != null)
+                          Text(
+                            DateFormat.MMMd().format(task.dueDate!),
+                            style: theme.textTheme.labelMedium?.copyWith(
+                              color: isOverdue ? colorScheme.error : (isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant),
+                              fontWeight: isOverdue ? FontWeight.w600 : FontWeight.normal,
+                            ),
+                          )
+                        else if (task.reminder != null)
+                          Text(
+                            _formatReminderTime(task.reminder!.triggerTime),
+                            style: theme.textTheme.labelMedium?.copyWith(
+                              color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                      ],
+                    ),
                   ],
                 ),
               ],
@@ -321,12 +344,15 @@ class TaskCard extends StatelessWidget {
   Color _getPriorityColor(Priority priority, ColorScheme colorScheme) {
     switch (priority) {
       case Priority.high:
-      case Priority.critical:
-        return Colors.red;
+        return colorScheme.error;
       case Priority.medium:
         return Colors.orange;
       case Priority.low:
-        return Colors.green;
+        return Colors.blue;
+      case Priority.critical:
+        return Colors.redAccent.shade700;
+      default:
+        return colorScheme.onSurfaceVariant.withValues(alpha: 0.3);
     }
   }
 }
