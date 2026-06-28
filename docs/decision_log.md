@@ -39,6 +39,12 @@ Living documents remain in `docs/`.
 - **Decision:** Database initialization is deferred until M2.
 - **Reason:** No Isar collections exist during M1. Avoid blocking application startup.
 
+### 020. Priority Indicators vs Task Color
+- **Date:** 2026-06-28
+- **Context:** Implementing M3.12 Home Validation & UX Polish.
+- **Decision:** The indicator dot on the task card strictly displays priority colors (Red, Orange, Green), while custom task colors are mapped exclusively to a subtle card background tint. The left accent border was removed.
+- **Reason:** Ensuring semantic correctness for priority visibility, while keeping the custom color as a non-intrusive aesthetic polish in line with the minimal design system.
+
 ### 019. Removing Navigation TODOs
 - **Date:** 2026-06-28
 - **Context:** Executing M3.12 Home Validation. The codebase contained TODO comments for deferred navigation (search and bottom bar).

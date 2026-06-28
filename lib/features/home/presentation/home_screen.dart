@@ -285,17 +285,13 @@ class HomeScreen extends ConsumerWidget {
       builder: (BuildContext context, Widget? child) {
         final double animValue = Curves.easeInOut.transform(animation.value);
         final double elevation = ui.lerpDouble(0, 4, animValue)!;
-        final double scale = ui.lerpDouble(1.0, 1.02, animValue)!;
         return DefaultTextStyle.merge(
           style: Theme.of(context).textTheme.bodyMedium,
-          child: Transform.scale(
-            scale: scale,
-            child: Material(
-              elevation: elevation,
-              color: Colors.transparent,
-              shadowColor: Colors.black12,
-              child: child,
-            ),
+          child: Material(
+            elevation: elevation,
+            color: Colors.transparent,
+            shadowColor: Colors.black12,
+            child: child,
           ),
         );
       },

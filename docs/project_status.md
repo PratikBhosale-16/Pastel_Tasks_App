@@ -5,8 +5,8 @@
 - Milestone: M3.12
 - Name: Home Validation
 - Status: Completed
-- Validation: Fixed 6 additional UX issues (Dynamic Greeting, Drag & Drop UX, Priority Dot vs Task Color, Reminder Display, Archive Swipe Actions, and Archive Card Visuals). All tasks successfully completed and tests passed.
-- Overall Progress: Phase 3 is fully validated, polished, and ready.
+- Validation: Fixed 5 additional UX issues (Task Card Metadata Layout, Archive Swipe Animation, Reorder Animation, Left Accent Border, Priority Colors). All tasks successfully completed and tests passed. Ready for M4.1.
+- Overall Progress: Phase 3 is fully validated, polished, and completed.
 
 ## Completed
 

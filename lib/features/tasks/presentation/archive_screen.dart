@@ -173,7 +173,6 @@ class _ArchiveScreenState extends ConsumerState<ArchiveScreen> {
         child: TaskCard(
           task: task,
           onTap: () => _showEditSheet(context, task),
-          onSwipeRight: () => _restoreTask(context, task),
           onEdit: () => _showEditSheet(context, task),
           onDelete: () => _confirmAndDeleteTask(context, task),
           onRestore: () => _restoreTask(context, task),

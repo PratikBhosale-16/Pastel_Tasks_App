@@ -101,9 +101,6 @@ class TaskCard extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(AppRadius.xl),
-              border: parsedTaskColor != null && !isArchived
-                  ? Border(left: BorderSide(color: parsedTaskColor, width: 4))
-                  : null,
             ),
             padding: const EdgeInsets.all(AppSpacing.lg),
             child: Column(
@@ -183,64 +180,70 @@ class TaskCard extends StatelessWidget {
                   ),
                 ],
               ),
-              if (task.dueDate != null || task.tags.isNotEmpty) ...[
+              if (task.dueDate != null || task.tags.isNotEmpty || task.reminder != null) ...[
                 const SizedBox(height: AppSpacing.md),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    if (task.dueDate != null) ...[
-                      Icon(
-                        Icons.calendar_today_rounded,
-                        size: 14,
-                        color: isOverdue ? colorScheme.error : colorScheme.onSurfaceVariant,
-                      ),
-                      const SizedBox(width: AppSpacing.xs),
-                      Text(
-                        DateFormat.yMMMd().format(task.dueDate!),
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: isOverdue ? colorScheme.error : colorScheme.onSurfaceVariant,
-                          fontWeight: isOverdue ? FontWeight.w600 : FontWeight.normal,
+                    if (task.tags.isNotEmpty)
+                      Expanded(
+                        child: Wrap(
+                          spacing: AppSpacing.xs,
+                          runSpacing: AppSpacing.xs,
+                          children: task.tags.map((tagId) {
+                            return Container(
+                              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: colorScheme.secondaryContainer.withValues(alpha: 0.5),
+                                borderRadius: BorderRadius.circular(AppRadius.sm),
+                              ),
+                              child: Text(
+                                tagId,
+                                style: theme.textTheme.labelSmall?.copyWith(
+                                  color: colorScheme.onSecondaryContainer,
+                                ),
+                              ),
+                            );
+                          }).toList(),
                         ),
-                      ),
-                      const SizedBox(width: AppSpacing.lg),
-                    ],
-                    Expanded(
-                      child: Wrap(
-                        spacing: AppSpacing.xs,
-                        runSpacing: AppSpacing.xs,
-                        children: task.tags.map((tagId) {
-                          // NOTE: In M4.1 Tags, we will load tag names. For now, it's just ID.
-                          return Container(
-                            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: 2),
-                            decoration: BoxDecoration(
-                              color: colorScheme.secondaryContainer.withValues(alpha: 0.5),
-                              borderRadius: BorderRadius.circular(AppRadius.sm),
-                            ),
-                            child: Text(
-                              tagId,
-                              style: theme.textTheme.labelSmall?.copyWith(
-                                color: colorScheme.onSecondaryContainer,
+                      )
+                    else
+                      const Spacer(),
+                      
+                    if (task.dueDate != null || task.reminder != null)
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          if (task.dueDate != null) ...[
+                            Text(
+                              DateFormat.yMMMd().format(task.dueDate!),
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: isOverdue ? colorScheme.error : colorScheme.onSurfaceVariant,
+                                fontWeight: isOverdue ? FontWeight.w600 : FontWeight.normal,
                               ),
                             ),
-                          );
-                        }).toList(),
+                          ],
+                          if (task.dueDate != null && task.reminder != null) ...[
+                            const SizedBox(width: AppSpacing.xs),
+                            Text(
+                              '•',
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                            const SizedBox(width: AppSpacing.xs),
+                          ],
+                          if (task.reminder != null) ...[
+                            Text(
+                              _formatReminderTime(task.reminder!.triggerTime),
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ],
                       ),
-                    ),
-                    if (task.reminder != null) ...[
-                      const SizedBox(width: AppSpacing.sm),
-                      Icon(
-                        Icons.alarm_rounded,
-                        size: 14,
-                        color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        _formatReminderTime(task.reminder!.triggerTime),
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ],
                   ],
                 ),
               ],
@@ -318,15 +321,12 @@ class TaskCard extends StatelessWidget {
   Color _getPriorityColor(Priority priority, ColorScheme colorScheme) {
     switch (priority) {
       case Priority.high:
-        return colorScheme.error;
+      case Priority.critical:
+        return Colors.red;
       case Priority.medium:
         return Colors.orange;
       case Priority.low:
-        return Colors.blue;
-      case Priority.critical:
-        return Colors.redAccent.shade700;
-      default:
-        return colorScheme.onSurfaceVariant.withValues(alpha: 0.3);
+        return Colors.green;
     }
   }
 }
