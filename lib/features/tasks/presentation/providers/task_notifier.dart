@@ -14,7 +14,7 @@ class TaskNotifier extends AsyncNotifier<void> {
     final repo = ref.read(taskRepositoryProvider);
     final result = await repo.create(task);
     if (result is Failure) {
-      state = AsyncError(result.exception, StackTrace.current);
+      state = AsyncError((result as Failure).exception, StackTrace.current);
     } else {
       state = const AsyncData(null);
     }
@@ -26,7 +26,7 @@ class TaskNotifier extends AsyncNotifier<void> {
     final repo = ref.read(taskRepositoryProvider);
     final result = await repo.update(task);
     if (result is Failure) {
-      state = AsyncError(result.exception, StackTrace.current);
+      state = AsyncError((result as Failure).exception, StackTrace.current);
     } else {
       state = const AsyncData(null);
     }
@@ -38,7 +38,7 @@ class TaskNotifier extends AsyncNotifier<void> {
     final repo = ref.read(taskRepositoryProvider);
     final result = await repo.delete(id);
     if (result is Failure) {
-      state = AsyncError(result.exception, StackTrace.current);
+      state = AsyncError((result as Failure).exception, StackTrace.current);
     } else {
       state = const AsyncData(null);
     }
@@ -50,7 +50,7 @@ class TaskNotifier extends AsyncNotifier<void> {
     final repo = ref.read(taskRepositoryProvider);
     final result = await repo.archive(id);
     if (result is Failure) {
-      state = AsyncError(result.exception, StackTrace.current);
+      state = AsyncError((result as Failure).exception, StackTrace.current);
     } else {
       state = const AsyncData(null);
     }
@@ -62,7 +62,7 @@ class TaskNotifier extends AsyncNotifier<void> {
     final repo = ref.read(taskRepositoryProvider);
     final result = await repo.restore(id);
     if (result is Failure) {
-      state = AsyncError(result.exception, StackTrace.current);
+      state = AsyncError((result as Failure).exception, StackTrace.current);
     } else {
       state = const AsyncData(null);
     }
@@ -74,7 +74,7 @@ class TaskNotifier extends AsyncNotifier<void> {
     final repo = ref.read(taskRepositoryProvider);
     final result = await repo.pin(id);
     if (result is Failure) {
-      state = AsyncError(result.exception, StackTrace.current);
+      state = AsyncError((result as Failure).exception, StackTrace.current);
     } else {
       state = const AsyncData(null);
     }
@@ -86,7 +86,7 @@ class TaskNotifier extends AsyncNotifier<void> {
     final repo = ref.read(taskRepositoryProvider);
     final result = await repo.unpin(id);
     if (result is Failure) {
-      state = AsyncError(result.exception, StackTrace.current);
+      state = AsyncError((result as Failure).exception, StackTrace.current);
     } else {
       state = const AsyncData(null);
     }
@@ -98,7 +98,7 @@ class TaskNotifier extends AsyncNotifier<void> {
     final repo = ref.read(taskRepositoryProvider);
     final result = await repo.reorder(ids);
     if (result is Failure) {
-      state = AsyncError(result.exception, StackTrace.current);
+      state = AsyncError((result as Failure).exception, StackTrace.current);
     } else {
       state = const AsyncData(null);
     }
