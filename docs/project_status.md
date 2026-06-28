@@ -2,11 +2,11 @@
 
 ## Current Milestone
 
-- Milestone: M1.5
-- Name: Device Validation & UX Polish
-- Status: In Progress
-- Validation: Need physical Android device testing before moving to M2.
-- Overall completion: 40%.
+- Milestone: M2.1
+- Name: Domain Architecture
+- Status: Completed
+- Validation: Designed the complete domain model in pure Dart without Isar or Flutter imports.
+- Overall completion: 45%.
 
 ## Completed
 
@@ -17,6 +17,8 @@
 - M1.2 Component Library.
 - M1.3 Application Shell.
 - M1.4 Developer Preview & Validation.
+- M1.5 Device Validation & UX Polish.
+- M2.1 Domain Architecture.
 - `lib/main.dart` calls `bootstrap()` only.
 - `lib/bootstrap/bootstrap.dart` initializes Flutter bindings, logger, Isar setup, notification service structure, ProviderScope, and App.
 - `lib/app/app.dart` provides `MaterialApp.router` with title, theme, and router config.
@@ -45,7 +47,11 @@
 - [x] M1.2: Component Library (Reusable buttons, inputs, cards)
 - [x] M1.3: Application Shell (Scaffolds, app bars, nav bars)
 - [x] M1.4: Developer Preview & Validation
-- [ ] M1.5: Device Validation & UX Polish
+- [x] M1.5: Device Validation & UX Polish
+
+## Phase 2: Domain & Persistence (In Progress)
+- [x] M2.1: Domain Architecture (Pure Dart business models and validation)
+- [ ] M2.2: Database Layer (Isar collections and setup)
 
 ## Pending
 
@@ -61,7 +67,7 @@
 
 ## Next Milestone
 
-- Milestone: M2 — Task Management Core
+- Milestone: M2.2 — Database Layer
 
 ## Development Order
 

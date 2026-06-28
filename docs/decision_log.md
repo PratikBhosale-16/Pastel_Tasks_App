@@ -39,6 +39,10 @@ Living documents remain in `docs/`.
 - **Decision:** Database initialization is deferred until M2.
 - **Reason:** No Isar collections exist during M1. Avoid blocking application startup.
 
+## M2.1 Domain Architecture
+- **Decision:** The core domain models and validation rules are written in pure Dart, isolated from Flutter, Riverpod, or Isar.
+- **Reason:** Enforces Clean Architecture boundaries, making the business logic easily testable and decoupled from persistence or UI implementation details.
+
 
 ### Consequences
 

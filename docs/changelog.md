@@ -16,8 +16,9 @@
 - Updated logger levels to suppress verbose output in release builds.
 
 ## [Unreleased]
+- M2.1: Completed Domain Architecture. Created pure Dart entities, enums, value objects, and domain validators for the Task domain.
 - Fixed bootstrap crash: skipped Isar initialization until M2 introduces collections.
-- M1.5: Started Device Validation & UX Polish.
+- M1.5: Completed Device Validation & UX Polish.
 - M1.4: Completed Developer Preview & Validation.
 - Added `DevPreviewScreen` showcasing all typography, colors, layout components, and widgets.
 - Updated `AppRouter` to default to developer preview route.

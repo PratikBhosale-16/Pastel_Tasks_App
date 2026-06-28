@@ -35,9 +35,9 @@
 
 # Current Milestone
 
-- Current milestone: M1.5 Device Validation & UX Polish.
-- Status: In Progress.
-- Validation: Ensure the Design System and Application Shell behave correctly on a real Android device before feature development begins.
+- Current milestone: M2.1 Domain Architecture.
+- Status: Completed.
+- Validation: Pure Dart domain models designed successfully without external dependencies.
 
 # Completed
 
@@ -48,6 +48,8 @@
 - M1.2 Component Library (implementation complete).
 - M1.3 Application Shell (implementation complete).
 - M1.4 Developer Preview & Validation (implementation complete).
+- M1.5 Device Validation & UX Polish (implementation complete).
+- M2.1 Domain Architecture (implementation complete).
 - `main.dart` calls `bootstrap()` only.
 - `bootstrap.dart` initializes Flutter bindings, logger, Isar setup, notification service structure, ProviderScope, and App.
 - `App` uses `MaterialApp.router`.
@@ -142,9 +144,9 @@
 
 # Next Milestone
 
-- Next milestone: M2 — Task Management Core.
-- Scope: Theme preview screen, component gallery, accessibility verification, and tests.
-- Constraint: do not begin feature implementation during M1.4.
+- Next milestone: M2.2 Database Layer.
+- Scope: Implement Isar collections and data sources based on the M2.1 Domain Architecture.
+- Constraint: Do not implement M2.2 until authorized.
 
 # Notes
 
