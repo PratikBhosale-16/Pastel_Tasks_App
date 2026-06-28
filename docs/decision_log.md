@@ -39,6 +39,11 @@ Living documents remain in `docs/`.
 - **Decision:** Database initialization is deferred until M2.
 - **Reason:** No Isar collections exist during M1. Avoid blocking application startup.
 
+### 015. Reusing AddTaskBottomSheet for Editing
+- **Date:** 2026-06-28
+- **Context:** Implementing the Edit Task workflow for M3.6.
+- **Decision:** Reused `AddTaskBottomSheet` instead of creating a separate edit screen. Passed an optional `Task? existingTask` parameter which prefills all form controllers. Implemented a `PopScope` to detect dirty state and prompt the user before discarding unsaved edits, preventing accidental data loss. Included the secondary Delete action directly into the form data result, preserving the single-source-of-truth structure in `HomeScreen`.
+
 ### 014. Creating Tasks from UI
 - **Date:** 2026-06-28
 - **Context:** Wiring the UI `AddTaskBottomSheet` to create tasks in Isar for M3.5.

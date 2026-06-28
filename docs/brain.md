@@ -35,9 +35,9 @@
 
 # Current Milestone
 
-- Current milestone: M3.5 Create Task Flow
+- Current milestone: M3.6 Edit Task
 - Status: Completed.
-- Validation: Successfully wired `AddTaskBottomSheet` to `TaskNotifier`, saving data to Isar and refreshing the UI automatically via Riverpod streams. Tested via APK build.
+- Validation: Successfully reused `AddTaskBottomSheet` for editing tasks. Wired pre-filled fields, discard changes dialog, and deletion actions to update Isar and refresh the UI automatically. Tested via APK build.
 
 # Completed
 
@@ -145,9 +145,9 @@
 
 # Next Milestone
 
-- Next milestone: M3.6 Edit Task
+- Next milestone: M3.7 Complete Task
 - Scope: Not specified.
-- Constraint: Do not implement M3.6 until authorized.
+- Constraint: Do not implement M3.7 until authorized.
 
 # Notes
 

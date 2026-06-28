@@ -2,11 +2,11 @@
 
 ## Current Milestone
 
-- Milestone: M3.5
-- Name: Create Task Flow
+- Milestone: M3.6
+- Name: Edit Task
 - Status: Completed
-- Validation: End-to-end task creation works. Tasks persist in Isar and appear instantly on the Home Screen without manual refreshing.
-- Overall Progress: Home experience basic workflows are functional.
+- Validation: End-to-end task editing works. Edits persist in Isar and appear instantly on the Home Screen.
+- Overall Progress: Home experience edit workflows are functional.
 
 ## Completed
 
@@ -67,9 +67,10 @@
 - [x] M3.3: Add Task
 - [x] M3.4: Edit Task
 - [x] M3.5: Delete & Archive
-- [ ] M3.6: Complete Task
-- [ ] M3.7: Drag & Drop
-- [ ] M3.8: Home Validation
+- [x] M3.6: Edit Task
+- [ ] M3.7: Complete Task
+- [ ] M3.8: Drag & Drop
+- [ ] M3.9: Home Validation
 
 ## Pending
 

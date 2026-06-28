@@ -78,6 +78,67 @@ class HomeScreen extends ConsumerWidget {
     }
   }
 
+  Future<void> _editTask(BuildContext context, WidgetRef ref, Task existingTask) async {
+    final formData = await AddTaskBottomSheet.show(context, existingTask: existingTask);
+    if (formData == null || !context.mounted) return;
+
+    if (formData.isDelete) {
+      await ref.read(taskNotifierProvider.notifier).delete(existingTask.id);
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Task deleted')),
+      );
+      return;
+    }
+
+    Priority parsePriority(String p) {
+      switch (p) {
+        case 'Low': return Priority.low;
+        case 'High': return Priority.high;
+        case 'Critical': return Priority.critical;
+        case 'Medium':
+        default: return Priority.medium;
+      }
+    }
+
+    RepeatRule parseRepeatRule(String r) {
+      switch (r) {
+        case 'Daily': return RepeatRule.daily;
+        case 'Weekly': return RepeatRule.weekly;
+        case 'Monthly': return RepeatRule.monthly;
+        case 'Yearly': return RepeatRule.yearly;
+        case 'None':
+        default: return RepeatRule.none;
+      }
+    }
+
+    final updatedTask = existingTask.copyWith(
+      title: formData.title,
+      description: formData.description,
+      priority: parsePriority(formData.priority),
+      tags: formData.tag != null ? [formData.tag!] : [],
+      updatedAt: DateTime.now().toUtc(),
+      dueDate: formData.dueDate,
+      repeatRule: parseRepeatRule(formData.repeatRule),
+      isPinned: formData.isPinned,
+      color: formData.color?.value.toRadixString(16) ?? '',
+    );
+
+    await ref.read(taskNotifierProvider.notifier).updateTask(updatedTask);
+    if (!context.mounted) return;
+
+    final state = ref.read(taskNotifierProvider);
+    if (state.hasError) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to update task')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Task updated successfully')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
@@ -144,9 +205,7 @@ class HomeScreen extends ConsumerWidget {
                 final task = displayTasks[index];
                 return TaskCard(
                   task: task,
-                  onTap: () {
-                    // TODO(M3.x): Navigate to task details
-                  },
+                  onTap: () => _editTask(context, ref, task),
                   onSwipeLeft: () {
                     ref.read(taskNotifierProvider.notifier).delete(task.id);
                   },

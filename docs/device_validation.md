@@ -44,3 +44,11 @@ Build Variant
 - Created 10 tasks, successfully swiped left to delete all 10 tasks.
 - The `EmptyState` widget correctly appeared with a smooth animation once the list became empty.
 - Restarted the app: confirmed deleted tasks did NOT return. The database state accurately matches the UI.
+
+## M3.6
+
+### Verification
+- **Edit Fields**: Verified editing title, description, priority, tags, due date, reminder, repeat rule, pinned status, and color via the reused AddTaskBottomSheet.
+- **Unsaved Changes**: The Discard Changes Dialog appears when attempting to close the sheet with modified fields. Discard closes it, Keep Editing dismisses the dialog.
+- **Persistence**: Edits successfully persist through app restart. 
+- **Deletion**: The Delete secondary action successfully removes the task from the database.
