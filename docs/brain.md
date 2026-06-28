@@ -35,10 +35,9 @@
 
 # Current Milestone
 
-- Current milestone: M2 Task Management Core.
-- Status: Ready to begin M2.
-- Validation: M1.4 Developer Preview & Validation is fully implemented and passes all checks.
-- Developer Preview screen showcases all design system components for visual validation.
+- Current milestone: M1.5 Device Validation & UX Polish.
+- Status: In Progress.
+- Validation: Ensure the Design System and Application Shell behave correctly on a real Android device before feature development begins.
 
 # Completed
 
@@ -102,6 +101,7 @@
 - Completed tasks remain visible for 24 hours before archive.
 - Manual drag-and-drop order must persist.
 - Isar, Riverpod, and GoRouter are selected foundation technologies.
+- Database initialization is deferred until M2 because no collections currently exist.
 - Documentation is split because Windows cannot reliably store names like `API.md` and `api.md` in one directory.
 
 # Current Folder Structure

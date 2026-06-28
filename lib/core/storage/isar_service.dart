@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:isar/isar.dart';
 import 'package:pastel_tasks/core/errors/app_exception.dart';
 import 'package:pastel_tasks/core/logging/app_logger.dart';
@@ -21,17 +22,29 @@ final class IsarService {
     return isar;
   }
 
-  /// Opens Isar without collections for the application shell.
-  Future<Isar> initialize() async {
+  /// Opens Isar for the application shell.
+  Future<Isar?> initialize() async {
     final existing = _isar;
     if (existing != null) {
       return existing;
     }
 
-    final directory = await getApplicationDocumentsDirectory();
+    final collections = <CollectionSchema<dynamic>>[];
+    
+    if (collections.isEmpty) {
+      appLogger.info('Database initialization skipped (no collections yet).');
+      return null;
+    }
+
+    var dirPath = '';
+    if (!kIsWeb) {
+      final directory = await getApplicationDocumentsDirectory();
+      dirPath = directory.path;
+    }
+
     final isar = await Isar.open(
-      <CollectionSchema<dynamic>>[],
-      directory: directory.path,
+      collections,
+      directory: dirPath,
     );
 
     _isar = isar;

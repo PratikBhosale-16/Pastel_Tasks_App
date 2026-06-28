@@ -2,10 +2,10 @@
 
 ## Current Milestone
 
-- Milestone: M2
-- Name: Task Management Core
-- Status: Ready to start
-- Validation: M1.4 completed and verified with passing builds and tests.
+- Milestone: M1.5
+- Name: Device Validation & UX Polish
+- Status: In Progress
+- Validation: Need physical Android device testing before moving to M2.
 - Overall completion: 40%.
 
 ## Completed
@@ -45,6 +45,7 @@
 - [x] M1.2: Component Library (Reusable buttons, inputs, cards)
 - [x] M1.3: Application Shell (Scaffolds, app bars, nav bars)
 - [x] M1.4: Developer Preview & Validation
+- [ ] M1.5: Device Validation & UX Polish
 
 ## Pending
 

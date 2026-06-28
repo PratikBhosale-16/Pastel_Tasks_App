@@ -31,6 +31,15 @@ Living documents remain in `docs/`.
 - **Decision:** All design tokens (Colors, Typography, Spacing, Radius) are directly injected into standard Material 3 components within `AppTheme` (`ThemeData`).
 - **Reason:** Reduces boilerplate at the widget level. Custom components automatically inherit the design system constraints without needing to read custom theme extensions manually for standard properties.
 
+## M1.5 Device Validation & UX Polish
+- **Decision:** Insert a new milestone, M1.5, before beginning M2 Task Management Core.
+- **Reason:** Ensures that the Design System and Application Shell behave exactly as expected on physical Android devices. Catching layout, spacing, accessibility, and performance issues now prevents them from propagating into feature development.
+
+## Isar Initialization Deferred
+- **Decision:** Database initialization in M1 is skipped if no Isar collections exist.
+- **Reason:** Isar.open() crashes if called without any collections. Since collections are introduced in M2, we temporarily bypass it to allow the application shell to boot without crashing.
+
+
 ### Consequences
 
 - Uppercase specification names remain available for approved baseline documents.

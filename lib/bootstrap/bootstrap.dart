@@ -9,11 +9,11 @@ import 'package:pastel_tasks/core/storage/isar_service.dart';
 
 /// Starts the PastelTasks application shell.
 Future<void> bootstrap() async {
+  WidgetsFlutterBinding.ensureInitialized();
   final logger = AppLogger.instance;
 
   await runZonedGuarded<Future<void>>(
     () async {
-      WidgetsFlutterBinding.ensureInitialized();
 
       logger.initialize();
       await IsarService.instance.initialize();
