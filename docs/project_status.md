@@ -72,7 +72,7 @@
 - [x] M3.8: Swipe Actions
 - [x] M3.9: Delete
 - [x] M3.10: Archive
-- [ ] M3.11: Reorder (Drag & Drop)
+- [x] M3.11: Reorder (Drag & Drop)
 - [ ] M3.12: Home Validation
 - [ ] M3.13: UX Polish
 

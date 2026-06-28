@@ -39,6 +39,12 @@ Living documents remain in `docs/`.
 - **Decision:** Database initialization is deferred until M2.
 - **Reason:** No Isar collections exist during M1. Avoid blocking application startup.
 
+### 018. ReorderableListView vs AnimatedList
+- **Date:** 2026-06-28
+- **Context:** Implementing M3.11 Drag & Drop Reordering. We previously used `AnimatedList` for home screen task removal animations.
+- **Decision:** Replaced `AnimatedList` with `ReorderableListView.builder`.
+- **Reason:** Flutter's native `ReorderableListView` satisfies all the M3.11 requirements (lift animation, placeholder, drag-and-drop, haptics) without requiring an unauthorized third-party package. The tradeoff of losing automatic explicit deletion animations is acceptable given the constraints and priority of native smooth reordering.
+
 ### 017. Custom Swipeable Action Pane
 - **Date:** 2026-06-28
 - **Context:** Implementing M3.8 Swipe Actions. Native `Dismissible` does not support remaining open for an action pane.

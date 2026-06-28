@@ -139,15 +139,34 @@
 - System: connectivity_plus, device_info_plus, path_provider, path, share_plus, package_info_plus, url_launcher.
 - Preferences: shared_preferences.
 
+# Current Phase: Phase 3 (Home Experience)
+Current Milestone: M3.12 (Home Validation) - pending authorization
+
+Completed Milestones:
+- M0.1 - M0.3
+- M1.1 - M1.3
+- M2.1 - M2.4
+- M3.1 Home Layout
+- M3.2 Task Card
+- M3.3 Empty State
+- M3.4 Add Task
+- M3.5 Create Task
+- M3.6 Edit Task
+- M3.7 Complete Task
+- M3.8 Swipe Actions
+- M3.9 Delete Task
+- M3.10 Archive Task
+- M3.11 Drag & Drop Reordering
+
 # Current Blockers
 
 - None.
 
 # Next Milestone
 
-- Next milestone: M3.11 Drag & Drop Reordering
-- Scope: Not specified.
-- Constraint: Do not implement M3.11 until authorized.
+- Next milestone: M3.12 Home Validation
+- Scope: Verification of overall Home screen flow and interactions.
+- Constraint: Do not implement M3.12 until authorized.
 
 # Notes
 

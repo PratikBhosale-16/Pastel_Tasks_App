@@ -278,21 +278,50 @@ class HomeScreen extends ConsumerWidget {
               );
             }
 
-            return _AnimatedTaskList(
-              key: const ValueKey('animated_task_list'),
-              tasks: displayTasks,
-              itemBuilder: (context, task, animation) {
-                return SizeTransition(
-                  sizeFactor: animation,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: TaskCard(
-                      task: task,
-                      onTap: () => _editTask(context, ref, task),
-                      onEdit: () => _editTask(context, ref, task),
-                      onArchive: () => _archiveTask(context, ref, task),
-                      onDelete: () => _confirmAndDeleteTask(context, ref, task),
-                      onSwipeRight: () {
+            return ReorderableListView.builder(
+              key: const ValueKey('reorderable_task_list'),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+              itemCount: displayTasks.length,
+              onReorder: (oldIndex, newIndex) {
+                if (newIndex > oldIndex) {
+                  newIndex -= 1;
+                }
+                final tasksCopy = List<Task>.from(displayTasks);
+                final task = tasksCopy.removeAt(oldIndex);
+                tasksCopy.insert(newIndex, task);
+                final orderedIds = tasksCopy.map((t) => t.id).toList();
+                ref.read(taskNotifierProvider.notifier).reorder(orderedIds);
+              },
+              itemBuilder: (context, index) {
+                final task = displayTasks[index];
+                return Padding(
+                  key: ValueKey(task.id),
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: TaskCard(
+                    task: task,
+                    onTap: () => _editTask(context, ref, task),
+                    onEdit: () => _editTask(context, ref, task),
+                    onArchive: () => _archiveTask(context, ref, task),
+                    onDelete: () => _confirmAndDeleteTask(context, ref, task),
+                    onMoveUp: index > 0
+                        ? () {
+                            final tasksCopy = List<Task>.from(displayTasks);
+                            final t = tasksCopy.removeAt(index);
+                            tasksCopy.insert(index - 1, t);
+                            final orderedIds = tasksCopy.map((t) => t.id).toList();
+                            ref.read(taskNotifierProvider.notifier).reorder(orderedIds);
+                          }
+                        : null,
+                    onMoveDown: index < displayTasks.length - 1
+                        ? () {
+                            final tasksCopy = List<Task>.from(displayTasks);
+                            final t = tasksCopy.removeAt(index);
+                            tasksCopy.insert(index + 1, t);
+                            final orderedIds = tasksCopy.map((t) => t.id).toList();
+                            ref.read(taskNotifierProvider.notifier).reorder(orderedIds);
+                          }
+                        : null,
+                    onSwipeRight: () {
                         final newStatus = task.status == TaskStatus.completed 
                             ? TaskStatus.pending 
                             : TaskStatus.completed;
@@ -314,7 +343,6 @@ class HomeScreen extends ConsumerWidget {
                           SemanticsService.announce('Task restored', ui.TextDirection.ltr);
                         }
                       },
-                    ),
                   ),
                 );
               },
@@ -364,89 +392,6 @@ class HomeScreen extends ConsumerWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _AnimatedTaskList extends StatefulWidget {
-  final List<Task> tasks;
-  final Widget Function(BuildContext context, Task task, Animation<double> animation) itemBuilder;
-
-  const _AnimatedTaskList({
-    super.key,
-    required this.tasks,
-    required this.itemBuilder,
-  });
-
-  @override
-  State<_AnimatedTaskList> createState() => _AnimatedTaskListState();
-}
-
-class _AnimatedTaskListState extends State<_AnimatedTaskList> {
-  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
-  late List<Task> _currentTasks;
-
-  @override
-  void initState() {
-    super.initState();
-    _currentTasks = List.from(widget.tasks);
-  }
-
-  @override
-  void didUpdateWidget(_AnimatedTaskList oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    _calculateDiffs(oldWidget.tasks, widget.tasks);
-  }
-
-  void _calculateDiffs(List<Task> oldList, List<Task> newList) {
-    // Handle removals
-    for (int i = oldList.length - 1; i >= 0; i--) {
-      final oldTask = oldList[i];
-      if (!newList.any((t) => t.id == oldTask.id)) {
-        final removedIndex = _currentTasks.indexWhere((t) => t.id == oldTask.id);
-        if (removedIndex != -1) {
-          final removedTask = _currentTasks.removeAt(removedIndex);
-          _listKey.currentState?.removeItem(
-            removedIndex,
-            (context, animation) => widget.itemBuilder(context, removedTask, animation),
-            duration: const Duration(milliseconds: 300),
-          );
-        }
-      }
-    }
-    
-    // Handle insertions
-    for (int i = 0; i < newList.length; i++) {
-      final newTask = newList[i];
-      final currentIndex = _currentTasks.indexWhere((t) => t.id == newTask.id);
-      if (currentIndex == -1) {
-        _currentTasks.insert(i, newTask);
-        _listKey.currentState?.insertItem(
-          i,
-          duration: const Duration(milliseconds: 300),
-        );
-      }
-    }
-    
-    // Handle updates
-    for (int i = 0; i < _currentTasks.length; i++) {
-      final currentTask = _currentTasks[i];
-      final freshTaskIndex = newList.indexWhere((t) => t.id == currentTask.id);
-      if (freshTaskIndex != -1) {
-        _currentTasks[i] = newList[freshTaskIndex];
-      }
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedList(
-      key: _listKey,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-      initialItemCount: _currentTasks.length,
-      itemBuilder: (context, index, animation) {
-        return widget.itemBuilder(context, _currentTasks[index], animation);
-      },
     );
   }
 }

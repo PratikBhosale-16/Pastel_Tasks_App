@@ -17,6 +17,8 @@ class TaskCard extends StatelessWidget {
     this.onEdit,
     this.onArchive,
     this.onDelete,
+    this.onMoveUp,
+    this.onMoveDown,
     super.key,
   });
 
@@ -40,6 +42,12 @@ class TaskCard extends StatelessWidget {
 
   /// Callback when Delete is selected.
   final VoidCallback? onDelete;
+
+  /// Callback to move task up.
+  final VoidCallback? onMoveUp;
+
+  /// Callback to move task down.
+  final VoidCallback? onMoveDown;
 
   void _showLongPressMenu(BuildContext context) {
     showModalBottomSheet(
@@ -75,6 +83,25 @@ class TaskCard extends StatelessWidget {
                   onDelete?.call();
                 },
               ),
+              if (onMoveUp != null || onMoveDown != null) const Divider(),
+              if (onMoveUp != null)
+                ListTile(
+                  leading: const Icon(Icons.arrow_upward_rounded),
+                  title: const Text('Move Up'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    onMoveUp?.call();
+                  },
+                ),
+              if (onMoveDown != null)
+                ListTile(
+                  leading: const Icon(Icons.arrow_downward_rounded),
+                  title: const Text('Move Down'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    onMoveDown?.call();
+                  },
+                ),
             ],
           ),
         );

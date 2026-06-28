@@ -50,7 +50,17 @@ Build Variant
 ### Verification
 - **Edit Fields**: Verified editing title, description, priority, tags, due date, reminder, repeat rule, pinned status, and color via the reused AddTaskBottomSheet.
 - **Unsaved Changes**: The Discard Changes Dialog appears when attempting to close the sheet with modified fields. Discard closes it, Keep Editing dismisses the dialog.
-- **Persistence**: Edits successfully persist through app restart. 
+- **Persistence**: Edits successfully persist through app restart.
+
+## M3.11
+
+### Verification
+- Created 20 tasks, reordered them effortlessly with long press and drag.
+- Verified smooth lift, drop, and auto-scroll animations out-of-the-box via `ReorderableListView`.
+- Restarted app: tasks loaded in the exact new order.
+- Verified that completed and archived tasks did not interfere with ordering.
+- Tested "Move Up" and "Move Down" accessibility actions in the TaskCard's long press menu.
+- Semantics announced "Moved task" properly. 
 - **Deletion**: The Delete secondary action successfully removes the task from the database.
 
 ## M3.7
