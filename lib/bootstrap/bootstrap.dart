@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pastel_tasks/app/app.dart';
 import 'package:pastel_tasks/core/logging/app_logger.dart';
 import 'package:pastel_tasks/core/logging/logger_service.dart';
-import 'package:pastel_tasks/infrastructure/database/isar/isar_service.dart';
+import 'package:pastel_tasks/infrastructure/database/isar/database_service.dart';
 import 'package:pastel_tasks/core/services/notification_service.dart';
 
 /// Starts the PastelTasks application shell.
@@ -15,9 +15,14 @@ Future<void> bootstrap() async {
 
   await runZonedGuarded<Future<void>>(
     () async {
-
       logger.initialize();
-      await IsarService.instance.initialize();
+      
+      try {
+        await DatabaseService.instance.initialize();
+      } catch (e, stack) {
+        logger.error('Failed to initialize database during bootstrap', e, stack);
+      }
+      
       await NotificationService.instance.initialize();
 
       runApp(

@@ -35,9 +35,9 @@
 
 # Current Milestone
 
-- Current milestone: M2.1 Domain Architecture.
+- Current milestone: M2.2 Database Layer.
 - Status: Completed.
-- Validation: Pure Dart domain models designed successfully without external dependencies.
+- Validation: Isar database layer implemented with Task, Tag, and Reminder collections. Schema version 1 established.
 
 # Completed
 

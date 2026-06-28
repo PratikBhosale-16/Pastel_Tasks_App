@@ -39,7 +39,11 @@ Living documents remain in `docs/`.
 - **Decision:** Database initialization is deferred until M2.
 - **Reason:** No Isar collections exist during M1. Avoid blocking application startup.
 
-## M2.1 Domain Architecture
+### 5. Database Layer and Isar Enums (2026-06-28)
+- **Context:** M2.2 requires persistence using Isar with Task, Tag, and Reminder collections.
+- **Decision:** Isar collections mapped with native `@enumerated` instead of custom type converters for `Priority`, `TaskStatus`, and `RepeatRule` to comply with Isar 3+ expectations. Established migration infrastructure with Schema Version 1. ID fields changed to `int` instead of `long` to match Dart types.
+
+### 4. Domain Architecture in Pure Dart (2026-06-28)
 - **Decision:** The core domain models and validation rules are written in pure Dart, isolated from Flutter, Riverpod, or Isar.
 - **Reason:** Enforces Clean Architecture boundaries, making the business logic easily testable and decoupled from persistence or UI implementation details.
 
