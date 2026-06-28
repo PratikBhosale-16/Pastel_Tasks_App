@@ -39,6 +39,10 @@ Living documents remain in `docs/`.
 - **Decision:** Database initialization is deferred until M2.
 - **Reason:** No Isar collections exist during M1. Avoid blocking application startup.
 
+### 6. Repository Layer Data Mapping (2026-06-28)
+- **Context:** M2.3 required the application to interact with Isar without exposing Isar-specific exceptions or models.
+- **Decision:** Used Dart extension methods (`toDomain()`, `toIsar()`) to act as mappers. Implemented `Result<T>` wrappers around all Isar transactions, catching and wrapping errors into `StorageFailure(StorageException(...))` to enforce Clean Architecture boundaries. Added `tags` and `uuid` to Isar schema where missed previously.
+
 ### 5. Database Layer and Isar Enums (2026-06-28)
 - **Context:** M2.2 requires persistence using Isar with Task, Tag, and Reminder collections.
 - **Decision:** Isar collections mapped with native `@enumerated` instead of custom type converters for `Priority`, `TaskStatus`, and `RepeatRule` to comply with Isar 3+ expectations. Established migration infrastructure with Schema Version 1. ID fields changed to `int` instead of `long` to match Dart types.

@@ -35,9 +35,9 @@
 
 # Current Milestone
 
-- Current milestone: M2.2 Database Layer.
+- Current milestone: M2.3 Repository Layer.
 - Status: Completed.
-- Validation: Isar database layer implemented with Task, Tag, and Reminder collections. Schema version 1 established.
+- Validation: Domain models mapped to Isar collections correctly via pure Dart repositories returning Result types.
 
 # Completed
 

@@ -2,11 +2,11 @@
 
 ## Current Milestone
 
-- Milestone: M2.2
-- Name: Database Layer
+- Milestone: M2.3
+- Name: Repository Layer
 - Status: Completed
-- Validation: Implemented Isar database service, collections, indexes, and schema migrations. Schema version is 1.
-- Overall Progress: Establishing M2 core functionality.
+- Validation: Implemented TaskRepository, TagRepository, and ReminderRepository returning Result<T> without leaking Isar exceptions.
+- Overall Progress: Data access patterns established successfully.
 
 ## Completed
 
@@ -30,6 +30,8 @@
 - `lib/core/result` contains `Result<T>`, `Success`, and `Failure`.
 - `lib/core/errors` contains the base application exception hierarchy.
 - `lib/infrastructure/database/isar` contains Isar collections, single service, and migration setup (Schema version 1).
+- `lib/features/tasks/domain/repositories` contains the repository interfaces for data access.
+- `lib/features/tasks/data/repositories` contains Isar implementations for the repositories.
 - `lib/core/services` retains the notification service structure from M0.2.
 - `lib/core/config` contains reusable application environment and build metadata configuration.
 - `lib/core/services` contains date/time, UUID, connectivity, and haptic abstractions.
@@ -53,7 +55,8 @@
 ## Phase 2: Domain & Persistence (In Progress)
 - [x] M2.1: Domain Architecture
 - [x] M2.2: Database Layer
-- [ ] M2.3: Repository Layer
+- [x] M2.3: Repository Layer
+- [ ] M2.4: State Management
 
 ## Pending
 

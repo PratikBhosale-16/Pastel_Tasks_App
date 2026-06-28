@@ -47,7 +47,12 @@ const ReminderCollectionSchema = CollectionSchema(
     r'taskId': PropertySchema(
       id: 5,
       name: r'taskId',
-      type: IsarType.long,
+      type: IsarType.string,
+    ),
+    r'uuid': PropertySchema(
+      id: 6,
+      name: r'uuid',
+      type: IsarType.string,
     )
   },
   estimateSize: _reminderCollectionEstimateSize,
@@ -56,6 +61,19 @@ const ReminderCollectionSchema = CollectionSchema(
   deserializeProp: _reminderCollectionDeserializeProp,
   idName: r'id',
   indexes: {
+    r'uuid': IndexSchema(
+      id: 2134397340427724972,
+      name: r'uuid',
+      unique: true,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'uuid',
+          type: IndexType.hash,
+          caseSensitive: true,
+        )
+      ],
+    ),
     r'taskId': IndexSchema(
       id: -6391211041487498726,
       name: r'taskId',
@@ -64,8 +82,8 @@ const ReminderCollectionSchema = CollectionSchema(
       properties: [
         IndexPropertySchema(
           name: r'taskId',
-          type: IndexType.value,
-          caseSensitive: false,
+          type: IndexType.hash,
+          caseSensitive: true,
         )
       ],
     ),
@@ -97,6 +115,8 @@ int _reminderCollectionEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  bytesCount += 3 + object.taskId.length * 3;
+  bytesCount += 3 + object.uuid.length * 3;
   return bytesCount;
 }
 
@@ -111,7 +131,8 @@ void _reminderCollectionSerialize(
   writer.writeDateTime(offsets[2], object.reminderDate);
   writer.writeLong(offsets[3], object.repeatInterval);
   writer.writeByte(offsets[4], object.repeatType.index);
-  writer.writeLong(offsets[5], object.taskId);
+  writer.writeString(offsets[5], object.taskId);
+  writer.writeString(offsets[6], object.uuid);
 }
 
 ReminderCollection _reminderCollectionDeserialize(
@@ -129,7 +150,8 @@ ReminderCollection _reminderCollectionDeserialize(
   object.repeatType = _ReminderCollectionrepeatTypeValueEnumMap[
           reader.readByteOrNull(offsets[4])] ??
       RepeatRule.none;
-  object.taskId = reader.readLong(offsets[5]);
+  object.taskId = reader.readString(offsets[5]);
+  object.uuid = reader.readString(offsets[6]);
   return object;
 }
 
@@ -153,7 +175,9 @@ P _reminderCollectionDeserializeProp<P>(
               reader.readByteOrNull(offset)] ??
           RepeatRule.none) as P;
     case 5:
-      return (reader.readLong(offset)) as P;
+      return (reader.readString(offset)) as P;
+    case 6:
+      return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -190,20 +214,66 @@ void _reminderCollectionAttach(
   object.id = id;
 }
 
+extension ReminderCollectionByIndex on IsarCollection<ReminderCollection> {
+  Future<ReminderCollection?> getByUuid(String uuid) {
+    return getByIndex(r'uuid', [uuid]);
+  }
+
+  ReminderCollection? getByUuidSync(String uuid) {
+    return getByIndexSync(r'uuid', [uuid]);
+  }
+
+  Future<bool> deleteByUuid(String uuid) {
+    return deleteByIndex(r'uuid', [uuid]);
+  }
+
+  bool deleteByUuidSync(String uuid) {
+    return deleteByIndexSync(r'uuid', [uuid]);
+  }
+
+  Future<List<ReminderCollection?>> getAllByUuid(List<String> uuidValues) {
+    final values = uuidValues.map((e) => [e]).toList();
+    return getAllByIndex(r'uuid', values);
+  }
+
+  List<ReminderCollection?> getAllByUuidSync(List<String> uuidValues) {
+    final values = uuidValues.map((e) => [e]).toList();
+    return getAllByIndexSync(r'uuid', values);
+  }
+
+  Future<int> deleteAllByUuid(List<String> uuidValues) {
+    final values = uuidValues.map((e) => [e]).toList();
+    return deleteAllByIndex(r'uuid', values);
+  }
+
+  int deleteAllByUuidSync(List<String> uuidValues) {
+    final values = uuidValues.map((e) => [e]).toList();
+    return deleteAllByIndexSync(r'uuid', values);
+  }
+
+  Future<Id> putByUuid(ReminderCollection object) {
+    return putByIndex(r'uuid', object);
+  }
+
+  Id putByUuidSync(ReminderCollection object, {bool saveLinks = true}) {
+    return putByIndexSync(r'uuid', object, saveLinks: saveLinks);
+  }
+
+  Future<List<Id>> putAllByUuid(List<ReminderCollection> objects) {
+    return putAllByIndex(r'uuid', objects);
+  }
+
+  List<Id> putAllByUuidSync(List<ReminderCollection> objects,
+      {bool saveLinks = true}) {
+    return putAllByIndexSync(r'uuid', objects, saveLinks: saveLinks);
+  }
+}
+
 extension ReminderCollectionQueryWhereSort
     on QueryBuilder<ReminderCollection, ReminderCollection, QWhere> {
   QueryBuilder<ReminderCollection, ReminderCollection, QAfterWhere> anyId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(const IdWhereClause.any());
-    });
-  }
-
-  QueryBuilder<ReminderCollection, ReminderCollection, QAfterWhere>
-      anyTaskId() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        const IndexWhereClause.any(indexName: r'taskId'),
-      );
     });
   }
 
@@ -288,7 +358,52 @@ extension ReminderCollectionQueryWhere
   }
 
   QueryBuilder<ReminderCollection, ReminderCollection, QAfterWhereClause>
-      taskIdEqualTo(int taskId) {
+      uuidEqualTo(String uuid) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'uuid',
+        value: [uuid],
+      ));
+    });
+  }
+
+  QueryBuilder<ReminderCollection, ReminderCollection, QAfterWhereClause>
+      uuidNotEqualTo(String uuid) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'uuid',
+              lower: [],
+              upper: [uuid],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'uuid',
+              lower: [uuid],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'uuid',
+              lower: [uuid],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'uuid',
+              lower: [],
+              upper: [uuid],
+              includeUpper: false,
+            ));
+      }
+    });
+  }
+
+  QueryBuilder<ReminderCollection, ReminderCollection, QAfterWhereClause>
+      taskIdEqualTo(String taskId) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.equalTo(
         indexName: r'taskId',
@@ -298,7 +413,7 @@ extension ReminderCollectionQueryWhere
   }
 
   QueryBuilder<ReminderCollection, ReminderCollection, QAfterWhereClause>
-      taskIdNotEqualTo(int taskId) {
+      taskIdNotEqualTo(String taskId) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -329,54 +444,6 @@ extension ReminderCollectionQueryWhere
               includeUpper: false,
             ));
       }
-    });
-  }
-
-  QueryBuilder<ReminderCollection, ReminderCollection, QAfterWhereClause>
-      taskIdGreaterThan(
-    int taskId, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'taskId',
-        lower: [taskId],
-        includeLower: include,
-        upper: [],
-      ));
-    });
-  }
-
-  QueryBuilder<ReminderCollection, ReminderCollection, QAfterWhereClause>
-      taskIdLessThan(
-    int taskId, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'taskId',
-        lower: [],
-        upper: [taskId],
-        includeUpper: include,
-      ));
-    });
-  }
-
-  QueryBuilder<ReminderCollection, ReminderCollection, QAfterWhereClause>
-      taskIdBetween(
-    int lowerTaskId,
-    int upperTaskId, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'taskId',
-        lower: [lowerTaskId],
-        includeLower: includeLower,
-        upper: [upperTaskId],
-        includeUpper: includeUpper,
-      ));
     });
   }
 
@@ -767,49 +834,58 @@ extension ReminderCollectionQueryFilter
   }
 
   QueryBuilder<ReminderCollection, ReminderCollection, QAfterFilterCondition>
-      taskIdEqualTo(int value) {
+      taskIdEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'taskId',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<ReminderCollection, ReminderCollection, QAfterFilterCondition>
       taskIdGreaterThan(
-    int value, {
+    String value, {
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
         property: r'taskId',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<ReminderCollection, ReminderCollection, QAfterFilterCondition>
       taskIdLessThan(
-    int value, {
+    String value, {
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
         property: r'taskId',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<ReminderCollection, ReminderCollection, QAfterFilterCondition>
       taskIdBetween(
-    int lower,
-    int upper, {
+    String lower,
+    String upper, {
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -818,6 +894,213 @@ extension ReminderCollectionQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ReminderCollection, ReminderCollection, QAfterFilterCondition>
+      taskIdStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'taskId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ReminderCollection, ReminderCollection, QAfterFilterCondition>
+      taskIdEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'taskId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ReminderCollection, ReminderCollection, QAfterFilterCondition>
+      taskIdContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'taskId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ReminderCollection, ReminderCollection, QAfterFilterCondition>
+      taskIdMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'taskId',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ReminderCollection, ReminderCollection, QAfterFilterCondition>
+      taskIdIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'taskId',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<ReminderCollection, ReminderCollection, QAfterFilterCondition>
+      taskIdIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'taskId',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<ReminderCollection, ReminderCollection, QAfterFilterCondition>
+      uuidEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'uuid',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ReminderCollection, ReminderCollection, QAfterFilterCondition>
+      uuidGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'uuid',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ReminderCollection, ReminderCollection, QAfterFilterCondition>
+      uuidLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'uuid',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ReminderCollection, ReminderCollection, QAfterFilterCondition>
+      uuidBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'uuid',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ReminderCollection, ReminderCollection, QAfterFilterCondition>
+      uuidStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'uuid',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ReminderCollection, ReminderCollection, QAfterFilterCondition>
+      uuidEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'uuid',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ReminderCollection, ReminderCollection, QAfterFilterCondition>
+      uuidContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'uuid',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ReminderCollection, ReminderCollection, QAfterFilterCondition>
+      uuidMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'uuid',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ReminderCollection, ReminderCollection, QAfterFilterCondition>
+      uuidIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'uuid',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<ReminderCollection, ReminderCollection, QAfterFilterCondition>
+      uuidIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'uuid',
+        value: '',
       ));
     });
   }
@@ -912,6 +1195,20 @@ extension ReminderCollectionQuerySortBy
       sortByTaskIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'taskId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<ReminderCollection, ReminderCollection, QAfterSortBy>
+      sortByUuid() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'uuid', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ReminderCollection, ReminderCollection, QAfterSortBy>
+      sortByUuidDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'uuid', Sort.desc);
     });
   }
 }
@@ -1015,6 +1312,20 @@ extension ReminderCollectionQuerySortThenBy
       return query.addSortBy(r'taskId', Sort.desc);
     });
   }
+
+  QueryBuilder<ReminderCollection, ReminderCollection, QAfterSortBy>
+      thenByUuid() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'uuid', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ReminderCollection, ReminderCollection, QAfterSortBy>
+      thenByUuidDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'uuid', Sort.desc);
+    });
+  }
 }
 
 extension ReminderCollectionQueryWhereDistinct
@@ -1055,9 +1366,16 @@ extension ReminderCollectionQueryWhereDistinct
   }
 
   QueryBuilder<ReminderCollection, ReminderCollection, QDistinct>
-      distinctByTaskId() {
+      distinctByTaskId({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'taskId');
+      return query.addDistinctBy(r'taskId', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<ReminderCollection, ReminderCollection, QDistinct>
+      distinctByUuid({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'uuid', caseSensitive: caseSensitive);
     });
   }
 }
@@ -1104,9 +1422,15 @@ extension ReminderCollectionQueryProperty
     });
   }
 
-  QueryBuilder<ReminderCollection, int, QQueryOperations> taskIdProperty() {
+  QueryBuilder<ReminderCollection, String, QQueryOperations> taskIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'taskId');
+    });
+  }
+
+  QueryBuilder<ReminderCollection, String, QQueryOperations> uuidProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'uuid');
     });
   }
 }

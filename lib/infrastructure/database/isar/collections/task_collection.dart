@@ -15,6 +15,8 @@ class TaskCollection {
 
   late String description;
 
+  List<String> tags = [];
+
   String? richText;
 
   @enumerated

@@ -7,8 +7,11 @@ part 'reminder_collection.g.dart';
 class ReminderCollection {
   Id id = Isar.autoIncrement;
 
+  @Index(unique: true)
+  late String uuid;
+
   @Index()
-  late int taskId;
+  late String taskId;
 
   @Index()
   late DateTime reminderDate;
