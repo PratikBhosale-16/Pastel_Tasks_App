@@ -88,6 +88,7 @@ Build Variant
 9. **Archive Swipes logic:** Changed `ArchiveScreen` left-action pane to exclude "Archive", updated `TaskCard` right background to display an Unarchive icon when archived, and mapped the right swipe action natively to restoration.
 10. **Task Card Metadata & Accent Polish:** Restructured `TaskCard` metadata row to align tags to the left and dates/repeat to the right. Added repeat rule icons. Standardized a 4dp left border using either the custom task color or the default design system accent.
 11. **Keyboard Bottom Sheet Stutter:** Replaced static bottom padding in `AddTaskBottomSheet` with `AnimatedPadding` using `Curves.easeOutCubic` to synchronize flawlessly with the native Android keyboard slide animation.
+12. **Undo Delete/Archive Failed:** Captured the `TaskNotifier` synchronously before the async `delete`/`archive` operation to prevent "unmounted `WidgetRef`" exceptions in the SnackBar's `onPressed` callback, ensuring undo actions securely restore the task state to the database.
 
 ## M3.7
 

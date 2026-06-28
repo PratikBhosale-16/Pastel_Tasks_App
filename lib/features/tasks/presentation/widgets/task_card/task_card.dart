@@ -122,8 +122,9 @@ class TaskCard extends ConsumerWidget {
       final taskCopy = task;
       final messenger = ScaffoldMessenger.of(context);
       final themeContext = Theme.of(context);
+      final notifier = ref.read(taskNotifierProvider.notifier);
       
-      await ref.read(taskNotifierProvider.notifier).delete(task.id);
+      await notifier.delete(task.id);
       
       messenger.clearSnackBars();
       messenger.showSnackBar(
@@ -138,7 +139,7 @@ class TaskCard extends ConsumerWidget {
                 ),
                 onPressed: () {
                   messenger.hideCurrentSnackBar();
-                  ref.read(taskNotifierProvider.notifier).create(taskCopy);
+                  notifier.create(taskCopy);
                 },
                 child: const Text('UNDO'),
               ),
@@ -154,8 +155,9 @@ class TaskCard extends ConsumerWidget {
     final taskCopy = task;
     final messenger = ScaffoldMessenger.of(context);
     final themeContext = Theme.of(context);
+    final notifier = ref.read(taskNotifierProvider.notifier);
 
-    await ref.read(taskNotifierProvider.notifier).archive(task.id);
+    await notifier.archive(task.id);
     
     messenger.clearSnackBars();
     messenger.showSnackBar(
@@ -170,7 +172,7 @@ class TaskCard extends ConsumerWidget {
               ),
               onPressed: () {
                 messenger.hideCurrentSnackBar();
-                ref.read(taskNotifierProvider.notifier).restore(taskCopy.id);
+                notifier.restore(taskCopy.id);
               },
               child: const Text('UNDO'),
             ),
