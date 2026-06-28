@@ -2,13 +2,81 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:pastel_tasks/features/tasks/presentation/providers/task_providers.dart';
+import 'package:pastel_tasks/features/tasks/presentation/providers/task_notifier.dart';
 import 'package:pastel_tasks/features/tasks/presentation/widgets/task_card/task_card.dart';
+import 'package:pastel_tasks/features/tasks/presentation/widgets/add_task_bottom_sheet/add_task_bottom_sheet.dart';
+import 'package:pastel_tasks/features/tasks/domain/models/task.dart';
+import 'package:pastel_tasks/features/tasks/domain/enums/task_status.dart';
+import 'package:pastel_tasks/features/tasks/domain/enums/priority.dart';
+import 'package:pastel_tasks/features/tasks/domain/enums/repeat_rule.dart';
 import 'package:pastel_tasks/shared/widgets/empty_state/empty_state.dart';
+import 'package:uuid/uuid.dart';
 
 /// Primary entry point for the task management application.
 class HomeScreen extends ConsumerWidget {
   /// Creates the home screen.
   const HomeScreen({super.key});
+
+  Future<void> _showAddTask(BuildContext context, WidgetRef ref) async {
+    final formData = await AddTaskBottomSheet.show(context);
+    if (formData == null || !context.mounted) return;
+
+    final now = DateTime.now().toUtc();
+    
+    Priority parsePriority(String p) {
+      switch (p) {
+        case 'Low': return Priority.low;
+        case 'High': return Priority.high;
+        case 'Critical': return Priority.critical;
+        case 'Medium':
+        default: return Priority.medium;
+      }
+    }
+
+    RepeatRule parseRepeatRule(String r) {
+      switch (r) {
+        case 'Daily': return RepeatRule.daily;
+        case 'Weekly': return RepeatRule.weekly;
+        case 'Monthly': return RepeatRule.monthly;
+        case 'None':
+        default: return RepeatRule.none;
+      }
+    }
+
+    final task = Task(
+      id: const Uuid().v4(),
+      title: formData.title,
+      description: formData.description,
+      status: TaskStatus.pending,
+      priority: parsePriority(formData.priority),
+      tags: formData.tag != null ? [formData.tag!] : [],
+      createdAt: now,
+      updatedAt: now,
+      dueDate: formData.dueDate,
+      completedAt: null,
+      reminder: null,
+      repeatRule: parseRepeatRule(formData.repeatRule),
+      position: now.millisecondsSinceEpoch.toDouble(),
+      isPinned: formData.isPinned,
+      isArchived: false,
+      color: formData.color?.value.toRadixString(16) ?? '',
+      attachments: const [],
+    );
+
+    await ref.read(taskNotifierProvider.notifier).create(task);
+    if (!context.mounted) return;
+
+    final state = ref.read(taskNotifierProvider);
+    if (state.hasError) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to create task')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Task created successfully')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -58,9 +126,7 @@ class HomeScreen extends ConsumerWidget {
           data: (tasks) {
             if (tasks.isEmpty) {
               return EmptyState.taskList(
-                onPrimaryAction: () {
-                  // TODO(M3.x): Implement quick add bottom sheet
-                },
+                onPrimaryAction: () => _showAddTask(context, ref),
               );
             }
 
@@ -98,9 +164,7 @@ class HomeScreen extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton(
         tooltip: 'Create Task',
-        onPressed: () {
-          // TODO(M3.x): Implement quick add bottom sheet
-        },
+        onPressed: () => _showAddTask(context, ref),
         child: const Icon(Icons.add_rounded),
       ),
       bottomNavigationBar: NavigationBar(
@@ -134,3 +198,4 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 }
+

@@ -2,11 +2,11 @@
 
 ## Current Milestone
 
-- Milestone: M3.4
-- Name: Add Task Bottom Sheet
+- Milestone: M3.5
+- Name: Create Task Flow
 - Status: Completed
-- Validation: Built `AddTaskBottomSheet` UI component in `lib/features/tasks/presentation/widgets/add_task_bottom_sheet/`. Contains title, description, priority, tags, dates, and color picker. Validates title locally. No business logic side-effects.
-- Overall Progress: Home experience UI is nearly complete.
+- Validation: End-to-end task creation works. Tasks persist in Isar and appear instantly on the Home Screen without manual refreshing.
+- Overall Progress: Home experience basic workflows are functional.
 
 ## Completed
 
@@ -66,7 +66,7 @@
 - [x] M3.2: Task Card
 - [x] M3.3: Add Task
 - [x] M3.4: Edit Task
-- [ ] M3.5: Delete & Archive
+- [x] M3.5: Delete & Archive
 - [ ] M3.6: Complete Task
 - [ ] M3.7: Drag & Drop
 - [ ] M3.8: Home Validation

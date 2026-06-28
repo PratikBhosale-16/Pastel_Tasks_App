@@ -39,7 +39,12 @@ Living documents remain in `docs/`.
 - **Decision:** Database initialization is deferred until M2.
 - **Reason:** No Isar collections exist during M1. Avoid blocking application startup.
 
-### 013. UI-Only Bottom Sheet State Management
+### 014. Creating Tasks from UI
+- **Date:** 2026-06-28
+- **Context:** Wiring the UI `AddTaskBottomSheet` to create tasks in Isar for M3.5.
+- **Decision:** Instead of making direct repository calls or complex state providers within the UI components, `HomeScreen` triggers the bottom sheet, waits for the returned `AddTaskFormData`, instantiates the Domain `Task` model, and dispatches it to `taskNotifierProvider`. Riverpod streams automatically refresh the UI.
+
+## 013. UI-Only Bottom Sheet State Management
 - **Date:** 2026-06-28
 - **Context:** Implementing the Add Task bottom sheet for M3.4 without triggering business logic, Isar, or Riverpod dependencies.
 - **Decision:** Built `AddTaskBottomSheet` as a `StatefulWidget` to handle purely local state (e.g. text controllers, selected chips, date pickers) and return a custom `AddTaskFormData` object via `Navigator.pop`. This decouples the UI from the domain layer entirely.
