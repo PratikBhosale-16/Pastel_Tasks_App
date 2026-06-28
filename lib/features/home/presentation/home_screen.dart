@@ -173,54 +173,25 @@ class HomeScreen extends ConsumerWidget {
 
     if (confirm && context.mounted) {
       final taskCopy = task;
+      final messenger = ScaffoldMessenger.of(context);
+      final themeContext = Theme.of(context);
+      
       await ref.read(taskNotifierProvider.notifier).delete(task.id);
       
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Row(
-              children: [
-                const Text('Task deleted'),
-                const Spacer(),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    foregroundColor: Theme.of(context).colorScheme.inversePrimary,
-                  ),
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                    ref.read(taskNotifierProvider.notifier).create(taskCopy);
-                  },
-                  child: const Text('UNDO'),
-                ),
-              ],
-            ),
-            duration: const Duration(seconds: 5),
-          ),
-        );
-      }
-    }
-  }
-
-  Future<void> _archiveTask(BuildContext context, WidgetRef ref, Task task) async {
-    final taskCopy = task;
-    await ref.read(taskNotifierProvider.notifier).archive(task.id);
-    
-    if (context.mounted) {
-      ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(
+      messenger.clearSnackBars();
+      messenger.showSnackBar(
         SnackBar(
           content: Row(
             children: [
-              const Text('Task archived'),
+              const Text('Task deleted'),
               const Spacer(),
               TextButton(
                 style: TextButton.styleFrom(
-                  foregroundColor: Theme.of(context).colorScheme.inversePrimary,
+                  foregroundColor: themeContext.colorScheme.inversePrimary,
                 ),
                 onPressed: () {
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  ref.read(taskNotifierProvider.notifier).restore(taskCopy.id);
+                  messenger.hideCurrentSnackBar();
+                  ref.read(taskNotifierProvider.notifier).create(taskCopy);
                 },
                 child: const Text('UNDO'),
               ),
@@ -230,6 +201,37 @@ class HomeScreen extends ConsumerWidget {
         ),
       );
     }
+  }
+
+  Future<void> _archiveTask(BuildContext context, WidgetRef ref, Task task) async {
+    final taskCopy = task;
+    final messenger = ScaffoldMessenger.of(context);
+    final themeContext = Theme.of(context);
+
+    await ref.read(taskNotifierProvider.notifier).archive(task.id);
+    
+    messenger.clearSnackBars();
+    messenger.showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const Text('Task archived'),
+            const Spacer(),
+            TextButton(
+              style: TextButton.styleFrom(
+                foregroundColor: themeContext.colorScheme.inversePrimary,
+              ),
+              onPressed: () {
+                messenger.hideCurrentSnackBar();
+                ref.read(taskNotifierProvider.notifier).restore(taskCopy.id);
+              },
+              child: const Text('UNDO'),
+            ),
+          ],
+        ),
+        duration: const Duration(seconds: 5),
+      ),
+    );
   }
 
   Widget _buildTaskCard(BuildContext context, WidgetRef ref, Task task) {
@@ -264,6 +266,43 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
+  String _getGreeting() {
+    final hour = DateTime.now().hour;
+    if (hour >= 5 && hour < 12) {
+      return 'Good morning';
+    } else if (hour >= 12 && hour < 17) {
+      return 'Good afternoon';
+    } else if (hour >= 17 && hour < 21) {
+      return 'Good evening';
+    } else {
+      return 'Good night';
+    }
+  }
+
+  Widget _proxyDecorator(Widget child, int index, Animation<double> animation) {
+    return AnimatedBuilder(
+      animation: animation,
+      builder: (BuildContext context, Widget? child) {
+        final double animValue = Curves.easeInOut.transform(animation.value);
+        final double elevation = ui.lerpDouble(0, 4, animValue)!;
+        final double scale = ui.lerpDouble(1.0, 1.02, animValue)!;
+        return DefaultTextStyle.merge(
+          style: Theme.of(context).textTheme.bodyMedium,
+          child: Transform.scale(
+            scale: scale,
+            child: Material(
+              elevation: elevation,
+              color: Colors.transparent,
+              shadowColor: Colors.black12,
+              child: child,
+            ),
+          ),
+        );
+      },
+      child: child,
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
@@ -279,8 +318,8 @@ class HomeScreen extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Good morning!',
-              style: theme.textTheme.headlineSmall?.copyWith(
+              _getGreeting(),
+              style: theme.textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.w600,
                 color: colorScheme.onSurface,
               ),
@@ -344,6 +383,7 @@ class HomeScreen extends ConsumerWidget {
                     ),
                   ),
                   SliverReorderableList(
+                    proxyDecorator: _proxyDecorator,
                     itemCount: pinnedTasks.length,
                     onReorder: (oldIndex, newIndex) {
                       if (newIndex > oldIndex) newIndex -= 1;
@@ -375,6 +415,7 @@ class HomeScreen extends ConsumerWidget {
                       ),
                     ),
                   SliverReorderableList(
+                    proxyDecorator: _proxyDecorator,
                     itemCount: pendingTasks.length,
                     onReorder: (oldIndex, newIndex) {
                       if (newIndex > oldIndex) newIndex -= 1;
@@ -414,6 +455,7 @@ class HomeScreen extends ConsumerWidget {
                     ),
                   ),
                   SliverReorderableList(
+                    proxyDecorator: _proxyDecorator,
                     itemCount: completedTasks.length,
                     onReorder: (oldIndex, newIndex) {
                       if (newIndex > oldIndex) newIndex -= 1;

@@ -312,11 +312,24 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                         ),
                       ),
                     ),
-                    Text(
-                      isEditMode ? 'Edit Task' : 'Add New Task',
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.w600,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          isEditMode ? 'Edit Task' : 'Add New Task',
+                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
+                        ),
+                        TextButton(
+                          onPressed: _submit,
+                          style: TextButton.styleFrom(
+                            foregroundColor: Theme.of(context).colorScheme.primary,
+                            textStyle: const TextStyle(fontWeight: FontWeight.bold),
                           ),
+                          child: Text(isEditMode ? 'Save' : 'Create'),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 24),
                     PrimaryTextField(

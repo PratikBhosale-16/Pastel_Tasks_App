@@ -169,14 +169,14 @@ class _ArchiveScreenState extends ConsumerState<ArchiveScreen> {
     return SizeTransition(
       sizeFactor: animation,
       child: Padding(
-        padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+        padding: const EdgeInsets.only(bottom: AppSpacing.sm, left: AppSpacing.md, right: AppSpacing.md),
         child: TaskCard(
           task: task,
           onTap: () => _showEditSheet(context, task),
           onSwipeRight: () => _restoreTask(context, task),
           onEdit: () => _showEditSheet(context, task),
           onDelete: () => _confirmAndDeleteTask(context, task),
-          onArchive: null, // Already archived
+          onRestore: () => _restoreTask(context, task),
         ),
       ),
     );

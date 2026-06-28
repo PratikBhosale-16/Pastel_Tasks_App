@@ -37,7 +37,7 @@
 
 - Current milestone: M3.12 Home Validation & Bug Fixes
 - Status: Completed.
-- Validation: Validated CRUD operations, swipe gestures, list reordering, accessibility, and app persistence on physical devices. Fixed Archive screen initialization. Addressed Snackbar timeout accessibility overrides. Reordered Home Screen into Pinned, Pending, and Completed sections using `CustomScrollView`. Tests and analysis passed.
+- Validation: Validated CRUD operations, swipe gestures, list reordering, accessibility, and app persistence on physical devices. Fixed Archive screen initialization. Addressed Snackbar timeout accessibility overrides. Reordered Home Screen into Pinned, Pending, and Completed sections using `CustomScrollView`. Fixed drag & drop proxyDecorator, added top action button to task sheet, corrected task color indicators, fixed reminder display, and preserved Undo context. Tests and analysis passed.
 
 # Completed
 

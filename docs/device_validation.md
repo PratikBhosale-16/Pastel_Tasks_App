@@ -81,6 +81,11 @@ Build Variant
 2. **Infinite Snackbars:** Embedded the UNDO button within the Snackbar content instead of using `SnackBarAction` to ensure the 5-second timeout applies even with active accessibility services.
 3. **No Separated List Sections:** Discarded the flat `ReorderableListView` in favor of a `CustomScrollView` containing three `SliverReorderableList`s, separating Pinned, Pending, and Completed tasks with correct persistence mappings.
 4. **Drag-and-Drop conflict:** Removed `onLongPress` and the modal menu from `TaskCard` to stop its `InkWell` from consuming long presses, restoring native `ReorderableListView` drag-and-drop.
+5. **Drag-and-Drop distortion:** Added a custom `proxyDecorator` to `SliverReorderableList` in `HomeScreen` to preserve `DefaultTextStyle` scaling and stabilize card rendering while dragged.
+6. **Static Greeting:** Implemented dynamic greeting string resolving based on the current system time (`DateTime.now().hour`).
+7. **Task Color & Priority mismatch:** Confined indicator dot strictly to task priority, while applying custom task hex colors as a faint background tint alongside a subtle left border to improve premium aesthetic.
+8. **Hidden Reminder Data:** Enhanced `TaskCard` bottom row to format and render active reminder trigger times using `intl` module.
+9. **Archive Swipes logic:** Changed `ArchiveScreen` left-action pane to exclude "Archive", updated `TaskCard` right background to display an Unarchive icon when archived, and mapped the right swipe action natively to restoration.
 
 ## M3.7
 

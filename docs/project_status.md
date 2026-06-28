@@ -5,8 +5,8 @@
 - Milestone: M3.12
 - Name: Home Validation
 - Status: Completed
-- Validation: Fixed 4 issues related to the Archive initialization, snackbar accessibility timeouts, home screen list sectioning (Pinned/Pending/Completed), and ReorderableListView drag-and-drop gesture conflicts. All tasks successfully completed and tests passed.
-- Overall Progress: Phase 3 is fully validated and ready.
+- Validation: Fixed 6 additional UX issues (Dynamic Greeting, Drag & Drop UX, Priority Dot vs Task Color, Reminder Display, Archive Swipe Actions, and Archive Card Visuals). All tasks successfully completed and tests passed.
+- Overall Progress: Phase 3 is fully validated, polished, and ready.
 
 ## Completed
 

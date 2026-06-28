@@ -14,7 +14,7 @@ class TagNotifier extends AsyncNotifier<void> {
     final repo = ref.read(tagRepositoryProvider);
     final result = await repo.create(tag);
     if (result is Failure) {
-      state = AsyncError(result.exception, StackTrace.current);
+      state = AsyncError((result as Failure).exception, StackTrace.current);
     } else {
       state = const AsyncData(null);
     }
@@ -26,7 +26,7 @@ class TagNotifier extends AsyncNotifier<void> {
     final repo = ref.read(tagRepositoryProvider);
     final result = await repo.update(tag);
     if (result is Failure) {
-      state = AsyncError(result.exception, StackTrace.current);
+      state = AsyncError((result as Failure).exception, StackTrace.current);
     } else {
       state = const AsyncData(null);
     }
@@ -38,7 +38,7 @@ class TagNotifier extends AsyncNotifier<void> {
     final repo = ref.read(tagRepositoryProvider);
     final result = await repo.delete(id);
     if (result is Failure) {
-      state = AsyncError(result.exception, StackTrace.current);
+      state = AsyncError((result as Failure).exception, StackTrace.current);
     } else {
       state = const AsyncData(null);
     }
@@ -50,7 +50,7 @@ class TagNotifier extends AsyncNotifier<void> {
     final repo = ref.read(tagRepositoryProvider);
     final result = await repo.reorder(ids);
     if (result is Failure) {
-      state = AsyncError(result.exception, StackTrace.current);
+      state = AsyncError((result as Failure).exception, StackTrace.current);
     } else {
       state = const AsyncData(null);
     }

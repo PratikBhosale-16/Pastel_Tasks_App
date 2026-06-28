@@ -15,6 +15,7 @@ class TaskCard extends StatelessWidget {
     this.onSwipeRight,
     this.onEdit,
     this.onArchive,
+    this.onRestore,
     this.onDelete,
     super.key,
   });
@@ -34,8 +35,19 @@ class TaskCard extends StatelessWidget {
   /// Callback when Archive is selected.
   final VoidCallback? onArchive;
 
+  /// Callback when Restore is selected.
+  final VoidCallback? onRestore;
+
   /// Callback when Delete is selected.
   final VoidCallback? onDelete;
+
+  String _formatReminderTime(DateTime time) {
+    final now = DateTime.now();
+    if (time.year == now.year && time.month == now.month && time.day == now.day) {
+      return 'Today ${DateFormat.jm().format(time)}';
+    }
+    return '${DateFormat.MMMd().format(time)} • ${DateFormat.jm().format(time)}';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,9 +68,22 @@ class TaskCard extends StatelessWidget {
       cardColor = colorScheme.surfaceVariant.withValues(alpha: 0.5);
     }
     
-    // Convert hex string to Color if task.color is a valid hex, otherwise default.
-    // For now we'll just use primary color if it's set to "default"
+    // Priority color should always be used for the indicator dot.
     final priorityColor = _getPriorityColor(task.priority, colorScheme);
+    
+    Color? parsedTaskColor;
+    if (task.color.isNotEmpty) {
+      try {
+        parsedTaskColor = Color(int.parse(task.color, radix: 16));
+      } catch (_) {}
+    }
+
+    if (!isArchived && parsedTaskColor != null) {
+      cardColor = Color.alphaBlend(
+        parsedTaskColor.withValues(alpha: 0.05), 
+        cardColor
+      );
+    }
 
     final cardContent = AnimatedOpacity(
       duration: const Duration(milliseconds: 300),
@@ -73,12 +98,18 @@ class TaskCard extends StatelessWidget {
         child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(AppRadius.xl),
-        child: Padding(
-          padding: const EdgeInsets.all(AppSpacing.lg),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(AppRadius.xl),
+              border: parsedTaskColor != null && !isArchived
+                  ? Border(left: BorderSide(color: parsedTaskColor, width: 4))
+                  : null,
+            ),
+            padding: const EdgeInsets.all(AppSpacing.lg),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -112,7 +143,7 @@ class TaskCard extends StatelessWidget {
                             duration: const Duration(milliseconds: 300),
                             style: theme.textTheme.titleMedium!.copyWith(
                               decoration: isCompleted ? TextDecoration.lineThrough : null,
-                              color: colorScheme.onSurface,
+                              color: isArchived ? colorScheme.onSurface.withValues(alpha: 0.6) : colorScheme.onSurface,
                               fontWeight: FontWeight.w600,
                             ),
                             child: Text(task.title),
@@ -124,7 +155,7 @@ class TaskCard extends StatelessWidget {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: theme.textTheme.bodyMedium?.copyWith(
-                                color: colorScheme.onSurfaceVariant,
+                                color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
                               ),
                             ),
                           ],
@@ -138,11 +169,10 @@ class TaskCard extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        if (task.reminder != null)
-                          Icon(Icons.alarm_rounded, size: 20, color: colorScheme.primary),
                         if (task.isPinned)
                           Icon(Icons.push_pin_rounded, size: 20, color: colorScheme.secondary),
-                        const SizedBox(width: AppSpacing.xs),
+                        if (task.isPinned)
+                          const SizedBox(width: AppSpacing.xs),
                         Icon(
                           Icons.circle,
                           size: 16,
@@ -196,6 +226,21 @@ class TaskCard extends StatelessWidget {
                         }).toList(),
                       ),
                     ),
+                    if (task.reminder != null) ...[
+                      const SizedBox(width: AppSpacing.sm),
+                      Icon(
+                        Icons.alarm_rounded,
+                        size: 14,
+                        color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        _formatReminderTime(task.reminder!.triggerTime),
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ],
@@ -214,7 +259,7 @@ class TaskCard extends StatelessWidget {
           color: Colors.green.shade300,
           borderRadius: BorderRadius.circular(AppRadius.xl),
         ),
-        child: const Icon(Icons.check_rounded, color: Colors.white, size: 32),
+        child: Icon(isArchived ? Icons.unarchive_outlined : Icons.check_rounded, color: Colors.white, size: 32),
       ),
       leftActionPaneBuilder: (context, close) {
         return Container(
@@ -234,14 +279,26 @@ class TaskCard extends StatelessWidget {
                   onEdit?.call();
                 },
               ),
-              IconButton(
-                icon: const Icon(Icons.archive_outlined),
-                color: Colors.orange,
-                onPressed: () {
-                  close();
-                  onArchive?.call();
-                },
-              ),
+              if (isArchived || onRestore != null)
+                IconButton(
+                  icon: const Icon(Icons.unarchive_outlined),
+                  color: Colors.green,
+                  onPressed: () {
+                    close();
+                    if (onRestore != null) {
+                      onRestore?.call();
+                    }
+                  },
+                )
+              else
+                IconButton(
+                  icon: const Icon(Icons.archive_outlined),
+                  color: Colors.orange,
+                  onPressed: () {
+                    close();
+                    onArchive?.call();
+                  },
+                ),
               IconButton(
                 icon: const Icon(Icons.delete_outline_rounded),
                 color: colorScheme.error,

@@ -14,7 +14,7 @@ class ReminderNotifier extends AsyncNotifier<void> {
     final repo = ref.read(reminderRepositoryProvider);
     final result = await repo.create(reminder);
     if (result is Failure) {
-      state = AsyncError(result.exception, StackTrace.current);
+      state = AsyncError((result as Failure).exception, StackTrace.current);
     } else {
       state = const AsyncData(null);
     }
@@ -26,7 +26,7 @@ class ReminderNotifier extends AsyncNotifier<void> {
     final repo = ref.read(reminderRepositoryProvider);
     final result = await repo.update(reminder);
     if (result is Failure) {
-      state = AsyncError(result.exception, StackTrace.current);
+      state = AsyncError((result as Failure).exception, StackTrace.current);
     } else {
       state = const AsyncData(null);
     }
@@ -38,7 +38,7 @@ class ReminderNotifier extends AsyncNotifier<void> {
     final repo = ref.read(reminderRepositoryProvider);
     final result = await repo.delete(id);
     if (result is Failure) {
-      state = AsyncError(result.exception, StackTrace.current);
+      state = AsyncError((result as Failure).exception, StackTrace.current);
     } else {
       state = const AsyncData(null);
     }
