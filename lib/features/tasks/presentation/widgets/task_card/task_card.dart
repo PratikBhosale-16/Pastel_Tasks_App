@@ -259,7 +259,7 @@ class TaskCard extends ConsumerWidget {
               border: !isArchived
                   ? Border(
                       left: BorderSide(
-                        color: parsedTaskColor ?? colorScheme.secondary, 
+                        color: parsedTaskColor ?? colorScheme.outlineVariant, 
                         width: 4,
                       ),
                     )
@@ -408,7 +408,14 @@ class TaskCard extends ConsumerWidget {
     );
 
     return SwipeableCard(
-      onSwipeRight: () => _toggleStatus(context, ref),
+      onSwipeRight: () {
+        if (isArchived) {
+          ref.read(taskNotifierProvider.notifier).restore(task.id);
+          SemanticsService.announce('Task restored', ui.TextDirection.ltr);
+        } else {
+          _toggleStatus(context, ref);
+        }
+      },
       rightActionBackground: Container(
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
         alignment: Alignment.centerLeft,
@@ -477,7 +484,7 @@ class TaskCard extends ConsumerWidget {
       case Priority.medium:
         return Colors.orange;
       case Priority.low:
-        return Colors.blue;
+        return Colors.green;
       case Priority.critical:
         return Colors.redAccent.shade700;
       default:
