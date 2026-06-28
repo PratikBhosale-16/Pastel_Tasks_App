@@ -5,16 +5,18 @@ import 'package:pastel_tasks/app/theme/spacing.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/priority.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/task_status.dart';
 import 'package:pastel_tasks/features/tasks/domain/models/task.dart';
+import 'package:pastel_tasks/shared/widgets/swipeable/swipeable_card.dart';
 
 /// Reusable Task Card component for the application.
 class TaskCard extends StatelessWidget {
-  /// Creates a new Task Card.
   const TaskCard({
     required this.task,
     this.onTap,
     this.onLongPress,
-    this.onSwipeLeft,
     this.onSwipeRight,
+    this.onEdit,
+    this.onArchive,
+    this.onDelete,
     super.key,
   });
 
@@ -24,14 +26,60 @@ class TaskCard extends StatelessWidget {
   /// Callback when the card is tapped.
   final VoidCallback? onTap;
 
-  /// Callback when the card is long-pressed (typically for dragging).
+  /// Callback when the card is long-pressed (custom override).
   final VoidCallback? onLongPress;
-
-  /// Callback when swiped left (e.g., Archive).
-  final VoidCallback? onSwipeLeft;
 
   /// Callback when swiped right (e.g., Complete).
   final VoidCallback? onSwipeRight;
+
+  /// Callback when Edit is selected.
+  final VoidCallback? onEdit;
+
+  /// Callback when Archive is selected.
+  final VoidCallback? onArchive;
+
+  /// Callback when Delete is selected.
+  final VoidCallback? onDelete;
+
+  void _showLongPressMenu(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        final colorScheme = Theme.of(context).colorScheme;
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: Icon(Icons.edit_rounded, color: colorScheme.primary),
+                title: const Text('Edit Task'),
+                onTap: () {
+                  Navigator.pop(context);
+                  onEdit?.call();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.archive_outlined, color: Colors.orange),
+                title: const Text('Archive Task'),
+                onTap: () {
+                  Navigator.pop(context);
+                  onArchive?.call();
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.delete_outline_rounded, color: colorScheme.error),
+                title: const Text('Delete Task'),
+                onTap: () {
+                  Navigator.pop(context);
+                  onDelete?.call();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +116,10 @@ class TaskCard extends StatelessWidget {
         color: cardColor,
         child: InkWell(
         onTap: onTap,
-        onLongPress: onLongPress,
+        onLongPress: () {
+          onLongPress?.call();
+          _showLongPressMenu(context);
+        },
         borderRadius: BorderRadius.circular(AppRadius.xl),
         child: Padding(
           padding: const EdgeInsets.all(AppSpacing.lg),
@@ -200,20 +251,9 @@ class TaskCard extends StatelessWidget {
       ),
     ));
 
-    return Dismissible(
-      key: ValueKey(task.id),
-      direction: DismissDirection.horizontal,
-      confirmDismiss: (direction) async {
-        if (direction == DismissDirection.endToStart) {
-          onSwipeLeft?.call();
-          return true; // Item will be deleted, so let it dismiss
-        } else if (direction == DismissDirection.startToEnd) {
-          onSwipeRight?.call();
-          return false; // Stays in the list (just crossed out), so bounce back
-        }
-        return false;
-      },
-      background: Container(
+    return SwipeableCard(
+      onSwipeRight: onSwipeRight,
+      rightActionBackground: Container(
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
         alignment: Alignment.centerLeft,
         decoration: BoxDecoration(
@@ -222,15 +262,44 @@ class TaskCard extends StatelessWidget {
         ),
         child: const Icon(Icons.check_rounded, color: Colors.white, size: 32),
       ),
-      secondaryBackground: Container(
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
-        alignment: Alignment.centerRight,
-        decoration: BoxDecoration(
-          color: Colors.red.shade400,
-          borderRadius: BorderRadius.circular(AppRadius.xl),
-        ),
-        child: const Icon(Icons.delete_outline_rounded, color: Colors.white, size: 32),
-      ),
+      leftActionPaneBuilder: (context, close) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+          decoration: BoxDecoration(
+            color: colorScheme.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(AppRadius.xl),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.edit_rounded),
+                color: colorScheme.primary,
+                onPressed: () {
+                  close();
+                  onEdit?.call();
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.archive_outlined),
+                color: Colors.orange,
+                onPressed: () {
+                  close();
+                  onArchive?.call();
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.delete_outline_rounded),
+                color: colorScheme.error,
+                onPressed: () {
+                  close();
+                  onDelete?.call();
+                },
+              ),
+            ],
+          ),
+        );
+      },
       child: cardContent,
     );
   }

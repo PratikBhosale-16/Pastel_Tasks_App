@@ -35,9 +35,9 @@
 
 # Current Milestone
 
-- Current milestone: M3.7 Complete / Restore
+- Current milestone: M3.8 Swipe Actions
 - Status: Completed.
-- Validation: Successfully implemented task completion using the existing `TaskCard`. Animated `Text` and `Card` opacity, and handled `completedAt` clearing logic. Tested via APK build.
+- Validation: Created custom `SwipeableCard` to provide a non-destructive action pane for Swipe Left. Swipe Right maintains instant Complete/Restore. Long press menu ensures accessibility. Tested successfully via APK build.
 
 # Completed
 
@@ -145,9 +145,9 @@
 
 # Next Milestone
 
-- Next milestone: M3.8 Swipe Actions
+- Next milestone: M3.9 Delete Task
 - Scope: Not specified.
-- Constraint: Do not implement M3.8 until authorized.
+- Constraint: Do not implement M3.9 until authorized.
 
 # Notes
 

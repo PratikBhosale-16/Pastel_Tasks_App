@@ -2,11 +2,11 @@
 
 ## Current Milestone
 
-- Milestone: M3.7
-- Name: Complete / Restore
+- Milestone: M3.8
+- Name: Swipe Actions
 - Status: Completed
-- Validation: Tasks can be checked/unchecked. The state persists to Isar, correctly updating `completedAt`. The UI updates instantly via Riverpod streams with smooth Material transitions.
-- Overall Progress: Home experience basic workflows, edit workflows, and completion workflows are functional.
+- Validation: The custom `SwipeableCard` allows smooth swipe interactions. Left swipe exposes an action pane (Edit, Archive, Delete) requiring explicit tap. Right swipe handles immediate completion/restoration.
+- Overall Progress: Home experience interactions are heavily polished.
 
 ## Completed
 
@@ -69,11 +69,12 @@
 - [x] M3.5: Create Task Flow
 - [x] M3.6: Edit Task
 - [x] M3.7: Complete / Restore
-- [ ] M3.8: Swipe Actions
+- [x] M3.8: Swipe Actions
 - [ ] M3.9: Delete
 - [ ] M3.10: Archive
 - [ ] M3.11: Reorder (Drag & Drop)
 - [ ] M3.12: Home Validation
+- [ ] M3.13: UX Polish
 
 ## Pending
 

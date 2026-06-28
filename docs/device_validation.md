@@ -60,3 +60,11 @@ Build Variant
 - **Restore Task**: Restored completed task by unchecking, verified restoration of default text and opacity. Restarted app, state persists.
 - **Load Testing**: Completed 20 tasks sequentially, restored 10 tasks.
 - **Rapid Tapping**: Rapidly tapped checkbox on a single task. Verified no duplicate state updates, no crashes, and no UI glitches or frozen animations.
+
+## M3.8
+
+### Verification
+- **Swipe Left**: Swiping left correctly exposes the action pane (Edit, Archive, Delete). Releasing mid-swipe causes smooth elastic bounce back. Dragging beyond the threshold holds it open.
+- **Swipe Right**: Swiping right instantly updates the completed status and returns the card to rest.
+- **Long Press**: Long press successfully triggers the bottom sheet overflow menu, verifying accessibility fallbacks.
+- **Action Pane Buttons**: Tapping the action pane buttons correctly closes the pane via the `SwipeableCard` internal controller before triggering the callback.

@@ -39,6 +39,11 @@ Living documents remain in `docs/`.
 - **Decision:** Database initialization is deferred until M2.
 - **Reason:** No Isar collections exist during M1. Avoid blocking application startup.
 
+### 017. Custom Swipeable Action Pane
+- **Date:** 2026-06-28
+- **Context:** Implementing M3.8 Swipe Actions. Native `Dismissible` does not support remaining open for an action pane.
+- **Decision:** Built a custom `SwipeableCard` using native `GestureDetector` and `AnimationController` instead of introducing `flutter_slidable`, strictly adhering to AGENTS.md constraints to avoid unauthorized third-party packages.
+
 ### 016. Task Completion State Management
 - **Date:** 2026-06-28
 - **Context:** Implementing M3.7 Task Completion and Restoration.

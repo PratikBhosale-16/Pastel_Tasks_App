@@ -341,6 +341,8 @@ Do not mix unrelated work.
 Do not rewrite history unless explicitly requested.
 Do not discard user changes.
 Do not run destructive git commands without explicit approval.
+
+**Milestone Tagging:** Every completed milestone must end with a release tag. In addition to committing and pushing, create a Git tag for the completed milestone using the semantic format `v0.[Phase].[Milestone]`. For example: `git tag -a v0.3.8 -m "Complete M3.8 Swipe Actions"` followed by `git push origin v0.3.8`.
 ---
 ## 16. AI Restrictions
 Never rewrite unrelated files.

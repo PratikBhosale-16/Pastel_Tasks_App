@@ -208,8 +208,12 @@ class HomeScreen extends ConsumerWidget {
                 return TaskCard(
                   task: task,
                   onTap: () => _editTask(context, ref, task),
-                  onSwipeLeft: () {
-                    ref.read(taskNotifierProvider.notifier).delete(task.id);
+                  onEdit: () => _editTask(context, ref, task),
+                  onArchive: () {
+                    // Deferred to M3.10 Archive Task
+                  },
+                  onDelete: () {
+                    // Deferred to M3.9 Delete Task
                   },
                   onSwipeRight: () {
                     final newStatus = task.status == TaskStatus.completed 
