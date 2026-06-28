@@ -12,13 +12,10 @@ class TaskCard extends StatelessWidget {
   const TaskCard({
     required this.task,
     this.onTap,
-    this.onLongPress,
     this.onSwipeRight,
     this.onEdit,
     this.onArchive,
     this.onDelete,
-    this.onMoveUp,
-    this.onMoveDown,
     super.key,
   });
 
@@ -27,9 +24,6 @@ class TaskCard extends StatelessWidget {
 
   /// Callback when the card is tapped.
   final VoidCallback? onTap;
-
-  /// Callback when the card is long-pressed (custom override).
-  final VoidCallback? onLongPress;
 
   /// Callback when swiped right (e.g., Complete).
   final VoidCallback? onSwipeRight;
@@ -42,72 +36,6 @@ class TaskCard extends StatelessWidget {
 
   /// Callback when Delete is selected.
   final VoidCallback? onDelete;
-
-  /// Callback to move task up.
-  final VoidCallback? onMoveUp;
-
-  /// Callback to move task down.
-  final VoidCallback? onMoveDown;
-
-  void _showLongPressMenu(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        final colorScheme = Theme.of(context).colorScheme;
-        return SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: Icon(Icons.edit_rounded, color: colorScheme.primary),
-                title: const Text('Edit Task'),
-                onTap: () {
-                  Navigator.pop(context);
-                  onEdit?.call();
-                },
-              ),
-              if (!task.isArchived)
-                ListTile(
-                  leading: const Icon(Icons.archive_outlined, color: Colors.orange),
-                  title: const Text('Archive Task'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    onArchive?.call();
-                  },
-                ),
-              ListTile(
-                leading: Icon(Icons.delete_outline_rounded, color: colorScheme.error),
-                title: const Text('Delete Task'),
-                onTap: () {
-                  Navigator.pop(context);
-                  onDelete?.call();
-                },
-              ),
-              if (onMoveUp != null || onMoveDown != null) const Divider(),
-              if (onMoveUp != null)
-                ListTile(
-                  leading: const Icon(Icons.arrow_upward_rounded),
-                  title: const Text('Move Up'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    onMoveUp?.call();
-                  },
-                ),
-              if (onMoveDown != null)
-                ListTile(
-                  leading: const Icon(Icons.arrow_downward_rounded),
-                  title: const Text('Move Down'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    onMoveDown?.call();
-                  },
-                ),
-            ],
-          ),
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -144,10 +72,6 @@ class TaskCard extends StatelessWidget {
         color: cardColor,
         child: InkWell(
         onTap: onTap,
-        onLongPress: () {
-          onLongPress?.call();
-          _showLongPressMenu(context);
-        },
         borderRadius: BorderRadius.circular(AppRadius.xl),
         child: Padding(
           padding: const EdgeInsets.all(AppSpacing.lg),

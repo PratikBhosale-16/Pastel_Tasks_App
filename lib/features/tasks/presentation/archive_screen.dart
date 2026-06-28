@@ -26,11 +26,7 @@ class _ArchiveScreenState extends ConsumerState<ArchiveScreen> {
   bool _isInit = false;
 
   void _updateList(List<Task> newTasks) {
-    if (!_isInit) {
-      _tasks.addAll(newTasks);
-      _isInit = true;
-      return;
-    }
+    if (!_isInit) return; // Should be initialized synchronously
 
     final oldIds = _tasks.map((t) => t.id).toList();
     final newIds = newTasks.map((t) => t.id).toList();
@@ -92,17 +88,27 @@ class _ArchiveScreenState extends ConsumerState<ArchiveScreen> {
 
   void _restoreTask(BuildContext context, Task task) {
     ref.read(taskNotifierProvider.notifier).restore(task.id);
+    final colorScheme = Theme.of(context).colorScheme;
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: const Text('Task restored'),
-        duration: const Duration(seconds: 5),
-        action: SnackBarAction(
-          label: 'Undo',
-          onPressed: () {
-            ref.read(taskNotifierProvider.notifier).archive(task.id);
-          },
+        content: Row(
+          children: [
+            const Text('Task restored'),
+            const Spacer(),
+            TextButton(
+              style: TextButton.styleFrom(
+                foregroundColor: colorScheme.inversePrimary,
+              ),
+              onPressed: () {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                ref.read(taskNotifierProvider.notifier).archive(task.id);
+              },
+              child: const Text('UNDO'),
+            ),
+          ],
         ),
+        duration: const Duration(seconds: 5),
       ),
     );
   }
@@ -207,6 +213,12 @@ class _ArchiveScreenState extends ConsumerState<ArchiveScreen> {
       body: allTasksAsync.when(
         data: (tasks) {
           final archivedTasks = tasks.where((t) => t.isArchived).toList();
+          
+          if (!_isInit) {
+            _tasks.addAll(archivedTasks);
+            _isInit = true;
+          }
+
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (mounted) {
               _updateList(archivedTasks);

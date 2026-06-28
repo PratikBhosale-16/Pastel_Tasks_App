@@ -35,9 +35,9 @@
 
 # Current Milestone
 
-- Current milestone: M3.10 Archive Task
+- Current milestone: M3.12 Home Validation & Bug Fixes
 - Status: Completed.
-- Validation: Implemented `ArchiveScreen` with `AnimatedList` for material motion. Updated `TaskCard` for archived UI and swipe logic. Added Archive/Restore support to `AddTaskBottomSheet` and `home_screen.dart`. Full device validation, CRUD and persistence checked. Tests pass.
+- Validation: Validated CRUD operations, swipe gestures, list reordering, accessibility, and app persistence on physical devices. Fixed Archive screen initialization. Addressed Snackbar timeout accessibility overrides. Reordered Home Screen into Pinned, Pending, and Completed sections using `CustomScrollView`. Tests and analysis passed.
 
 # Completed
 
@@ -50,7 +50,7 @@
 - M1.4 Developer Preview & Validation (implementation complete).
 - M1.5 Device Validation & UX Polish (implementation complete).
 - M2.1 Domain Architecture (implementation complete).
-- M3.1 to M3.9 Home & Task interaction (implementation complete).
+- M3.1 to M3.12 Home & Task interaction (implementation & validation complete).
 - `main.dart` calls `bootstrap()` only.
 - `bootstrap.dart` initializes Flutter bindings, logger, Isar setup, notification service structure, ProviderScope, and App.
 - `App` uses `MaterialApp.router`.

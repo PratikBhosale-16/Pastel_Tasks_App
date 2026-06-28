@@ -2,11 +2,11 @@
 
 ## Current Milestone
 
-- Milestone: M3.9
-- Name: Delete Task
+- Milestone: M3.12
+- Name: Home Validation
 - Status: Completed
-- Validation: The ConfirmationDialog manages deletion flows. An AnimatedList correctly diffs UI rendering. Undo restores to Isar with the exact same ID for 5 seconds. All entry points covered.
-- Overall Progress: Task life cycle interaction is heavily polished.
+- Validation: Fixed 4 issues related to the Archive initialization, snackbar accessibility timeouts, home screen list sectioning (Pinned/Pending/Completed), and ReorderableListView drag-and-drop gesture conflicts. All tasks successfully completed and tests passed.
+- Overall Progress: Phase 3 is fully validated and ready.
 
 ## Completed
 
@@ -89,9 +89,7 @@
 
 ## Next Milestone
 
-## Next Milestone
-
-- Milestone: M3.10 — Archive
+- Milestone: M4.1 — Tags
 
 ## Development Order
 

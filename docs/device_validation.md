@@ -76,6 +76,12 @@ Build Variant
 - **Error Handling:** Verified empty database shows `EmptyState`. No storage failures reported.
 - **UI Consistency:** Visuals strictly follow Stitch design specifications (typography, elevation, spacing, icons).
 
+### Issues Fixed
+1. **Archive screen blank on load:** Fixed `AnimatedList` initialization to populate its inner array prior to layout.
+2. **Infinite Snackbars:** Embedded the UNDO button within the Snackbar content instead of using `SnackBarAction` to ensure the 5-second timeout applies even with active accessibility services.
+3. **No Separated List Sections:** Discarded the flat `ReorderableListView` in favor of a `CustomScrollView` containing three `SliverReorderableList`s, separating Pinned, Pending, and Completed tasks with correct persistence mappings.
+4. **Drag-and-Drop conflict:** Removed `onLongPress` and the modal menu from `TaskCard` to stop its `InkWell` from consuming long presses, restoring native `ReorderableListView` drag-and-drop.
+
 ## M3.7
 
 ### Verification

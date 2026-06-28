@@ -179,14 +179,23 @@ class HomeScreen extends ConsumerWidget {
         ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Task deleted'),
-            duration: const Duration(seconds: 5),
-            action: SnackBarAction(
-              label: 'Undo',
-              onPressed: () {
-                ref.read(taskNotifierProvider.notifier).create(taskCopy);
-              },
+            content: Row(
+              children: [
+                const Text('Task deleted'),
+                const Spacer(),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    foregroundColor: Theme.of(context).colorScheme.inversePrimary,
+                  ),
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    ref.read(taskNotifierProvider.notifier).create(taskCopy);
+                  },
+                  child: const Text('UNDO'),
+                ),
+              ],
             ),
+            duration: const Duration(seconds: 5),
           ),
         );
       }
@@ -201,17 +210,58 @@ class HomeScreen extends ConsumerWidget {
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Task archived'),
-          duration: const Duration(seconds: 5),
-          action: SnackBarAction(
-            label: 'Undo',
-            onPressed: () {
-              ref.read(taskNotifierProvider.notifier).restore(taskCopy.id);
-            },
+          content: Row(
+            children: [
+              const Text('Task archived'),
+              const Spacer(),
+              TextButton(
+                style: TextButton.styleFrom(
+                  foregroundColor: Theme.of(context).colorScheme.inversePrimary,
+                ),
+                onPressed: () {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  ref.read(taskNotifierProvider.notifier).restore(taskCopy.id);
+                },
+                child: const Text('UNDO'),
+              ),
+            ],
           ),
+          duration: const Duration(seconds: 5),
         ),
       );
     }
+  }
+
+  Widget _buildTaskCard(BuildContext context, WidgetRef ref, Task task) {
+    return TaskCard(
+      task: task,
+      onTap: () => _editTask(context, ref, task),
+      onEdit: () => _editTask(context, ref, task),
+      onArchive: () => _archiveTask(context, ref, task),
+      onDelete: () => _confirmAndDeleteTask(context, ref, task),
+      onSwipeRight: () {
+        final newStatus = task.status == TaskStatus.completed 
+            ? TaskStatus.pending 
+            : TaskStatus.completed;
+        
+        final updatedTask = task.copyWith(
+          status: newStatus,
+          updatedAt: DateTime.now().toUtc(),
+          completedAt: newStatus == TaskStatus.completed 
+              ? DateTime.now().toUtc() 
+              : null,
+          clearCompletedAt: newStatus != TaskStatus.completed,
+        );
+        
+        ref.read(taskNotifierProvider.notifier).updateTask(updatedTask);
+
+        if (newStatus == TaskStatus.completed) {
+          SemanticsService.announce('Task completed', ui.TextDirection.ltr);
+        } else {
+          SemanticsService.announce('Task restored', ui.TextDirection.ltr);
+        }
+      },
+    );
   }
 
   @override
@@ -278,74 +328,116 @@ class HomeScreen extends ConsumerWidget {
               );
             }
 
-            return ReorderableListView.builder(
-              key: const ValueKey('reorderable_task_list'),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-              itemCount: displayTasks.length,
-              onReorder: (oldIndex, newIndex) {
-                if (newIndex > oldIndex) {
-                  newIndex -= 1;
-                }
-                final tasksCopy = List<Task>.from(displayTasks);
-                final task = tasksCopy.removeAt(oldIndex);
-                tasksCopy.insert(newIndex, task);
-                final orderedIds = tasksCopy.map((t) => t.id).toList();
-                ref.read(taskNotifierProvider.notifier).reorder(orderedIds);
-              },
-              itemBuilder: (context, index) {
-                final task = displayTasks[index];
-                return Padding(
-                  key: ValueKey(task.id),
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: TaskCard(
-                    task: task,
-                    onTap: () => _editTask(context, ref, task),
-                    onEdit: () => _editTask(context, ref, task),
-                    onArchive: () => _archiveTask(context, ref, task),
-                    onDelete: () => _confirmAndDeleteTask(context, ref, task),
-                    onMoveUp: index > 0
-                        ? () {
-                            final tasksCopy = List<Task>.from(displayTasks);
-                            final t = tasksCopy.removeAt(index);
-                            tasksCopy.insert(index - 1, t);
-                            final orderedIds = tasksCopy.map((t) => t.id).toList();
-                            ref.read(taskNotifierProvider.notifier).reorder(orderedIds);
-                          }
-                        : null,
-                    onMoveDown: index < displayTasks.length - 1
-                        ? () {
-                            final tasksCopy = List<Task>.from(displayTasks);
-                            final t = tasksCopy.removeAt(index);
-                            tasksCopy.insert(index + 1, t);
-                            final orderedIds = tasksCopy.map((t) => t.id).toList();
-                            ref.read(taskNotifierProvider.notifier).reorder(orderedIds);
-                          }
-                        : null,
-                    onSwipeRight: () {
-                        final newStatus = task.status == TaskStatus.completed 
-                            ? TaskStatus.pending 
-                            : TaskStatus.completed;
-                        
-                        final updatedTask = task.copyWith(
-                          status: newStatus,
-                          updatedAt: DateTime.now().toUtc(),
-                          completedAt: newStatus == TaskStatus.completed 
-                              ? DateTime.now().toUtc() 
-                              : null,
-                          clearCompletedAt: newStatus != TaskStatus.completed,
-                        );
-                        
-                        ref.read(taskNotifierProvider.notifier).updateTask(updatedTask);
+            final pinnedTasks = displayTasks.where((t) => t.isPinned && t.status != TaskStatus.completed).toList();
+            final pendingTasks = displayTasks.where((t) => !t.isPinned && t.status != TaskStatus.completed).toList();
+            final completedTasks = displayTasks.where((t) => t.status == TaskStatus.completed).toList();
 
-                        if (newStatus == TaskStatus.completed) {
-                          SemanticsService.announce('Task completed', ui.TextDirection.ltr);
-                        } else {
-                          SemanticsService.announce('Task restored', ui.TextDirection.ltr);
-                        }
-                      },
+            return CustomScrollView(
+              key: const ValueKey('home_scroll_view'),
+              slivers: [
+                const SliverPadding(padding: EdgeInsets.only(top: 24)),
+                if (pinnedTasks.isNotEmpty) ...[
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      child: Text('Pinned', style: theme.textTheme.labelLarge?.copyWith(color: colorScheme.primary)),
+                    ),
                   ),
-                );
-              },
+                  SliverReorderableList(
+                    itemCount: pinnedTasks.length,
+                    onReorder: (oldIndex, newIndex) {
+                      if (newIndex > oldIndex) newIndex -= 1;
+                      final tasksCopy = List<Task>.from(pinnedTasks);
+                      final task = tasksCopy.removeAt(oldIndex);
+                      tasksCopy.insert(newIndex, task);
+                      final orderedIds = tasksCopy.map((t) => t.id).toList();
+                      ref.read(taskNotifierProvider.notifier).reorder(orderedIds);
+                    },
+                    itemBuilder: (context, index) {
+                      final task = pinnedTasks[index];
+                      return ReorderableDelayedDragStartListener(
+                        key: ValueKey(task.id),
+                        index: index,
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 12, left: 16, right: 16),
+                          child: _buildTaskCard(context, ref, task),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+                if (pendingTasks.isNotEmpty) ...[
+                  if (pinnedTasks.isNotEmpty)
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        child: Text('Tasks', style: theme.textTheme.labelLarge?.copyWith(color: colorScheme.onSurfaceVariant)),
+                      ),
+                    ),
+                  SliverReorderableList(
+                    itemCount: pendingTasks.length,
+                    onReorder: (oldIndex, newIndex) {
+                      if (newIndex > oldIndex) newIndex -= 1;
+                      final tasksCopy = List<Task>.from(pendingTasks);
+                      final task = tasksCopy.removeAt(oldIndex);
+                      tasksCopy.insert(newIndex, task);
+                      final orderedIds = tasksCopy.map((t) => t.id).toList();
+                      ref.read(taskNotifierProvider.notifier).reorder(orderedIds);
+                    },
+                    itemBuilder: (context, index) {
+                      final task = pendingTasks[index];
+                      return ReorderableDelayedDragStartListener(
+                        key: ValueKey(task.id),
+                        index: index,
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 12, left: 16, right: 16),
+                          child: _buildTaskCard(context, ref, task),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+                if (completedTasks.isNotEmpty) ...[
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                      child: Row(
+                        children: [
+                          Expanded(child: Divider(color: colorScheme.outlineVariant)),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: Text('Completed', style: theme.textTheme.labelMedium?.copyWith(color: colorScheme.onSurfaceVariant)),
+                          ),
+                          Expanded(child: Divider(color: colorScheme.outlineVariant)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SliverReorderableList(
+                    itemCount: completedTasks.length,
+                    onReorder: (oldIndex, newIndex) {
+                      if (newIndex > oldIndex) newIndex -= 1;
+                      final tasksCopy = List<Task>.from(completedTasks);
+                      final task = tasksCopy.removeAt(oldIndex);
+                      tasksCopy.insert(newIndex, task);
+                      final orderedIds = tasksCopy.map((t) => t.id).toList();
+                      ref.read(taskNotifierProvider.notifier).reorder(orderedIds);
+                    },
+                    itemBuilder: (context, index) {
+                      final task = completedTasks[index];
+                      return ReorderableDelayedDragStartListener(
+                        key: ValueKey(task.id),
+                        index: index,
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 12, left: 16, right: 16),
+                          child: _buildTaskCard(context, ref, task),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+                const SliverPadding(padding: EdgeInsets.only(bottom: 80)),
+              ],
             );
           },
           error: (err, _) => Center(
