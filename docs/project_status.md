@@ -2,11 +2,11 @@
 
 ## Current Milestone
 
-- Milestone: M2.3
-- Name: Repository Layer
+- Milestone: M2.4
+- Name: State Management
 - Status: Completed
-- Validation: Implemented TaskRepository, TagRepository, and ReminderRepository returning Result<T> without leaking Isar exceptions.
-- Overall Progress: Data access patterns established successfully.
+- Validation: Implemented core Riverpod providers and domain Notifiers bridging the Repository Layer without UI logic.
+- Overall Progress: Data access patterns and reactive state management established.
 
 ## Completed
 
@@ -32,6 +32,8 @@
 - `lib/infrastructure/database/isar` contains Isar collections, single service, and migration setup (Schema version 1).
 - `lib/features/tasks/domain/repositories` contains the repository interfaces for data access.
 - `lib/features/tasks/data/repositories` contains Isar implementations for the repositories.
+- `lib/features/tasks/presentation/providers` contains Riverpod providers for state exposure and mutation.
+- `lib/core/providers` contains application-wide Riverpod dependency injection definitions.
 - `lib/core/services` retains the notification service structure from M0.2.
 - `lib/core/config` contains reusable application environment and build metadata configuration.
 - `lib/core/services` contains date/time, UUID, connectivity, and haptic abstractions.
@@ -56,7 +58,7 @@
 - [x] M2.1: Domain Architecture
 - [x] M2.2: Database Layer
 - [x] M2.3: Repository Layer
-- [ ] M2.4: State Management
+- [x] M2.4: State Management
 
 ## Pending
 

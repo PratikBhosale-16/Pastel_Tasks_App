@@ -35,9 +35,9 @@
 
 # Current Milestone
 
-- Current milestone: M2.3 Repository Layer.
+- Current milestone: M2.4 State Management.
 - Status: Completed.
-- Validation: Domain models mapped to Isar collections correctly via pure Dart repositories returning Result types.
+- Validation: Riverpod providers mapped repositories to Reactive AsyncValue streams, ensuring complete isolation of Isar exceptions.
 
 # Completed
 

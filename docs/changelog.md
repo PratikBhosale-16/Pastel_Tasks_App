@@ -16,6 +16,7 @@
 - Updated logger levels to suppress verbose output in release builds.
 
 ## [Unreleased]
+- M2.4: Completed State Management layer. Introduced Riverpod for repository dependency injection, state filtering, and mutation (Notifiers).
 - M2.3: Completed Repository Layer. Created pure Dart interfaces for Tasks, Tags, and Reminders, implemented with Isar.
 - M2.2: Completed Database Layer. Implemented Isar database service, Task/Tag/Reminder collections, indexes, and migration infrastructure (Schema version 1).
 - M2.1: Completed Domain Architecture. Created pure Dart entities, enums, value objects, and domain validators for the Task domain.

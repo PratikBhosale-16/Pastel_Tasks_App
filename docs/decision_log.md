@@ -39,6 +39,10 @@ Living documents remain in `docs/`.
 - **Decision:** Database initialization is deferred until M2.
 - **Reason:** No Isar collections exist during M1. Avoid blocking application startup.
 
+### 7. Riverpod State Management without Generator (2026-06-28)
+- **Context:** M2.4 needed complete state management using Riverpod.
+- **Decision:** Used standard Riverpod providers (e.g., `StreamProvider`, `FutureProvider`, `Notifier`) without `.g.dart` generator for core app connectivity and data providers to ensure explicitness and avoid extra code generation steps for pure domain/DI wiring.
+
 ### 6. Repository Layer Data Mapping (2026-06-28)
 - **Context:** M2.3 required the application to interact with Isar without exposing Isar-specific exceptions or models.
 - **Decision:** Used Dart extension methods (`toDomain()`, `toIsar()`) to act as mappers. Implemented `Result<T>` wrappers around all Isar transactions, catching and wrapping errors into `StorageFailure(StorageException(...))` to enforce Clean Architecture boundaries. Added `tags` and `uuid` to Isar schema where missed previously.
