@@ -323,6 +323,14 @@ Before implementing any screen:
 5. Extract reusable components
 6. Implement native Flutter widgets
 7. Never convert HTML directly into Flutter
+
+### UI Fidelity Requirement
+
+Before marking any UI milestone complete:
+✓ Compare the implemented Flutter screen against the corresponding Stitch HTML and screenshot.
+✓ Match spacing, typography, colors, elevation, border radius, animations, and interactions.
+✓ Any intentional deviations must be documented in docs/decision_log.md with a reason.
+Do not mark the milestone complete until the Flutter implementation is visually aligned with the approved design.
 ---
 ## 15. Git Rules
 Recommended branch names:
