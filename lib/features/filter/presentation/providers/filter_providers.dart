@@ -112,8 +112,12 @@ final filteredTasksProvider = Provider<AsyncValue<List<Task>>>((ref) {
       if (filter.isArchived != null) {
         if (task.isArchived != filter.isArchived) return false;
       } else {
-        // By default, hide archived tasks from the general filtered view
-        if (task.isArchived) return false;
+        // By default, hide archived tasks from the general filtered view,
+        // UNLESS the user explicitly filtered by TaskStatus.archived
+        final isFilteringByArchivedStatus = filter.statuses?.contains(TaskStatus.archived) ?? false;
+        if (task.isArchived && !isFilteringByArchivedStatus) {
+          return false;
+        }
       }
 
       // Smart Date Filters

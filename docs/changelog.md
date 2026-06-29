@@ -12,6 +12,8 @@
   - Expanded task color palette to 12 Material 3 compatible pastel shades.
   - Ensured selected task color accurately persists and pre-fills in the Create/Edit UI.
   - Ensured dynamically created tags are instantly available to Smart Lists, Filters, Search, and Task Editor logic.
+  - Consolidated and polished Home Screen UI: integrated Sort and Filter actions into a unified `SortAndFilterBottomSheet`, added Pinned visual indicators to `TaskCard`, and ensured robust keyboard-aware layout for `AddTaskBottomSheet`.
+  - Fixed syntax and build errors stemming from `AddTaskBottomSheet` refactoring, resulting in a successful build.
 - M4.4: Implemented Smart Sorting. Created persistent sorting preferences via `SortPreferences` (saving to `shared_preferences`). Integrated `sortedTasksProvider` with the search/filter task chain. Sorted tasks can be ascending/descending by date, priority, or alphabetically. Maintained positional stability for identical sort keys. Disabled drag-and-drop manual ordering when sorting by non-manual options. Added `SortBottomSheet` for UI control.
 - M4.3: Implemented Intelligent Task Search. Built `TaskSearchBar`, `HighlightText`, and integrated Riverpod `searchedTasksProvider`. Search runs locally across titles and descriptions and works seamlessly on top of applied filters.
 - M4.2: Implemented Advanced Task Filtering. Added robust `TaskFilter` options including tag matching, status filtering, and priority filtering. Built `FilterBottomSheet` and `ActiveFiltersRow` to seamlessly toggle and visualize state. Integrated with Isar local queries via Riverpod.

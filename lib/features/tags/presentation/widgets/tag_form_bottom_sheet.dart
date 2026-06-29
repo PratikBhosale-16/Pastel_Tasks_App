@@ -71,6 +71,9 @@ class _TagFormBottomSheetState extends State<TagFormBottomSheet> {
       _selectedColor = _presetColors.first;
       _selectedIcon = _presetIcons.first.codePoint.toString();
     }
+    _nameController.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
@@ -108,116 +111,158 @@ class _TagFormBottomSheetState extends State<TagFormBottomSheet> {
       ),
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeOutCubic,
-      child: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
+      child: SafeArea(
+        child: Form(
+          key: _formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-            Text(
-              widget.existingTag == null ? 'New Tag' : 'Edit Tag',
-              style: theme.textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.w600,
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        widget.existingTag == null ? 'New Tag' : 'Edit Tag',
+                        style: theme.textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      PrimaryTextField(
+                        controller: _nameController,
+                        labelText: 'Tag Name',
+                        hintText: 'e.g., Work, Personal',
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Please enter a tag name';
+                          }
+                          if (value.length > 30) {
+                            return 'Tag name is too long';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 24),
+                      Text('Preview', style: theme.textTheme.titleSmall),
+                      const SizedBox(height: 12),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: _selectedColor,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (_selectedIcon != null)
+                                Icon(
+                                  IconData(int.parse(_selectedIcon!), fontFamily: 'MaterialIcons'),
+                                  size: 16,
+                                  color: Colors.black87,
+                                ),
+                              if (_selectedIcon != null) const SizedBox(width: 6),
+                              Text(
+                                _nameController.text.isEmpty ? 'Tag Name' : _nameController.text,
+                                style: theme.textTheme.labelMedium?.copyWith(
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      Text('Color', style: theme.textTheme.titleSmall),
+                      const SizedBox(height: 12),
+                      Wrap(
+                        spacing: 12,
+                        runSpacing: 12,
+                        children: _presetColors.map((color) {
+                          final isSelected = _selectedColor == color;
+                          return GestureDetector(
+                            onTap: () => setState(() => _selectedColor = color),
+                            child: Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: color,
+                                shape: BoxShape.circle,
+                                border: isSelected
+                                    ? Border.all(color: theme.colorScheme.primary, width: 3)
+                                    : null,
+                              ),
+                              child: isSelected
+                                  ? const Icon(Icons.check, color: Colors.white, size: 20)
+                                  : null,
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                      const SizedBox(height: 24),
+                      Text('Icon', style: theme.textTheme.titleSmall),
+                      const SizedBox(height: 12),
+                      Wrap(
+                        spacing: 12,
+                        runSpacing: 12,
+                        children: _presetIcons.map((icon) {
+                          final isSelected = _selectedIcon == icon.codePoint.toString();
+                          return GestureDetector(
+                            onTap: () => setState(() => _selectedIcon = icon.codePoint.toString()),
+                            child: Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? theme.colorScheme.primaryContainer
+                                    : theme.colorScheme.surfaceContainerHighest,
+                                shape: BoxShape.circle,
+                                border: isSelected
+                                    ? Border.all(color: theme.colorScheme.primary, width: 2)
+                                    : Border.all(color: Colors.transparent, width: 2),
+                              ),
+                              child: Icon(
+                                icon,
+                                color: isSelected
+                                    ? theme.colorScheme.onPrimaryContainer
+                                    : theme.colorScheme.onSurfaceVariant,
+                                size: 20,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                      const SizedBox(height: 32),
+                    ],
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(height: 24),
-            PrimaryTextField(
-              controller: _nameController,
-              labelText: 'Tag Name',
-              hintText: 'e.g., Work, Personal',
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Please enter a tag name';
-                }
-                if (value.length > 30) {
-                  return 'Tag name is too long';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 24),
-            Text('Color', style: theme.textTheme.titleSmall),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              children: _presetColors.map((color) {
-                final isSelected = _selectedColor == color;
-                return GestureDetector(
-                  onTap: () => setState(() => _selectedColor = color),
-                  child: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: color,
-                      shape: BoxShape.circle,
-                      border: isSelected
-                          ? Border.all(color: theme.colorScheme.primary, width: 3)
-                          : null,
-                    ),
-                    child: isSelected
-                        ? const Icon(Icons.check, color: Colors.white, size: 20)
-                        : null,
-                  ),
-                );
-              }).toList(),
-            ),
-            const SizedBox(height: 24),
-            Text('Icon', style: theme.textTheme.titleSmall),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              children: _presetIcons.map((icon) {
-                final isSelected = _selectedIcon == icon.codePoint.toString();
-                return GestureDetector(
-                  onTap: () => setState(() => _selectedIcon = icon.codePoint.toString()),
-                  child: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: isSelected
-                          ? theme.colorScheme.primaryContainer
-                          : theme.colorScheme.surfaceContainerHighest,
-                      shape: BoxShape.circle,
-                      border: isSelected
-                          ? Border.all(color: theme.colorScheme.primary, width: 2)
-                          : Border.all(color: Colors.transparent, width: 2),
-                    ),
-                    child: Icon(
-                      icon,
-                      color: isSelected
-                          ? theme.colorScheme.onPrimaryContainer
-                          : theme.colorScheme.onSurfaceVariant,
-                      size: 20,
+              Row(
+                children: [
+                  Expanded(
+                    child: SecondaryButton(
+                      label: 'Cancel',
+                      onPressed: () => Navigator.of(context).pop(),
                     ),
                   ),
-                );
-              }).toList(),
-            ),
-            const SizedBox(height: 32),
-            Row(
-              children: [
-                Expanded(
-                  child: SecondaryButton(
-                    label: 'Cancel',
-                    onPressed: () => Navigator.of(context).pop(),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: PrimaryButton(
+                      label: widget.existingTag == null ? 'Create' : 'Save',
+                      onPressed: _submit,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: PrimaryButton(
-                    label: widget.existingTag == null ? 'Create' : 'Save',
-                    onPressed: _submit,
-                  ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
-    ),
-  );
+    );
   }
 }

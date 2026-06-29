@@ -27,6 +27,7 @@ import 'package:pastel_tasks/features/tasks/presentation/widgets/task_card/task_
 import 'package:pastel_tasks/shared/widgets/dialogs/confirmation_dialog.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/priority.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/repeat_rule.dart';
+import 'package:pastel_tasks/features/filter/domain/models/task_filter.dart';
 import 'package:pastel_tasks/features/filter/presentation/providers/filter_providers.dart';
 import 'package:pastel_tasks/features/filter/presentation/widgets/active_filters_row.dart';
 import 'package:pastel_tasks/features/filter/presentation/widgets/filter_bottom_sheet.dart';
@@ -34,7 +35,7 @@ import 'package:pastel_tasks/features/search/presentation/providers/search_provi
 import 'package:pastel_tasks/features/search/presentation/widgets/task_search_bar.dart';
 import 'package:pastel_tasks/features/sorting/domain/enums/sort_option.dart';
 import 'package:pastel_tasks/features/sorting/presentation/providers/sort_providers.dart';
-import 'package:pastel_tasks/features/sorting/presentation/widgets/sort_bottom_sheet.dart';
+import 'package:pastel_tasks/features/filter/presentation/widgets/sort_and_filter_bottom_sheet.dart';
 import 'package:pastel_tasks/features/filter/presentation/widgets/active_filters_row.dart';
 import 'package:pastel_tasks/features/smart_lists/presentation/widgets/smart_lists_drawer.dart';
 import 'package:pastel_tasks/features/selection/presentation/providers/selection_providers.dart';
@@ -113,13 +114,13 @@ class HomeScreen extends ConsumerWidget {
   String _getGreeting() {
     final hour = DateTime.now().hour;
     if (hour >= 5 && hour < 12) {
-      return 'Good Morning !';
+      return 'Good Morning!';
     } else if (hour >= 12 && hour < 17) {
-      return 'Good Afternoon !';
+      return 'Good Afternoon!';
     } else if (hour >= 17 && hour < 21) {
-      return 'Good Evening !';
+      return 'Good Evening!';
     } else {
-      return 'Good Night !';
+      return 'Good Night!';
     }
   }
 
@@ -187,11 +188,16 @@ class HomeScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              _getGreeting(),
-              style: theme.textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.w600,
-                color: colorScheme.onSurface,
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: Text(
+                _getGreeting(),
+                maxLines: 1,
+                style: theme.textTheme.headlineMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: colorScheme.onSurface,
+                ),
               ),
             ),
             Text(
@@ -211,24 +217,10 @@ class HomeScreen extends ConsumerWidget {
             },
           ),
           IconButton(
-            icon: const Icon(Icons.label_outline),
-            tooltip: 'Tags',
+            icon: const Icon(Icons.tune_rounded),
+            tooltip: 'Sort & Filter Tasks',
             onPressed: () {
-              context.push(RouteNames.tagsPath);
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.sort),
-            tooltip: 'Sort Tasks',
-            onPressed: () {
-              SortBottomSheet.show(context);
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.filter_list_rounded),
-            tooltip: 'Filter Tasks',
-            onPressed: () {
-              FilterBottomSheet.show(context);
+              SortAndFilterBottomSheet.show(context);
             },
           ),
           const SizedBox(width: 8),
@@ -250,10 +242,28 @@ class HomeScreen extends ConsumerWidget {
             // Wait, if it's the home screen, normally it's active tasks. Let's just use tasks.
             final displayTasks = tasks.where((t) => !t.isArchived).toList();
             if (displayTasks.isEmpty) {
-              return EmptyState.taskList(
-                key: const ValueKey('empty_state'),
-                onPrimaryAction: () => _showAddTask(context, ref),
-              );
+              final filter = ref.read(filterProvider).valueOrNull ?? TaskFilter.empty;
+              final searchQuery = ref.read(debouncedSearchQueryProvider);
+              final hasActiveFilters = filter != TaskFilter.empty || searchQuery.isNotEmpty;
+              
+              if (hasActiveFilters) {
+                return EmptyState(
+                  key: const ValueKey('empty_state_filtered'),
+                  title: 'No matching tasks',
+                  subtitle: 'Try adjusting your filters or search query.',
+                  illustration: Icons.search_off_rounded,
+                  primaryActionLabel: 'Clear Filters',
+                  onPrimaryAction: () {
+                    ref.read(filterProvider.notifier).clearAll();
+                    ref.read(searchQueryProvider.notifier).state = '';
+                  },
+                );
+              } else {
+                return EmptyState.taskList(
+                  key: const ValueKey('empty_state'),
+                  onPrimaryAction: () => _showAddTask(context, ref),
+                );
+              }
             }
 
             final pinnedTasks = displayTasks.where((t) => t.isPinned && t.status != TaskStatus.completed).toList();
@@ -265,10 +275,16 @@ class HomeScreen extends ConsumerWidget {
               slivers: [
                 const SliverPadding(padding: EdgeInsets.only(top: 24)),
                 if (pinnedTasks.isNotEmpty) ...[
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      child: Text('Pinned', style: theme.textTheme.labelLarge?.copyWith(color: colorScheme.primary)),
+                  SliverPadding(
+                    padding: const EdgeInsets.only(left: 20, right: 20, bottom: 8),
+                    sliver: SliverToBoxAdapter(
+                      child: Row(
+                        children: [
+                          Icon(Icons.push_pin_rounded, size: 18, color: colorScheme.primary),
+                          const SizedBox(width: 8),
+                          Text('Pinned', style: theme.textTheme.labelLarge?.copyWith(color: colorScheme.primary)),
+                        ],
+                      ),
                     ),
                   ),
                   SliverReorderableList(
@@ -417,7 +433,9 @@ floatingActionButton: isSelectionMode
         : NavigationBar(
         selectedIndex: 0,
         onDestinationSelected: (idx) {
-          // Bottom navigation routing deferred to future milestones
+          if (idx == 2) {
+            context.push(RouteNames.tagsPath);
+          }
         },
         destinations: const [
           NavigationDestination(

@@ -9,6 +9,7 @@ class SelectionChip extends StatelessWidget {
     super.key,
     this.onSelected,
     this.icon,
+    this.color,
   });
 
   /// The text label for the selection.
@@ -23,6 +24,9 @@ class SelectionChip extends StatelessWidget {
   /// Optional icon to display.
   final IconData? icon;
 
+  /// Optional color when selected.
+  final Color? color;
+
   @override
   Widget build(BuildContext context) {
     return ChoiceChip(
@@ -31,6 +35,7 @@ class SelectionChip extends StatelessWidget {
       onSelected: onSelected,
       avatar: icon != null ? Icon(icon, size: 16) : null,
       showCheckmark: false,
+      selectedColor: color,
     );
   }
 }

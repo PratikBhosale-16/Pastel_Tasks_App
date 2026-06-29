@@ -265,9 +265,10 @@ class TaskCard extends ConsumerWidget {
           onTap: isSelectionMode 
             ? () => ref.read(selectionProvider.notifier).toggle(task.id)
             : () => _editTask(context, ref),
-          onLongPress: isSelectionMode 
+          onDoubleTap: isSelectionMode 
             ? null 
             : () => ref.read(selectionProvider.notifier).toggle(task.id),
+          onLongPress: null, // Let native drag handle long press
           borderRadius: BorderRadius.circular(AppRadius.xl),
           child: Container(
             decoration: BoxDecoration(
@@ -318,17 +319,32 @@ class TaskCard extends ConsumerWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            AnimatedDefaultTextStyle(
-                              duration: const Duration(milliseconds: 300),
-                              style: theme.textTheme.titleMedium!.copyWith(
-                                decoration: isCompleted ? TextDecoration.lineThrough : null,
-                                color: isArchived ? colorScheme.onSurface.withValues(alpha: 0.6) : colorScheme.onSurface,
-                                fontWeight: FontWeight.w600,
-                              ),
-                              child: HighlightText(
-                                text: task.title,
-                                query: searchQuery,
-                              ),
+                            Row(
+                              children: [
+                                if (task.isPinned)
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 6.0),
+                                    child: Icon(
+                                      Icons.push_pin_rounded,
+                                      size: 16,
+                                      color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.primary,
+                                    ),
+                                  ),
+                                Expanded(
+                                  child: AnimatedDefaultTextStyle(
+                                    duration: const Duration(milliseconds: 300),
+                                    style: theme.textTheme.titleMedium!.copyWith(
+                                      decoration: isCompleted ? TextDecoration.lineThrough : null,
+                                      color: isArchived ? colorScheme.onSurface.withValues(alpha: 0.6) : colorScheme.onSurface,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    child: HighlightText(
+                                      text: task.title,
+                                      query: searchQuery,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                             if (task.description.isNotEmpty) ...[
                               const SizedBox(height: AppSpacing.xs),
@@ -363,64 +379,87 @@ class TaskCard extends ConsumerWidget {
                 if (task.tags.isNotEmpty || task.dueDate != null || task.reminder != null || task.repeatRule != RepeatRule.none) ...[
                   const SizedBox(height: AppSpacing.md),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      // LEFT: Tag Chip
                       Expanded(
-                        child: Wrap(
-                          spacing: AppSpacing.xs,
-                          runSpacing: AppSpacing.xs,
-                          children: task.tags.map((tag) {
-                            return Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: isArchived 
-                                  ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.5) 
-                                  : colorScheme.surfaceContainerHighest,
-                                borderRadius: BorderRadius.circular(AppRadius.sm),
-                              ),
-                              child: Text(
-                                tag,
-                                style: theme.textTheme.labelSmall?.copyWith(
-                                  color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Wrap(
+                            spacing: AppSpacing.xs,
+                            runSpacing: AppSpacing.xs,
+                            children: task.tags.map((tag) {
+                              return Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                decoration: BoxDecoration(
+                                  color: isArchived 
+                                    ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.5) 
+                                    : colorScheme.surfaceContainerHighest,
+                                  borderRadius: BorderRadius.circular(AppRadius.sm),
                                 ),
-                              ),
-                            );
-                          }).toList(),
+                                child: Text(
+                                  tag,
+                                  style: theme.textTheme.labelSmall?.copyWith(
+                                    color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
                         ),
                       ),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          if (task.repeatRule != RepeatRule.none)
-                            Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: Text(
+                      // CENTER: Repeat indicator icon
+                      if (task.repeatRule != RepeatRule.none)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.repeat, 
+                                size: 14, 
+                                color: isArchived ? colorScheme.primary.withValues(alpha: 0.6) : colorScheme.primary
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
                                 _getRepeatLabel(task.repeatRule),
                                 style: theme.textTheme.labelMedium?.copyWith(
                                   color: isArchived ? colorScheme.primary.withValues(alpha: 0.6) : colorScheme.primary,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ),
-                          if (task.dueDate != null)
-                            Text(
-                              DateFormat.MMMd().format(task.dueDate!),
-                              style: theme.textTheme.labelMedium?.copyWith(
-                                color: isArchived 
-                                    ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) 
-                                    : (isOverdue ? colorScheme.error : colorScheme.onSurfaceVariant),
-                                fontWeight: isOverdue ? FontWeight.bold : FontWeight.normal,
-                              ),
-                            )
-                          else if (task.reminder != null)
-                            Text(
-                              _formatReminderTime(task.reminder!.triggerTime),
-                              style: theme.textTheme.labelMedium?.copyWith(
-                                color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
-                              ),
-                            ),
-                        ],
+                            ],
+                          ),
+                        )
+                      else
+                        const SizedBox(width: 20), // Spacer if no repeat, though we don't necessarily need perfect center if nothing is there
+                      
+                      // RIGHT: Due Date / Time
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (task.dueDate != null)
+                                Text(
+                                  DateFormat.MMMd().format(task.dueDate!),
+                                  style: theme.textTheme.labelMedium?.copyWith(
+                                    color: isArchived 
+                                        ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) 
+                                        : (isOverdue ? colorScheme.error : colorScheme.onSurfaceVariant),
+                                    fontWeight: isOverdue ? FontWeight.bold : FontWeight.normal,
+                                  ),
+                                )
+                              else if (task.reminder != null)
+                                Text(
+                                  _formatReminderTime(task.reminder!.triggerTime),
+                                  style: theme.textTheme.labelMedium?.copyWith(
+                                    color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
                       ),
                     ],
                   ),

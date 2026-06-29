@@ -282,18 +282,16 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
           Navigator.of(context).pop();
         }
       },
-      child: DraggableScrollableSheet(
-        initialChildSize: 0.9,
-        minChildSize: 0.5,
-        maxChildSize: 0.95,
-        expand: false,
-        builder: (context, scrollController) {
-          return _KeyboardPadding(
-            child: SafeArea(
+      child: AnimatedPadding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.viewInsetsOf(context).bottom,
+        ),
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOutCubic,
+        child: SafeArea(
               child: Form(
                 key: _formKey,
                 child: ListView(
-                  controller: scrollController,
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                   children: [
                     // Handle
@@ -413,6 +411,8 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
                                   child: SelectionChip(
                                     label: t.name,
                                     isSelected: _tag == t.name,
+                                    color: Color(int.parse(t.color, radix: 16)),
+                                    icon: IconData(int.parse(t.icon), fontFamily: 'MaterialIcons'),
                                     onSelected: (selected) {
                                       setState(() => _tag = selected ? t.name : null);
                                     },
@@ -567,29 +567,7 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
                 ),
               ),
             ),
-          );
-        },
       ),
-    );
-  }
-}
-
-/// A wrapper that applies bottom padding for the keyboard, 
-/// isolated in its own widget to prevent the entire bottom sheet
-/// from rebuilding 60 times a second during the keyboard animation.
-class _KeyboardPadding extends StatelessWidget {
-  const _KeyboardPadding({required this.child});
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final bottomPadding = MediaQuery.of(context).viewInsets.bottom;
-    return AnimatedPadding(
-      padding: EdgeInsets.only(bottom: bottomPadding),
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeOutCubic,
-      child: child,
     );
   }
 }
