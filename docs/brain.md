@@ -34,9 +34,9 @@
 - Minimum Android API: Android 12, API 31.
 
 ## Current Milestone
-**M5.1 — Calendar Foundation**
-- Next milestone: M5.1 Calendar
-- Focus: Build Time Management features (Calendar, Reminders, WorkManager, Repeat Rules).
+**M4 Tags UI Redesign**
+- Next milestone: M5.1 Calendar Foundation
+- Focus: Redesigned the tags page to a premium 2-col staggered grid with reorder support, task previews, progress bars, and context menus.
 
 # Completed
 
@@ -46,7 +46,7 @@
 - M4.3 Search
 - M4.4 Sorting
 - M4.5 Bulk Selection & Bulk Actions
-- M4.6 Smart Lists
+- M4.6 Smart Lists (Post-validation polish completed)
 - M4.7 Organization Validation & Freeze
 
 # Completed

@@ -39,6 +39,12 @@ Living documents remain in `docs/`.
 - **Decision:** Database initialization is deferred until M2.
 - **Reason:** No Isar collections exist during M1. Avoid blocking application startup.
 
+### 020. ReorderableGridView for Tags Redesign
+- **Date:** 2026-06-29
+- **Context:** Implementing the staggered 2-col grid for the M4 Tags Redesign. Flutter's native GridView doesn't support built-in drag-and-drop reordering natively like ReorderableListView does.
+- **Decision:** Integrated the `reorderable_grid_view` package.
+- **Reason:** It was necessary to achieve jitter-free drag-and-drop reordering inside a grid layout to match the premium design specs without reinventing complex layout transition physics.
+
 ### 019. Removing Navigation TODOs
 - **Date:** 2026-06-28
 - **Context:** Executing M3.12 Home Validation. The codebase contained TODO comments for deferred navigation (search and bottom bar).

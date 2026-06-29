@@ -31,6 +31,7 @@ dependencies:
   package_info_plus: any
   path: any
   path_provider: any
+  reorderable_grid_view: ^2.2.8
   riverpod_annotation: any
   share_plus: any
   shared_preferences: any

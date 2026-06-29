@@ -37,11 +37,10 @@ class TaskCard extends ConsumerWidget {
 
   String _getRepeatLabel(RepeatRule rule) {
     switch (rule) {
-      case RepeatRule.daily: return '🔁 D';
-      case RepeatRule.weekly: return '🔁 W';
-      case RepeatRule.monthly: return '🔁 M';
-      case RepeatRule.yearly: return '🔁 Y';
-      case RepeatRule.custom: return '🔁 C';
+      case RepeatRule.daily: return 'Daily';
+      case RepeatRule.weekly: return 'Weekly';
+      case RepeatRule.monthly: return 'Monthly';
+      case RepeatRule.yearly: return 'Yearly';
       case RepeatRule.none: return '';
     }
   }

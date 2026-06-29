@@ -189,7 +189,6 @@ const _ReminderCollectionrepeatTypeEnumValueMap = {
   'weekly': 2,
   'monthly': 3,
   'yearly': 4,
-  'custom': 5,
 };
 const _ReminderCollectionrepeatTypeValueEnumMap = {
   0: RepeatRule.none,
@@ -197,7 +196,6 @@ const _ReminderCollectionrepeatTypeValueEnumMap = {
   2: RepeatRule.weekly,
   3: RepeatRule.monthly,
   4: RepeatRule.yearly,
-  5: RepeatRule.custom,
 };
 
 Id _reminderCollectionGetId(ReminderCollection object) {

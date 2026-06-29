@@ -219,17 +219,17 @@ class _TagFormBottomSheetState extends State<TagFormBottomSheet> {
                               height: 40,
                               decoration: BoxDecoration(
                                 color: isSelected
-                                    ? theme.colorScheme.primaryContainer
+                                    ? (_selectedColor?.withValues(alpha: 0.2) ?? theme.colorScheme.primaryContainer)
                                     : theme.colorScheme.surfaceContainerHighest,
                                 shape: BoxShape.circle,
                                 border: isSelected
-                                    ? Border.all(color: theme.colorScheme.primary, width: 2)
+                                    ? Border.all(color: _selectedColor ?? theme.colorScheme.primary, width: 2)
                                     : Border.all(color: Colors.transparent, width: 2),
                               ),
                               child: Icon(
                                 icon,
                                 color: isSelected
-                                    ? theme.colorScheme.onPrimaryContainer
+                                    ? _selectedColor
                                     : theme.colorScheme.onSurfaceVariant,
                                 size: 20,
                               ),

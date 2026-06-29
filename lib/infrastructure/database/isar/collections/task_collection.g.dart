@@ -392,7 +392,6 @@ const _TaskCollectionrepeatRuleEnumValueMap = {
   'weekly': 2,
   'monthly': 3,
   'yearly': 4,
-  'custom': 5,
 };
 const _TaskCollectionrepeatRuleValueEnumMap = {
   0: RepeatRule.none,
@@ -400,7 +399,6 @@ const _TaskCollectionrepeatRuleValueEnumMap = {
   2: RepeatRule.weekly,
   3: RepeatRule.monthly,
   4: RepeatRule.yearly,
-  5: RepeatRule.custom,
 };
 const _TaskCollectionstatusEnumValueMap = {
   'pending': 0,

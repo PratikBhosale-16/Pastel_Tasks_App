@@ -12,7 +12,11 @@
   - Expanded task color palette to 12 Material 3 compatible pastel shades.
   - Ensured selected task color accurately persists and pre-fills in the Create/Edit UI.
   - Ensured dynamically created tags are instantly available to Smart Lists, Filters, Search, and Task Editor logic.
-  - Consolidated and polished Home Screen UI: integrated Sort and Filter actions into a unified `SortAndFilterBottomSheet`, added Pinned visual indicators to `TaskCard`, and ensured robust keyboard-aware layout for `AddTaskBottomSheet`.
+  - Consolidate and polish Home Screen UI: integrated Sort and Filter actions into a unified `SortAndFilterBottomSheet`, added Pinned visual indicators to `TaskCard`, and ensured robust keyboard-aware layout for `AddTaskBottomSheet`.
+  - Redesigned `TagsScreen` to Material 3 standard (flat cards, dynamic trailing menu, and floating FAB) and integrated real-time dynamic task counts for each tag.
+  - Implemented dynamic Task Counts across all `SmartList` tiles and the new `Tags` section inside `SmartListsDrawer`.
+  - Added real-time icon color preview synchronization within `TagFormBottomSheet`.
+  - Persisted the initially-collapsed state of the Sorting panel in `SortAndFilterBottomSheet` via a dedicated state provider.
   - Fixed syntax and build errors stemming from `AddTaskBottomSheet` refactoring, resulting in a successful build.
 - M4.4: Implemented Smart Sorting. Created persistent sorting preferences via `SortPreferences` (saving to `shared_preferences`). Integrated `sortedTasksProvider` with the search/filter task chain. Sorted tasks can be ascending/descending by date, priority, or alphabetically. Maintained positional stability for identical sort keys. Disabled drag-and-drop manual ordering when sorting by non-manual options. Added `SortBottomSheet` for UI control.
 - M4.3: Implemented Intelligent Task Search. Built `TaskSearchBar`, `HighlightText`, and integrated Riverpod `searchedTasksProvider`. Search runs locally across titles and descriptions and works seamlessly on top of applied filters.
@@ -37,6 +41,12 @@
 
 ## [Unreleased]
 ### Added
+- **M4 Tags UI Redesign**:
+  - Redesigned `TagsScreen` to a responsive 2-column staggered grid layout.
+  - Built interactive `TagGridCard` with inline task count, progress bars, and up to 3 task previews.
+  - Replaced native reordering with smooth `reorderable_grid_view` to ensure jitter-free drag-and-drop.
+  - Implemented dynamic trailing `TagContextMenuBottomSheet` supporting Pin, Edit, Color, Merge, and Delete actions.
+  - Integrated tag merging via `MergeTagDialog` and new `mergeTags` logic in `TaskNotifier` & `IsarTaskRepository`.
 - **M4.7 Organization Validation & Freeze**:
   - Removed duplicate repository methods and obsolete providers to consolidate processing into a single reactive Riverpod pipeline.
   - Profiled `taskListProvider` memory filtering ensuring smooth 60 FPS performance.

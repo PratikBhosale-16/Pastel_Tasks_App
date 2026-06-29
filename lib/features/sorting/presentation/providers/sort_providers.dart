@@ -137,6 +137,9 @@ final sortedTasksProvider = Provider<AsyncValue<List<Task>>>((ref) {
           final bTag = b.tags.isNotEmpty ? b.tags.first.toLowerCase() : '';
           comparison = aTag.compareTo(bTag);
           break;
+        case TaskSortOption.repeat:
+          comparison = a.repeatRule.index.compareTo(b.repeatRule.index);
+          break;
         case TaskSortOption.manual:
           // Handled above.
           break;

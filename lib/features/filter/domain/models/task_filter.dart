@@ -147,6 +147,118 @@ class TaskFilter extends Equatable {
   /// Returns an empty filter (all nulls).
   static const empty = TaskFilter();
 
+  /// Evaluates whether a given task matches this filter.
+  bool matches(dynamic taskObj) {
+    final task = taskObj; // Assuming passed object has the task properties
+    
+    // Tags
+    if (tags != null && tags!.isNotEmpty) {
+      final hasAnyTag = tags!.any((t) => (task.tags as List).contains(t));
+      if (!hasAnyTag) return false;
+    }
+    
+    // HasTags boolean check
+    if (hasTags != null) {
+      if ((task.tags as List).isEmpty == hasTags) return false;
+    }
+
+    // Priorities
+    if (priorities != null && priorities!.isNotEmpty) {
+      if (!priorities!.contains(task.priority)) return false;
+    }
+
+    // Statuses
+    if (statuses != null && statuses!.isNotEmpty) {
+      bool statusMatch = statuses!.contains(task.status);
+      if (statuses!.contains(TaskStatus.archived) && task.isArchived) {
+        statusMatch = true;
+      }
+      if (!statusMatch) return false;
+    }
+
+    // Pinned
+    if (isPinned != null) {
+      if (task.isPinned != isPinned) return false;
+    }
+
+    // Due Date
+    if (hasDueDate != null) {
+      final taskHasDueDate = task.dueDate != null;
+      if (taskHasDueDate != hasDueDate) return false;
+    }
+
+    // Reminder
+    if (hasReminder != null) {
+      final taskHasReminder = task.reminder != null;
+      if (taskHasReminder != hasReminder) return false;
+    }
+
+    // Repeat Rules
+    if (repeatRules != null && repeatRules!.isNotEmpty) {
+      if (!repeatRules!.contains(task.repeatRule)) return false;
+    }
+
+    // Colors
+    if (colors != null && colors!.isNotEmpty) {
+      if (!colors!.contains(task.color)) return false;
+    }
+
+    // Completed
+    if (isCompleted != null) {
+      final taskIsCompleted = task.status == TaskStatus.completed;
+      if (taskIsCompleted != isCompleted) return false;
+    }
+
+    // Archived
+    if (isArchived != null) {
+      if (task.isArchived != isArchived) return false;
+    } else {
+      final isFilteringByArchivedStatus = statuses?.contains(TaskStatus.archived) ?? false;
+      if (task.isArchived && !isFilteringByArchivedStatus) {
+        return false;
+      }
+    }
+
+    // Smart Date Filters
+    if (smartDateFilter != null) {
+      final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+      final tomorrow = today.add(const Duration(days: 1));
+      
+      switch (smartDateFilter!) {
+        case SmartDateFilter.today:
+          if (task.dueDate == null) return false;
+          final taskDate = DateTime(task.dueDate!.year, task.dueDate!.month, task.dueDate!.day);
+          if (taskDate != today) return false;
+          break;
+        case SmartDateFilter.tomorrow:
+          if (task.dueDate == null) return false;
+          final taskDate = DateTime(task.dueDate!.year, task.dueDate!.month, task.dueDate!.day);
+          if (taskDate != tomorrow) return false;
+          break;
+        case SmartDateFilter.upcoming:
+          if (task.dueDate == null) return false;
+          final taskDate = DateTime(task.dueDate!.year, task.dueDate!.month, task.dueDate!.day);
+          if (!taskDate.isAfter(today)) return false;
+          break;
+        case SmartDateFilter.overdue:
+          if (task.dueDate == null) return false;
+          if (task.status == TaskStatus.completed) return false;
+          final taskDate = DateTime(task.dueDate!.year, task.dueDate!.month, task.dueDate!.day);
+          if (!taskDate.isBefore(today)) return false;
+          break;
+        case SmartDateFilter.completedToday:
+          if (task.status != TaskStatus.completed) return false;
+          if (task.completedAt == null) return false;
+          final compDate = DateTime(task.completedAt!.year, task.completedAt!.month, task.completedAt!.day);
+          if (compDate != today) return false;
+          break;
+      }
+    }
+
+    return true;
+  }
+
   /// Checks if this filter has any active criteria (ignoring default isArchived).
   bool get hasActiveFilters {
     return (tags?.isNotEmpty ?? false) ||

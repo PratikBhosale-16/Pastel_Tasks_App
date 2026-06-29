@@ -12,6 +12,8 @@ import 'package:pastel_tasks/features/tasks/domain/enums/repeat_rule.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/task_status.dart';
 import 'package:pastel_tasks/features/tasks/presentation/providers/tag_providers.dart';
 
+final sortingExpandedProvider = StateProvider<bool>((ref) => false);
+
 /// Unified bottom sheet for selecting task sorting and filtering options.
 class SortAndFilterBottomSheet extends ConsumerWidget {
   const SortAndFilterBottomSheet({super.key});
@@ -97,7 +99,10 @@ class SortAndFilterBottomSheet extends ConsumerWidget {
                 // SORTING
                 ExpansionTile(
                   title: const Text('Sorting', style: TextStyle(fontWeight: FontWeight.w600)),
-                  initiallyExpanded: true,
+                  initiallyExpanded: ref.watch(sortingExpandedProvider),
+                  onExpansionChanged: (expanded) {
+                    ref.read(sortingExpandedProvider.notifier).state = expanded;
+                  },
                   childrenPadding: const EdgeInsets.all(16),
                   children: [
                     Wrap(
@@ -396,6 +401,8 @@ class SortAndFilterBottomSheet extends ConsumerWidget {
         return 'Color';
       case TaskSortOption.tag:
         return 'Tag';
+      case TaskSortOption.repeat:
+        return 'Repeat';
     }
   }
 

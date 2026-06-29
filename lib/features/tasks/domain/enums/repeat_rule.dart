@@ -5,5 +5,4 @@ enum RepeatRule {
   weekly,
   monthly,
   yearly,
-  custom,
 }

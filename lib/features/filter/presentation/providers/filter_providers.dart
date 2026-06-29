@@ -72,7 +72,11 @@ final filteredTasksProvider = Provider<AsyncValue<List<Task>>>((ref) {
 
       // Statuses
       if (filter.statuses != null && filter.statuses!.isNotEmpty) {
-        if (!filter.statuses!.contains(task.status)) return false;
+        bool statusMatch = filter.statuses!.contains(task.status);
+        if (filter.statuses!.contains(TaskStatus.archived) && task.isArchived) {
+          statusMatch = true;
+        }
+        if (!statusMatch) return false;
       }
 
       // Pinned

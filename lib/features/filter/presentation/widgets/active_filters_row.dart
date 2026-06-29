@@ -127,7 +127,7 @@ class ActiveFiltersRow extends ConsumerWidget {
           final tag = allTags.firstWhere((t) => t.id == tagId, orElse: () => throw Exception('Tag not found'));
           chips.add(_buildFilterChip(
             context,
-            label: '#${tag.name}',
+            label: 'Tag: ${tag.name}',
             onDeleted: () {
               final updated = List.of(filter.tags!)..remove(tagId);
               ref.read(filterProvider.notifier).updateFilter(
@@ -138,6 +138,46 @@ class ActiveFiltersRow extends ConsumerWidget {
           ));
         }
       });
+    }
+
+    // Color Filters
+    if (filter.colors != null && filter.colors!.isNotEmpty) {
+      final colorMap = {
+        '0xFFFFCDD2': 'Red',
+        '0xFFF8BBD0': 'Pink',
+        '0xFFE1BEE7': 'Purple',
+        '0xFFD1C4E9': 'Deep Purple',
+        '0xFFC5CAE9': 'Indigo',
+        '0xFFBBDEFB': 'Blue',
+        '0xFFB3E5FC': 'Light Blue',
+        '0xFFB2EBF2': 'Cyan',
+        '0xFFB2DFDB': 'Teal',
+        '0xFFC8E6C9': 'Green',
+        '0xFFDCEDC8': 'Light Green',
+        '0xFFF0F4C3': 'Lime',
+        '0xFFFFF9C4': 'Yellow',
+        '0xFFFFECB3': 'Amber',
+        '0xFFFFE0B2': 'Orange',
+        '0xFFFFCCBC': 'Deep Orange',
+        '0xFFD7CCC8': 'Brown',
+        '0xFFF5F5F5': 'Grey',
+        '0xFFCFD8DC': 'Blue Grey',
+      };
+      
+      for (final c in filter.colors!) {
+        final colorName = colorMap[c] ?? 'Color';
+        chips.add(_buildFilterChip(
+          context,
+          label: 'Color: $colorName',
+          onDeleted: () {
+            final updated = List.of(filter.colors!)..remove(c);
+            ref.read(filterProvider.notifier).updateFilter(
+                  filter.copyWith(colors: updated, clearColors: updated.isEmpty),
+                );
+          },
+          colorScheme: colorScheme,
+        ));
+      }
     }
 
     if (chips.isEmpty) {
@@ -223,6 +263,8 @@ class ActiveFiltersRow extends ConsumerWidget {
         return 'Color';
       case TaskSortOption.tag:
         return 'Tag';
+      case TaskSortOption.repeat:
+        return 'Repeat';
     }
   }
 

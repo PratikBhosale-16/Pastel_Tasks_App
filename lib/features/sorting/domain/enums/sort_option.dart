@@ -32,4 +32,7 @@ enum TaskSortOption {
 
   /// Sort by primary tag name.
   tag,
+
+  /// Sort by repeating rule.
+  repeat,
 }

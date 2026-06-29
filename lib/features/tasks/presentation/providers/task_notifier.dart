@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pastel_tasks/core/errors/failure.dart';
 import 'package:pastel_tasks/features/tasks/domain/models/task.dart';
 import 'package:pastel_tasks/features/tasks/presentation/providers/repository_providers.dart';
+import 'package:pastel_tasks/features/tasks/presentation/providers/task_providers.dart';
 
 /// Notifier handling task state mutations.
 class TaskNotifier extends AsyncNotifier<void> {
@@ -125,6 +126,37 @@ class TaskNotifier extends AsyncNotifier<void> {
       state = AsyncError((result as Failure).exception, StackTrace.current);
     } else {
       state = const AsyncData(null);
+    }
+  }
+
+  /// Merges all tasks from oldTagId into newTagId.
+  Future<void> mergeTags(String oldTagId, String newTagId) async {
+    state = const AsyncLoading();
+    try {
+      final tasks = await ref.read(taskListProvider.future);
+      final tasksToUpdate = tasks.where((t) => t.tags.contains(oldTagId)).toList();
+      
+      final updatedTasks = tasksToUpdate.map((t) {
+        final newTags = List<String>.from(t.tags);
+        newTags.remove(oldTagId);
+        if (!newTags.contains(newTagId)) {
+          newTags.add(newTagId);
+        }
+        return t.copyWith(tags: newTags);
+      }).toList();
+
+      if (updatedTasks.isNotEmpty) {
+        final repo = ref.read(taskRepositoryProvider);
+        final result = await repo.bulkUpdate(updatedTasks);
+        if (result is Failure) {
+          state = AsyncError((result as Failure).exception, StackTrace.current);
+          return;
+        }
+      }
+      
+      state = const AsyncData(null);
+    } catch (e, st) {
+      state = AsyncError(e, st);
     }
   }
 }
