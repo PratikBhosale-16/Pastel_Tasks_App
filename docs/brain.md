@@ -33,12 +33,11 @@
 - Google Drive Backup.
 - Minimum Android API: Android 12, API 31.
 
-# Current Milestone
-
-- Current milestone: M4.4 Smart Sorting
-- Status: Completed.
-- Validation: Implemented `SortPreferences`, `SortRepository`, `SortNotifier`, and `sortedTasksProvider`. Integrated `SortBottomSheet` and updated `ActiveFiltersRow` and `HomeScreen`. Drag-and-drop disabled when sorting is not manual. Unit tests pass.
-
+## Current Milestone
+**M4.5 — Bulk Selection & Bulk Actions** (Complete)
+- Selection mode via long press implemented.
+- Bulk operations (Complete, Archive, Delete, Pin, Priority, Tag, Color) implemented with single Isar transaction batching.
+- Next: Performance Optimization Pass.
 
 # Completed
 

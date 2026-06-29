@@ -82,7 +82,7 @@
 - [x] M4.2 Filters
 - [x] M4.3 Search
 - [x] M4.4 Sorting
-- [ ] M4: Organization (M4.5 Smart Lists, M4.6 Bulk Actions)
+- [x] M4.5 Organization (Smart Lists, Bulk Actions)
 - [ ] M5: Time Management (M5.1 Calendar, M5.2 Due Dates, M5.3 Reminders, M5.4 Repeat Rules, M5.5 WorkManager, M5.6 Validation)
 - [ ] M6: Notes & Rich Content (M6.1 Rich Notes, M6.2 Flutter Quill, M6.3 Attachments, M6.4 Validation)
 - [ ] M7: Statistics (M7.1 Dashboard, M7.2 Productivity, M7.3 Charts, M7.4 Insights)

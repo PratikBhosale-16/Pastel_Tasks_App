@@ -13,6 +13,7 @@ import 'package:pastel_tasks/features/tasks/presentation/providers/task_notifier
 import 'package:pastel_tasks/features/tasks/presentation/widgets/add_task_bottom_sheet/add_task_bottom_sheet.dart';
 import 'package:pastel_tasks/features/search/presentation/providers/search_providers.dart';
 import 'package:pastel_tasks/features/search/presentation/widgets/highlight_text.dart';
+import 'package:pastel_tasks/features/selection/presentation/providers/selection_providers.dart';
 import 'package:pastel_tasks/shared/widgets/dialogs/confirmation_dialog.dart';
 import 'package:pastel_tasks/shared/widgets/swipeable/swipeable_card.dart';
 
@@ -222,9 +223,14 @@ class TaskCard extends ConsumerWidget {
                       task.dueDate != null && 
                       task.dueDate!.isBefore(DateTime(now.year, now.month, now.day));
 
+    final isSelectionMode = ref.watch(isSelectionModeProvider);
+    final isSelected = ref.watch(selectionProvider).contains(task.id);
+
     // Base card color based on states
     Color cardColor = colorScheme.surface;
-    if (isArchived) {
+    if (isSelected) {
+      cardColor = colorScheme.secondaryContainer;
+    } else if (isArchived) {
       cardColor = colorScheme.surfaceVariant.withValues(alpha: 0.5);
     }
     
@@ -238,7 +244,7 @@ class TaskCard extends ConsumerWidget {
       } catch (_) {}
     }
 
-    if (!isArchived && parsedTaskColor != null) {
+    if (!isArchived && !isSelected && parsedTaskColor != null) {
       cardColor = Color.alphaBlend(
         parsedTaskColor.withValues(alpha: 0.05), 
         cardColor
@@ -247,7 +253,7 @@ class TaskCard extends ConsumerWidget {
 
     final cardContent = AnimatedOpacity(
       duration: const Duration(milliseconds: 300),
-      opacity: isCompleted ? 0.6 : 1.0,
+      opacity: (isCompleted && !isSelected) ? 0.6 : 1.0,
       child: Card(
         elevation: 2,
         margin: EdgeInsets.zero,
@@ -256,7 +262,12 @@ class TaskCard extends ConsumerWidget {
         ),
         color: cardColor,
         child: InkWell(
-          onTap: () => _editTask(context, ref),
+          onTap: isSelectionMode 
+            ? () => ref.read(selectionProvider.notifier).toggle(task.id)
+            : () => _editTask(context, ref),
+          onLongPress: isSelectionMode 
+            ? null 
+            : () => ref.read(selectionProvider.notifier).toggle(task.id),
           borderRadius: BorderRadius.circular(AppRadius.xl),
           child: Container(
             decoration: BoxDecoration(
@@ -284,15 +295,20 @@ class TaskCard extends ConsumerWidget {
                       child: SizedBox(
                         width: 48,
                         height: 48,
-                        child: isArchived 
-                          ? const Icon(Icons.archive_outlined, size: 24, color: Colors.grey)
-                          : Checkbox(
-                              value: isCompleted,
-                              onChanged: (_) => _toggleStatus(context, ref),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(AppRadius.sm),
-                              ),
-                            ),
+                        child: isSelectionMode 
+                          ? Icon(
+                              isSelected ? Icons.check_circle_rounded : Icons.circle_outlined,
+                              color: isSelected ? colorScheme.primary : colorScheme.outline,
+                            )
+                          : (isArchived 
+                            ? const Icon(Icons.archive_outlined, size: 24, color: Colors.grey)
+                            : Checkbox(
+                                value: isCompleted,
+                                onChanged: (_) => _toggleStatus(context, ref),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(AppRadius.sm),
+                                ),
+                              )),
                       ),
                     ),
                     const SizedBox(width: AppSpacing.sm),

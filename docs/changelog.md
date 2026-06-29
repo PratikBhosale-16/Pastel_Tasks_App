@@ -26,6 +26,13 @@
 - Updated logger levels to suppress verbose output in release builds.
 
 ## [Unreleased]
+### Added
+- **M4.5 Bulk Selection & Bulk Actions**:
+  - Selection mode via long press on tasks.
+  - Multi-select tasks to perform bulk actions via an animated SelectionAppBar.
+  - Generic `bulkUpdate` and `bulkDelete` operations added to IsarTaskRepository to ensure high performance through single-transaction batches.
+  - Bulk actions bottom sheet with complete, archive, delete, priority, tags, color, pin/unpin options.
+  - Undo snackbars for bulk destructive actions (Delete, Archive).
 - M4.3: Completed Intelligent Task Search. Implemented fast, local in-memory task searching. Created `debouncedSearchQueryProvider` for 300ms debounce handling. Created `searchedTasksProvider` to stack on top of `filteredTasksProvider`, scanning task title, description, tags, reminder trigger time, and repeat rules (case-insensitive). Built reusable `TaskSearchBar` with integrated clear button and focus management, and added to the top of `HomeScreen`. Created `HighlightText` widget to visually emphasize matched query substrings within `TaskCard` title and description using the primary theme color. Added full test coverage for search matching logic.
 - M4.2: Completed Advanced Task Filtering. Added reusable filter models and persistence via `FilterRepository`. Added Riverpod state management `FilterNotifier` and `filteredTasksProvider` for non-destructive, in-memory list filtering. Built `FilterBottomSheet` and `ActiveFiltersRow` UI components and integrated them natively into `HomeScreen`.
 - M4.1: Completed Tag Management. Implemented tag models, Isar persistence logic, state notifier, and reusable `TagFormBottomSheet`. Built a standalone `TagsScreen` to manage (CRUD) list of tags, including manual drag-and-drop tag ordering via a `ReorderableListView`.

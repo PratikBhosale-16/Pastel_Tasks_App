@@ -371,4 +371,39 @@ class TaskRepositoryImpl implements TaskRepository {
       return Stream.value(StorageFailure(StorageException('Failed to watch all tasks', cause: e)));
     }
   }
+
+  @override
+  Future<Result<void>> bulkUpdate(List<Task> tasks) async {
+    try {
+      await _dbService.write((isar) async {
+        for (final task in tasks) {
+          final existing = await isar.taskCollections.filter().uuidEqualTo(task.id).findFirst();
+          if (existing != null) {
+            final updated = task.toIsar()..id = existing.id;
+            await isar.taskCollections.put(updated);
+          }
+        }
+      });
+      return const Success(null);
+    } catch (e) {
+      return StorageFailure(StorageException('Failed to bulk update tasks', cause: e));
+    }
+  }
+
+  @override
+  Future<Result<void>> bulkDelete(List<String> ids) async {
+    try {
+      await _dbService.write((isar) async {
+        for (final id in ids) {
+          final existing = await isar.taskCollections.filter().uuidEqualTo(id).findFirst();
+          if (existing != null) {
+            await isar.taskCollections.delete(existing.id);
+          }
+        }
+      });
+      return const Success(null);
+    } catch (e) {
+      return StorageFailure(StorageException('Failed to bulk delete tasks', cause: e));
+    }
+  }
 }

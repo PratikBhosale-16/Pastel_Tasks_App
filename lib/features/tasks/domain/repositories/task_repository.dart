@@ -68,4 +68,10 @@ abstract class TaskRepository {
 
   /// Watches all tasks for changes.
   Stream<Result<List<Task>>> watchAll();
+
+  /// Bulk updates a list of tasks.
+  Future<Result<void>> bulkUpdate(List<Task> tasks);
+
+  /// Bulk deletes a list of tasks.
+  Future<Result<void>> bulkDelete(List<String> ids);
 }

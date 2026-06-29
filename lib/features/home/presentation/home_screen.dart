@@ -35,6 +35,8 @@ import 'package:pastel_tasks/features/search/presentation/widgets/task_search_ba
 import 'package:pastel_tasks/features/sorting/domain/enums/sort_option.dart';
 import 'package:pastel_tasks/features/sorting/presentation/providers/sort_providers.dart';
 import 'package:pastel_tasks/features/sorting/presentation/widgets/sort_bottom_sheet.dart';
+import 'package:pastel_tasks/features/selection/presentation/providers/selection_providers.dart';
+import 'package:pastel_tasks/features/selection/presentation/widgets/bulk_actions_bottom_sheet.dart';
 import 'package:pastel_tasks/shared/widgets/empty_state/empty_state.dart';
 import 'package:uuid/uuid.dart';
 
@@ -151,10 +153,33 @@ class HomeScreen extends ConsumerWidget {
     final sortPrefs = ref.watch(sortPreferencesProvider);
     final isManualSort = sortPrefs.option == TaskSortOption.manual;
     final todayStr = DateFormat.yMMMMd().format(DateTime.now());
+    
+    final isSelectionMode = ref.watch(isSelectionModeProvider);
+    final selectionCount = ref.watch(selectionCountProvider);
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
-      appBar: AppBar(
+      appBar: isSelectionMode
+          ? AppBar(
+              leading: IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () => ref.read(selectionProvider.notifier).clear(),
+              ),
+              title: Text('$selectionCount Selected'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    final tasks = ref.read(sortedTasksProvider).valueOrNull;
+                    if (tasks != null) {
+                      final allIds = tasks.where((t) => !t.isArchived).map((t) => t.id).toList();
+                      ref.read(selectionProvider.notifier).selectAll(allIds);
+                    }
+                  },
+                  child: const Text('Select All'),
+                ),
+              ],
+            )
+          : AppBar(
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -256,14 +281,18 @@ class HomeScreen extends ConsumerWidget {
                     } : (_, __) {},
                     itemBuilder: (context, index) {
                       final task = pinnedTasks[index];
+                      final child = Padding(
+                        padding: const EdgeInsets.only(bottom: 12, left: 16, right: 16),
+                        child: TaskCard(task: task),
+                      );
+                      if (isSelectionMode) {
+                        return KeyedSubtree(key: ValueKey(task.id), child: child);
+                      }
                       return ReorderableDelayedDragStartListener(
                         key: ValueKey(task.id),
                         index: index,
                         enabled: isManualSort,
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 12, left: 16, right: 16),
-                          child: TaskCard(task: task),
-                        ),
+                        child: child,
                       );
                     },
                   ),
@@ -289,14 +318,18 @@ class HomeScreen extends ConsumerWidget {
                     } : (_, __) {},
                     itemBuilder: (context, index) {
                       final task = pendingTasks[index];
+                      final child = Padding(
+                        padding: const EdgeInsets.only(bottom: 12, left: 16, right: 16),
+                        child: TaskCard(task: task),
+                      );
+                      if (isSelectionMode) {
+                        return KeyedSubtree(key: ValueKey(task.id), child: child);
+                      }
                       return ReorderableDelayedDragStartListener(
                         key: ValueKey(task.id),
                         index: index,
                         enabled: isManualSort,
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 12, left: 16, right: 16),
-                          child: TaskCard(task: task),
-                        ),
+                        child: child,
                       );
                     },
                   ),
@@ -330,14 +363,18 @@ class HomeScreen extends ConsumerWidget {
                     } : (_, __) {},
                     itemBuilder: (context, index) {
                       final task = completedTasks[index];
+                      final child = Padding(
+                        padding: const EdgeInsets.only(bottom: 12, left: 16, right: 16),
+                        child: TaskCard(task: task),
+                      );
+                      if (isSelectionMode) {
+                        return KeyedSubtree(key: ValueKey(task.id), child: child);
+                      }
                       return ReorderableDelayedDragStartListener(
                         key: ValueKey(task.id),
                         index: index,
                         enabled: isManualSort,
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 12, left: 16, right: 16),
-                          child: TaskCard(task: task),
-                        ),
+                        child: child,
                       );
                     },
                   ),
@@ -353,13 +390,28 @@ class HomeScreen extends ConsumerWidget {
     ),
   ],
 ),
-floatingActionButton: FloatingActionButton.extended(
+floatingActionButton: isSelectionMode 
+    ? FloatingActionButton.extended(
+        onPressed: () {
+          final tasks = ref.read(sortedTasksProvider).valueOrNull ?? [];
+          final selectedTasks = tasks.where((t) => ref.read(selectionProvider).contains(t.id)).toList();
+          BulkActionsBottomSheet.show(context, selectedTasks);
+        },
+        icon: const Icon(Icons.bolt_rounded),
+        label: const Text('Actions'),
+        elevation: 2,
+        backgroundColor: colorScheme.secondaryContainer,
+        foregroundColor: colorScheme.onSecondaryContainer,
+      )
+    : FloatingActionButton.extended(
         onPressed: () => _showAddTask(context, ref),
         icon: const Icon(Icons.add),
         label: const Text('New Task'),
         elevation: 2,
       ),
-      bottomNavigationBar: NavigationBar(
+      bottomNavigationBar: isSelectionMode 
+        ? null 
+        : NavigationBar(
         selectedIndex: 0,
         onDestinationSelected: (idx) {
           // Bottom navigation routing deferred to future milestones

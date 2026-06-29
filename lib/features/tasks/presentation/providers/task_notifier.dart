@@ -103,6 +103,30 @@ class TaskNotifier extends AsyncNotifier<void> {
       state = const AsyncData(null);
     }
   }
+
+  /// Bulk updates tasks.
+  Future<void> bulkUpdateTasks(List<Task> tasks) async {
+    state = const AsyncLoading();
+    final repo = ref.read(taskRepositoryProvider);
+    final result = await repo.bulkUpdate(tasks);
+    if (result is Failure) {
+      state = AsyncError((result as Failure).exception, StackTrace.current);
+    } else {
+      state = const AsyncData(null);
+    }
+  }
+
+  /// Bulk deletes tasks.
+  Future<void> bulkDeleteTasks(List<String> ids) async {
+    state = const AsyncLoading();
+    final repo = ref.read(taskRepositoryProvider);
+    final result = await repo.bulkDelete(ids);
+    if (result is Failure) {
+      state = AsyncError((result as Failure).exception, StackTrace.current);
+    } else {
+      state = const AsyncData(null);
+    }
+  }
 }
 
 /// Provides the task notifier.

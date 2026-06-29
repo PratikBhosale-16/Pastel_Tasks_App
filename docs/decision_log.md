@@ -117,3 +117,17 @@ Living documents remain in `docs/`.
  
   
  
+## Bulk Operations Architecture
+
+- Date: 2026-06-29.
+- Status: Accepted.
+
+### Reason
+
+Handling multi-select operations by looping over individual TaskRepository.update and TaskRepository.delete methods would result in UI jank when updating hundreds of tasks due to transaction overhead. Instead, we added ulkUpdate and ulkDelete to the repository interface.
+
+### Architecture
+
+- Implemented ulkUpdate(List<Task>) and ulkDelete(List<String>).
+- Under the hood, Isar processes these in a single _dbService.write(...) transaction.
+- This ensures high performance for bulk modifications.
