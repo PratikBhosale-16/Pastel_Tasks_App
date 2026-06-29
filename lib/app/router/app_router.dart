@@ -4,6 +4,7 @@ import 'package:pastel_tasks/features/dev_preview/dev_preview_screen.dart';
 import 'package:pastel_tasks/features/home/presentation/home_screen.dart';
 import 'package:pastel_tasks/features/tasks/presentation/archive_screen.dart';
 import 'package:pastel_tasks/features/tags/presentation/tags_screen.dart';
+import 'package:pastel_tasks/features/calendar/presentation/calendar_screen.dart';
 
 /// Application router used by the app shell.
 final appRouter = GoRouter(
@@ -28,6 +29,11 @@ final appRouter = GoRouter(
       name: RouteNames.tags,
       path: RouteNames.tagsPath,
       builder: (context, state) => const TagsScreen(),
+    ),
+    GoRoute(
+      name: RouteNames.calendar,
+      path: RouteNames.calendarPath,
+      builder: (context, state) => const CalendarScreen(),
     ),
   ],
 );

@@ -34,9 +34,9 @@
 - Minimum Android API: Android 12, API 31.
 
 ## Current Milestone
-**M4 Tags UI Redesign**
-- Next milestone: M5.1 Calendar Foundation
-- Focus: Redesigned the tags page to a premium 2-col staggered grid with reorder support, task previews, progress bars, and context menus. Resolved drag-and-drop artifacts, restored the bottom navigation bar, fixed the archived task filtering pipeline, and fixed tag counts/filtering to correctly use `tag.id` instead of `tag.name`. Polished `TaskCard` dates/icons and `Tags` UI to display a green completion checkmark when all active tasks in a tag are completed.
+**M5.1 Premium Calendar Screen**
+- Next milestone: M5.2 Due Dates
+- Focus: Implemented a completely redesigned Calendar screen using a modern premium aesthetic inspired by Stitch but rooted in the Pastel Tasks design language. Integrated dynamic task projections for repeat rules on the monthly grid, animated header transitions, and an interactive daily agenda synchronized with selected dates. Ensure strict use of Material 3 `Theme.of(context)` to maintain theme stability.
 
 # Completed
 

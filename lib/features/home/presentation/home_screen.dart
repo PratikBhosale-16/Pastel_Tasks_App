@@ -432,7 +432,9 @@ floatingActionButton: isSelectionMode
         : NavigationBar(
         selectedIndex: 0,
         onDestinationSelected: (idx) {
-          if (idx == 2) {
+          if (idx == 1) {
+            context.push(RouteNames.calendarPath);
+          } else if (idx == 2) {
             context.push(RouteNames.tagsPath);
           }
         },

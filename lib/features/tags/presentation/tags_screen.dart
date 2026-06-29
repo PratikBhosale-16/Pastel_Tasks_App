@@ -286,6 +286,8 @@ class _TagsScreenState extends ConsumerState<TagsScreen> with SingleTickerProvid
         onDestinationSelected: (idx) {
           if (idx == 0) {
             context.go(RouteNames.homePath);
+          } else if (idx == 1) {
+            context.push(RouteNames.calendarPath);
           }
         },
         destinations: const [

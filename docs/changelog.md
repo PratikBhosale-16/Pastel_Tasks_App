@@ -45,6 +45,14 @@
 
 ## [Unreleased]
 ### Added
+- **M5.1 Premium Calendar Screen**:
+  - Implemented a completely redesigned Calendar screen using a modern premium aesthetic inspired by Stitch but rooted in the Pastel Tasks design language.
+  - Built custom `MonthCalendar` with smooth gesture swiping between months and custom dot indicators for task density.
+  - Implemented `CalendarHeader` with animated Next/Previous month transitions and bold typography.
+  - Added an interactive `AgendaList` synchronized with `selectedDateProvider`, dynamically surfacing tasks due on the selected day, sorted by priority and due time.
+  - Implemented real-time dynamic rendering of repeating tasks onto the calendar grid without writing duplicates to the database by leveraging `RepeatRule` projections in `monthTasksProvider`.
+  - Polished the Empty State for days without tasks using a smooth `AnimatedSwitcher` fading/sliding transition.
+  - Cleaned up custom theme tokens to strictly use Material 3 `Theme.of(context)` equivalents to ensure robust build stability.
 - **M4 Tags UI Redesign**:
   - Redesigned `TagsScreen` to a responsive 2-column staggered grid layout.
   - Built interactive `TagGridCard` with inline task count, progress bars, and up to 3 task previews.

@@ -25,4 +25,10 @@ abstract final class RouteNames {
 
   /// Tags route path.
   static const tagsPath = '/tags';
+
+  /// Calendar route name.
+  static const calendar = 'calendar';
+
+  /// Calendar route path.
+  static const calendarPath = '/calendar';
 }
