@@ -36,7 +36,7 @@
 ## Current Milestone
 **M4 Tags UI Redesign**
 - Next milestone: M5.1 Calendar Foundation
-- Focus: Redesigned the tags page to a premium 2-col staggered grid with reorder support, task previews, progress bars, and context menus. Resolved drag-and-drop artifacts, task count sync bugs, and restored the bottom navigation bar.
+- Focus: Redesigned the tags page to a premium 2-col staggered grid with reorder support, task previews, progress bars, and context menus. Resolved drag-and-drop artifacts, task count sync bugs, restored the bottom navigation bar, and fixed the archived task filtering pipeline.
 
 # Completed
 

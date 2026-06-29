@@ -239,8 +239,7 @@ class HomeScreen extends ConsumerWidget {
           data: (tasks) {
             // Check active/completed tasks only since watchAll doesn't filter.
             // But if the user expects all tasks to be shown here, we'll leave it.
-            // Wait, if it's the home screen, normally it's active tasks. Let's just use tasks.
-            final displayTasks = tasks.where((t) => !t.isArchived).toList();
+            final displayTasks = tasks.toList();
             if (displayTasks.isEmpty) {
               final filter = ref.read(filterProvider).valueOrNull ?? TaskFilter.empty;
               final searchQuery = ref.read(debouncedSearchQueryProvider);
