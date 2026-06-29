@@ -118,7 +118,7 @@ class _TagsScreenState extends ConsumerState<TagsScreen> with SingleTickerProvid
 
   void _onTagTapped(Tag tag) {
     // Apply tag filter and go to home screen
-    ref.read(filterProvider.notifier).updateFilter(TaskFilter(tags: [tag.name]));
+    ref.read(filterProvider.notifier).updateFilter(TaskFilter(tags: [tag.id]));
     context.go(RouteNames.homePath);
   }
 
@@ -236,7 +236,7 @@ class _TagsScreenState extends ConsumerState<TagsScreen> with SingleTickerProvid
               }
               
               final tag = tags[index];
-              final tagTasks = allTasks.where((t) => t.tags.contains(tag.name) && !t.isArchived).toList();
+              final tagTasks = allTasks.where((t) => t.tags.contains(tag.id) && !t.isArchived).toList();
 
               // Staggered animation values
               final double start = (index * 0.1).clamp(0.0, 1.0);

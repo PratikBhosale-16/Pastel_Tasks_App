@@ -74,7 +74,7 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
   final _descriptionController = TextEditingController();
 
   String _priority = 'Medium';
-  String? _tag;
+  String? _tagId;
   DateTime? _dueDate;
   TimeOfDay? _reminder;
   String _repeatRule = 'None';
@@ -93,7 +93,7 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
       _titleController.text = task.title;
       _descriptionController.text = task.description;
       _priority = _formatPriority(task.priority);
-      _tag = task.tags.isNotEmpty ? task.tags.first : null;
+      _tagId = task.tags.isNotEmpty ? task.tags.first : null;
       _dueDate = task.dueDate;
       _repeatRule = _formatRepeatRule(task.repeatRule);
       if (task.color.isNotEmpty) {
@@ -136,13 +136,13 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
     if (task == null) {
       return _titleController.text.trim().isNotEmpty || 
              _descriptionController.text.trim().isNotEmpty ||
-             _dueDate != null || _tag != null;
+             _dueDate != null || _tagId != null;
     } else {
       if (_titleController.text.trim() != task.title) return true;
       if (_descriptionController.text.trim() != task.description) return true;
       if (_priority != _formatPriority(task.priority)) return true;
       final existingTag = task.tags.isNotEmpty ? task.tags.first : null;
-      if (_tag != existingTag) return true;
+      if (_tagId != existingTag) return true;
       if (_dueDate != task.dueDate) return true;
       if (_repeatRule != _formatRepeatRule(task.repeatRule)) return true;
       
@@ -188,7 +188,7 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
         title: _titleController.text.trim(),
         description: _descriptionController.text.trim(),
         priority: _priority,
-        tag: _tag,
+        tag: _tagId,
         dueDate: _dueDate,
         reminder: _reminder,
         repeatRule: _repeatRule,
@@ -204,7 +204,7 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
       title: _titleController.text.trim(),
       description: _descriptionController.text.trim(),
       priority: _priority,
-      tag: _tag,
+      tag: _tagId,
       dueDate: _dueDate,
       reminder: _reminder,
       repeatRule: _repeatRule,
@@ -220,7 +220,7 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
       title: _titleController.text.trim(),
       description: _descriptionController.text.trim(),
       priority: _priority,
-      tag: _tag,
+      tag: _tagId,
       dueDate: _dueDate,
       reminder: _reminder,
       repeatRule: _repeatRule,
@@ -236,7 +236,7 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
       title: _titleController.text.trim(),
       description: _descriptionController.text.trim(),
       priority: _priority,
-      tag: _tag,
+      tag: _tagId,
       dueDate: _dueDate,
       reminder: _reminder,
       repeatRule: _repeatRule,
@@ -397,7 +397,7 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
                               if (newTag != null && mounted) {
                                 await ref.read(tagNotifierProvider.notifier).create(newTag);
                                 setState(() {
-                                  _tag = newTag.name;
+                                  _tagId = newTag.id;
                                 });
                               }
                             },
@@ -410,11 +410,11 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
                                   padding: const EdgeInsets.only(right: 8.0),
                                   child: SelectionChip(
                                     label: t.name,
-                                    isSelected: _tag == t.name,
+                                    isSelected: _tagId == t.id,
                                     color: Color(int.parse(t.color, radix: 16)),
                                     icon: IconData(int.parse(t.icon), fontFamily: 'MaterialIcons'),
                                     onSelected: (selected) {
-                                      setState(() => _tag = selected ? t.name : null);
+                                      setState(() => _tagId = selected ? t.id : null);
                                     },
                                   ),
                                 );

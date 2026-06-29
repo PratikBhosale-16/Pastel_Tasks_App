@@ -14,6 +14,7 @@ import 'package:pastel_tasks/features/tasks/presentation/widgets/add_task_bottom
 import 'package:pastel_tasks/features/search/presentation/providers/search_providers.dart';
 import 'package:pastel_tasks/features/search/presentation/widgets/highlight_text.dart';
 import 'package:pastel_tasks/features/selection/presentation/providers/selection_providers.dart';
+import 'package:pastel_tasks/features/tags/presentation/providers/tag_notifier.dart';
 import 'package:pastel_tasks/shared/widgets/dialogs/confirmation_dialog.dart';
 import 'package:pastel_tasks/shared/widgets/swipeable/swipeable_card.dart';
 
@@ -233,6 +234,8 @@ class TaskCard extends ConsumerWidget {
       cardColor = colorScheme.surfaceVariant.withValues(alpha: 0.5);
     }
     
+    final tagsList = ref.watch(tagNotifierProvider).valueOrNull ?? [];
+    
     // Priority color should always be used for the indicator dot.
     final priorityColor = _getPriorityColor(task.priority, colorScheme);
     
@@ -386,7 +389,9 @@ class TaskCard extends ConsumerWidget {
                           child: Wrap(
                             spacing: AppSpacing.xs,
                             runSpacing: AppSpacing.xs,
-                            children: task.tags.map((tag) {
+                            children: task.tags.map((tagId) {
+                              final tagModel = tagsList.where((t) => t.id == tagId).firstOrNull;
+                              final displayName = tagModel?.name ?? tagId;
                               return Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                                 decoration: BoxDecoration(
@@ -396,7 +401,7 @@ class TaskCard extends ConsumerWidget {
                                   borderRadius: BorderRadius.circular(AppRadius.sm),
                                 ),
                                 child: Text(
-                                  tag,
+                                  displayName,
                                   style: theme.textTheme.labelSmall?.copyWith(
                                     color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
                                   ),
@@ -441,7 +446,9 @@ class TaskCard extends ConsumerWidget {
                             children: [
                               if (task.dueDate != null)
                                 Text(
-                                  DateFormat.MMMd().format(task.dueDate!),
+                                  task.dueDate!.year == now.year 
+                                      ? DateFormat.MMMd().format(task.dueDate!)
+                                      : DateFormat.yMMMd().format(task.dueDate!),
                                   style: theme.textTheme.labelMedium?.copyWith(
                                     color: isArchived 
                                         ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) 
@@ -456,6 +463,16 @@ class TaskCard extends ConsumerWidget {
                                     color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
                                   ),
                                 ),
+                              if (task.reminder != null) ...[
+                                const SizedBox(width: 4),
+                                Icon(
+                                  Icons.alarm,
+                                  size: 14,
+                                  color: isArchived 
+                                      ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) 
+                                      : colorScheme.onSurfaceVariant,
+                                ),
+                              ],
                             ],
                           ),
                         ),

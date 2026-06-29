@@ -6,6 +6,7 @@ import 'package:pastel_tasks/features/smart_lists/domain/models/smart_list.dart'
 import 'package:pastel_tasks/features/tasks/presentation/providers/task_providers.dart';
 import 'package:pastel_tasks/features/tags/presentation/providers/tag_notifier.dart';
 import 'package:pastel_tasks/features/filter/domain/models/task_filter.dart';
+import 'package:pastel_tasks/features/tasks/domain/enums/task_status.dart';
 
 class SmartListsDrawer extends ConsumerWidget {
   const SmartListsDrawer({super.key});
@@ -159,8 +160,13 @@ class _TagsSliverList extends ConsumerWidget {
             (context, index) {
               final tag = tags[index];
               int count = 0;
+              bool allCompleted = false;
               if (tasksAsync.hasValue && tasksAsync.value != null) {
-                count = tasksAsync.value!.where((t) => t.tags.contains(tag.id)).length;
+                final tagTasks = tasksAsync.value!.where((t) => t.tags.contains(tag.id) && !t.isArchived).toList();
+                count = tagTasks.length;
+                if (count > 0 && tagTasks.every((t) => t.status == TaskStatus.completed)) {
+                  allCompleted = true;
+                }
               }
 
               final Color tagColor = Color(int.parse(tag.color, radix: 16));
@@ -176,20 +182,33 @@ class _TagsSliverList extends ConsumerWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                trailing: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    '$count',
-                    style: theme.textTheme.labelMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ),
+                trailing: allCompleted
+                    ? Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: const BoxDecoration(
+                          color: Colors.green,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.check,
+                          size: 16,
+                          color: Colors.white,
+                        ),
+                      )
+                    : Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.surfaceContainerHighest,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          '$count',
+                          style: theme.textTheme.labelMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ),
                 onTap: () {
                   // Apply tag filter
                   ref.read(filterProvider.notifier).updateFilter(TaskFilter(tags: [tag.id]));

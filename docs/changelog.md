@@ -19,6 +19,9 @@
   - Persisted the initially-collapsed state of the Sorting panel in `SortAndFilterBottomSheet` via a dedicated state provider.
   - Fixed syntax and build errors stemming from `AddTaskBottomSheet` refactoring, resulting in a successful build.
   - Fixed archived task filtering pipeline to ensure they are visible on the home screen when filtering by Status: Archived, and that search, sorting, and tag filters correctly operate on them.
+  - Fixed tag counts and tag filtering bugs by standardizing `task.tags` to correctly store `tag.id` instead of `tag.name` across the app (including Add Task, Edit Task, Task Card, Tags Screen, and Filters).
+  - Updated `TaskCard` to conditionally show the due date year if it does not match the current year, and appended an alarm icon if a reminder is set.
+  - Updated `TagGridCard` and `SmartListsDrawer` to visually indicate when a tag's task list is completely finished by rendering a green checkmark instead of the task count.
 - M4.4: Implemented Smart Sorting. Created persistent sorting preferences via `SortPreferences` (saving to `shared_preferences`). Integrated `sortedTasksProvider` with the search/filter task chain. Sorted tasks can be ascending/descending by date, priority, or alphabetically. Maintained positional stability for identical sort keys. Disabled drag-and-drop manual ordering when sorting by non-manual options. Added `SortBottomSheet` for UI control.
 - M4.3: Implemented Intelligent Task Search. Built `TaskSearchBar`, `HighlightText`, and integrated Riverpod `searchedTasksProvider`. Search runs locally across titles and descriptions and works seamlessly on top of applied filters.
 - M4.2: Implemented Advanced Task Filtering. Added robust `TaskFilter` options including tag matching, status filtering, and priority filtering. Built `FilterBottomSheet` and `ActiveFiltersRow` to seamlessly toggle and visualize state. Integrated with Isar local queries via Riverpod.
