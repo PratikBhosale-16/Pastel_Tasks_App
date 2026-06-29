@@ -70,7 +70,7 @@ const TagCollectionSchema = CollectionSchema(
     r'name': IndexSchema(
       id: 879695947855722453,
       name: r'name',
-      unique: false,
+      unique: true,
       replace: false,
       properties: [
         IndexPropertySchema(
@@ -235,6 +235,59 @@ extension TagCollectionByIndex on IsarCollection<TagCollection> {
   List<Id> putAllByUuidSync(List<TagCollection> objects,
       {bool saveLinks = true}) {
     return putAllByIndexSync(r'uuid', objects, saveLinks: saveLinks);
+  }
+
+  Future<TagCollection?> getByName(String name) {
+    return getByIndex(r'name', [name]);
+  }
+
+  TagCollection? getByNameSync(String name) {
+    return getByIndexSync(r'name', [name]);
+  }
+
+  Future<bool> deleteByName(String name) {
+    return deleteByIndex(r'name', [name]);
+  }
+
+  bool deleteByNameSync(String name) {
+    return deleteByIndexSync(r'name', [name]);
+  }
+
+  Future<List<TagCollection?>> getAllByName(List<String> nameValues) {
+    final values = nameValues.map((e) => [e]).toList();
+    return getAllByIndex(r'name', values);
+  }
+
+  List<TagCollection?> getAllByNameSync(List<String> nameValues) {
+    final values = nameValues.map((e) => [e]).toList();
+    return getAllByIndexSync(r'name', values);
+  }
+
+  Future<int> deleteAllByName(List<String> nameValues) {
+    final values = nameValues.map((e) => [e]).toList();
+    return deleteAllByIndex(r'name', values);
+  }
+
+  int deleteAllByNameSync(List<String> nameValues) {
+    final values = nameValues.map((e) => [e]).toList();
+    return deleteAllByIndexSync(r'name', values);
+  }
+
+  Future<Id> putByName(TagCollection object) {
+    return putByIndex(r'name', object);
+  }
+
+  Id putByNameSync(TagCollection object, {bool saveLinks = true}) {
+    return putByIndexSync(r'name', object, saveLinks: saveLinks);
+  }
+
+  Future<List<Id>> putAllByName(List<TagCollection> objects) {
+    return putAllByIndex(r'name', objects);
+  }
+
+  List<Id> putAllByNameSync(List<TagCollection> objects,
+      {bool saveLinks = true}) {
+    return putAllByIndexSync(r'name', objects, saveLinks: saveLinks);
   }
 }
 

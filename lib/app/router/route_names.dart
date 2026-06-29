@@ -19,4 +19,10 @@ abstract final class RouteNames {
 
   /// Archive route path.
   static const archivePath = '/archive';
+
+  /// Tags route name.
+  static const tags = 'tags';
+
+  /// Tags route path.
+  static const tagsPath = '/tags';
 }

@@ -9,7 +9,7 @@ class TagCollection {
   @Index(unique: true)
   late String uuid;
 
-  @Index()
+  @Index(unique: true)
   late String name;
 
   late String color;

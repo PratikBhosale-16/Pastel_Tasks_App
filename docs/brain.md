@@ -35,9 +35,10 @@
 
 # Current Milestone
 
-- Current milestone: M3.12 Home Validation & Bug Fixes
+- Current milestone: M4.1 Tag Management
 - Status: Completed.
-- Validation: Validated CRUD operations, swipe gestures, list reordering, accessibility, and app persistence on physical devices. Fixed Archive screen initialization. Addressed Snackbar timeout accessibility overrides. Reordered Home Screen into Pinned, Pending, and Completed sections using `CustomScrollView`. Fixed drag & drop proxyDecorator, added top action button to task sheet, corrected task color indicators, fixed reminder display, and preserved Undo context. Finalized UX polish for TaskCard metadata layout, default accent borders, repeat indicators. Completed performance optimization pass: extracted leaf widgets and eliminated large subtree rebuilds during keyboard animation in `AddTaskBottomSheet`, and replaced inline closures in `HomeScreen` with a stateless `const TaskCard` using localized Riverpod consumer access to prevent full-list rebuilds during animations. Tests and analysis passed. Physical device APK built successfully.
+- Validation: Implemented Tag model, TagCollection, TagRepository, TagNotifier, TagsScreen, and TagFormBottomSheet. Successfully handled UI mapping of dynamic Material Symbols using integer code point string representations. Added tags to Isar database layout. Tests pass.
+
 
 # Completed
 

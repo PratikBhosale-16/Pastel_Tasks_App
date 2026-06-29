@@ -173,6 +173,13 @@ class HomeScreen extends ConsumerWidget {
             },
           ),
           IconButton(
+            icon: const Icon(Icons.label_outline),
+            tooltip: 'Tags',
+            onPressed: () {
+              context.push(RouteNames.tagsPath);
+            },
+          ),
+          IconButton(
             icon: const Icon(Icons.search_rounded),
             tooltip: 'Search Tasks',
             onPressed: () {

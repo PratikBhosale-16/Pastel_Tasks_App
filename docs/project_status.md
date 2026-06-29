@@ -2,11 +2,11 @@
 
 ## Current Milestone
 
-- Milestone: M3.12
-- Name: Home Validation
+- Milestone: M4.1
+- Name: Tag Management
 - Status: Completed
-- Validation: Fixed all remaining UX issues including Dynamic Greeting, Drag & Drop UX, Priority Dot vs Task Color, Reminder Display, Archive Swipe Actions, Archive Card Visuals, TaskCard metadata layout & accent polish, and AddTaskBottomSheet keyboard animation performance. All tasks successfully completed and tests passed.
-- Overall Progress: Phase 3 is fully validated, polished, and ready.
+- Validation: Implemented domain models, repository, state notifier, and presentation UI for tags. All tests passed. Build runner successfully generated schema.
+- Overall Progress: Phase 4 organization has started. Tags feature complete.
 
 ## Completed
 
