@@ -11,6 +11,8 @@ import 'package:pastel_tasks/features/tasks/domain/enums/task_status.dart';
 import 'package:pastel_tasks/features/tasks/domain/models/task.dart';
 import 'package:pastel_tasks/features/tasks/presentation/providers/task_notifier.dart';
 import 'package:pastel_tasks/features/tasks/presentation/widgets/add_task_bottom_sheet/add_task_bottom_sheet.dart';
+import 'package:pastel_tasks/features/search/presentation/providers/search_providers.dart';
+import 'package:pastel_tasks/features/search/presentation/widgets/highlight_text.dart';
 import 'package:pastel_tasks/shared/widgets/dialogs/confirmation_dialog.dart';
 import 'package:pastel_tasks/shared/widgets/swipeable/swipeable_card.dart';
 
@@ -213,6 +215,7 @@ class TaskCard extends ConsumerWidget {
     
     final isCompleted = task.status == TaskStatus.completed;
     final isArchived = task.isArchived;
+    final searchQuery = ref.watch(debouncedSearchQueryProvider);
     
     final now = DateTime.now();
     final isOverdue = !isCompleted && 
@@ -306,12 +309,16 @@ class TaskCard extends ConsumerWidget {
                                 color: isArchived ? colorScheme.onSurface.withValues(alpha: 0.6) : colorScheme.onSurface,
                                 fontWeight: FontWeight.w600,
                               ),
-                              child: Text(task.title),
+                              child: HighlightText(
+                                text: task.title,
+                                query: searchQuery,
+                              ),
                             ),
                             if (task.description.isNotEmpty) ...[
                               const SizedBox(height: AppSpacing.xs),
-                              Text(
-                                task.description,
+                              HighlightText(
+                                text: task.description,
+                                query: searchQuery,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: theme.textTheme.bodyMedium?.copyWith(

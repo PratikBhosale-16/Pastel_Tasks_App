@@ -30,6 +30,8 @@ import 'package:pastel_tasks/features/tasks/domain/enums/repeat_rule.dart';
 import 'package:pastel_tasks/features/filter/presentation/providers/filter_providers.dart';
 import 'package:pastel_tasks/features/filter/presentation/widgets/active_filters_row.dart';
 import 'package:pastel_tasks/features/filter/presentation/widgets/filter_bottom_sheet.dart';
+import 'package:pastel_tasks/features/search/presentation/providers/search_providers.dart';
+import 'package:pastel_tasks/features/search/presentation/widgets/task_search_bar.dart';
 import 'package:pastel_tasks/shared/widgets/empty_state/empty_state.dart';
 import 'package:uuid/uuid.dart';
 
@@ -142,7 +144,7 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final taskListAsync = ref.watch(filteredTasksProvider);
+    final taskListAsync = ref.watch(searchedTasksProvider);
     final todayStr = DateFormat.yMMMMd().format(DateTime.now());
 
     return Scaffold(
@@ -196,6 +198,7 @@ class HomeScreen extends ConsumerWidget {
       ),
       body: Column(
         children: [
+          const TaskSearchBar(),
           const ActiveFiltersRow(),
           Expanded(
             child: AnimatedSwitcher(

@@ -35,9 +35,9 @@
 
 # Current Milestone
 
-- Current milestone: M4.2 Advanced Task Filtering
+- Current milestone: M4.3 Intelligent Task Search
 - Status: Completed.
-- Validation: Implemented `TaskFilter` domain model, `FilterRepository` for local storage, `FilterNotifier` for state management, and updated `filteredTasksProvider` to filter in-memory. Added `FilterBottomSheet` and `ActiveFiltersRow`. Tests pass.
+- Validation: Implemented `TaskSearchBar`, `HighlightText` widget for matched query, and Riverpod `searchedTasksProvider` to filter tasks locally in memory. Tests pass.
 
 
 # Completed
@@ -161,14 +161,15 @@ Completed Milestones:
 - M3.12 Home Validation
 - M4.1 Tag Management
 - M4.2 Advanced Task Filtering
+- M4.3 Intelligent Task Search
 
 # Current Blockers
 
 - None.
 
-- Next milestone: M4.3 Search
-- Scope: Implementation of task searching functionality.
-- Constraint: Do not implement M4.3 until authorized.
+- Next milestone: Performance Optimization Pass / M4.4 Sorting
+- Scope: Profile performance, resolve any frame drops, then move to sorting functionality.
+- Constraint: Do not implement M4.4 until authorized.
 
 # Notes
 
