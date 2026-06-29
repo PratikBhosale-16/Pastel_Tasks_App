@@ -27,27 +27,6 @@ abstract class TaskRepository {
   /// Gets all tasks.
   Future<Result<List<Task>>> getAll();
 
-  /// Gets active (non-completed, non-archived) tasks.
-  Future<Result<List<Task>>> getActive();
-
-  /// Gets completed tasks.
-  Future<Result<List<Task>>> getCompleted();
-
-  /// Gets archived tasks.
-  Future<Result<List<Task>>> getArchived();
-
-  /// Searches tasks by title, description, or combined query.
-  Future<Result<List<Task>>> search(String query);
-
-  /// Gets tasks by a specific tag ID.
-  Future<Result<List<Task>>> getByTag(String tagId);
-
-  /// Gets tasks by a specific due date.
-  Future<Result<List<Task>>> getByDueDate(DateTime date);
-
-  /// Gets overdue tasks.
-  Future<Result<List<Task>>> getOverdue();
-
   /// Pins a task.
   Future<Result<void>> pin(String id);
 

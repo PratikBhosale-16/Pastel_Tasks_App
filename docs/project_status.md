@@ -2,11 +2,11 @@
 
 ## Current Milestone
 
-- Milestone: M4.6
-- Name: Smart Lists
-- Status: Completed
-- Validation: Implemented `SmartDateFilter` enum and updated `TaskFilter` to support relative dynamic date checking for "Today", "Tomorrow", "Upcoming", "Overdue", and "Completed Today" natively via Riverpod evaluation. Implemented `SmartListsDrawer` offering easy access to predefined views and integrated it into `HomeScreen`. Analyzed, tested, and built.
-- Overall Progress: Phase 4 organization is fully complete. Tags, Filters, Search, Sorting, Bulk Actions, and Smart Lists are done.
+- Milestone: M5.1
+- Name: Calendar Foundation
+- Status: Planned
+- Validation: N/A
+- Overall Progress: Phase 4 organization is fully completed and validated. Moving to Phase 5.
 
 ## Completed
 
@@ -84,6 +84,7 @@
 - [x] M4.4 Sorting
 - [x] M4.5 Bulk Selection & Bulk Actions
 - [x] M4.6 Smart Lists
+- [x] M4.7 Organization Validation & Freeze
 - [ ] M5: Time Management (M5.1 Calendar, M5.2 Due Dates, M5.3 Reminders, M5.4 Repeat Rules, M5.5 WorkManager, M5.6 Validation)
 - [ ] M6: Notes & Rich Content (M6.1 Rich Notes, M6.2 Flutter Quill, M6.3 Attachments, M6.4 Validation)
 - [ ] M7: Statistics (M7.1 Dashboard, M7.2 Productivity, M7.3 Charts, M7.4 Insights)
@@ -94,7 +95,7 @@
 
 ## Next Milestone
 
-- Milestone: Performance Optimization Pass / M5.1 — Calendar
+- Milestone: M5.1 — Calendar Foundation
 
 ## Development Order
 

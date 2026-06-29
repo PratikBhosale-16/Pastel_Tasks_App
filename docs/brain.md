@@ -34,11 +34,20 @@
 - Minimum Android API: Android 12, API 31.
 
 ## Current Milestone
-**M4.6 — Smart Lists** (Complete)
-- Implemented `SmartDateFilter` enum and updated `TaskFilter` to support relative dynamic date checking for "Today", "Tomorrow", "Upcoming", "Overdue", and "Completed Today" natively via Riverpod evaluation.
-- Implemented `SmartListsDrawer` offering easy access to predefined views and integrated it into `HomeScreen`.
-- Overall Progress: Phase 4 organization is fully complete. Tags, Filters, Search, Sorting, Bulk Actions, and Smart Lists are done.
-- Next: Performance Optimization Pass / M5 Time Management.
+**M5.1 — Calendar Foundation**
+- Next milestone: M5.1 Calendar
+- Focus: Build Time Management features (Calendar, Reminders, WorkManager, Repeat Rules).
+
+# Completed
+
+## Phase 4: Organization Complete
+- M4.1 Tags
+- M4.2 Filters
+- M4.3 Search
+- M4.4 Sorting
+- M4.5 Bulk Selection & Bulk Actions
+- M4.6 Smart Lists
+- M4.7 Organization Validation & Freeze
 
 # Completed
 
@@ -165,14 +174,15 @@ Completed Milestones:
 - M4.4 Smart Sorting
 - M4.5 Bulk Selection & Bulk Actions
 - M4.6 Smart Lists
+- M4.7 Organization Validation & Freeze
 
 # Current Blockers
 
 - None.
 
-- Next milestone: Performance Optimization Pass / M5.1 Calendar
-- Scope: Profile performance, resolve any frame drops, then move to M5.
-- Constraint: Do not implement further until authorized.
+- Next milestone: M5.1 Calendar
+- Scope: Foundation for Calendar and Due Dates logic.
+- Constraint: Do not implement M6.
 
 # Notes
 
