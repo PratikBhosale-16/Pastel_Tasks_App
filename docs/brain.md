@@ -35,9 +35,9 @@
 
 # Current Milestone
 
-- Current milestone: M4.3 Intelligent Task Search
+- Current milestone: M4.4 Smart Sorting
 - Status: Completed.
-- Validation: Implemented `TaskSearchBar`, `HighlightText` widget for matched query, and Riverpod `searchedTasksProvider` to filter tasks locally in memory. Tests pass.
+- Validation: Implemented `SortPreferences`, `SortRepository`, `SortNotifier`, and `sortedTasksProvider`. Integrated `SortBottomSheet` and updated `ActiveFiltersRow` and `HomeScreen`. Drag-and-drop disabled when sorting is not manual. Unit tests pass.
 
 
 # Completed
@@ -141,7 +141,7 @@
 - Preferences: shared_preferences.
 
 # Current Phase: Phase 4 (Organization)
-Current Milestone: M4.2 (Advanced Task Filtering) - Completed
+Current Milestone: M4.4 (Smart Sorting) - Completed
 
 Completed Milestones:
 - M0.1 - M0.3
@@ -162,14 +162,15 @@ Completed Milestones:
 - M4.1 Tag Management
 - M4.2 Advanced Task Filtering
 - M4.3 Intelligent Task Search
+- M4.4 Smart Sorting
 
 # Current Blockers
 
 - None.
 
-- Next milestone: Performance Optimization Pass / M4.4 Sorting
-- Scope: Profile performance, resolve any frame drops, then move to sorting functionality.
-- Constraint: Do not implement M4.4 until authorized.
+- Next milestone: Performance Optimization Pass
+- Scope: Profile performance, resolve any frame drops, then move to M4.5 Smart Lists if applicable.
+- Constraint: Do not implement further until authorized.
 
 # Notes
 

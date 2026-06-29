@@ -103,3 +103,17 @@ Living documents remain in `docs/`.
 - Uppercase specification names remain available for approved baseline documents.
 - Lowercase living tracker names remain available for development updates.
 - The documentation structure stays compatible with Windows without requiring case-sensitive directory settings.
+# # #   0 2 3 .   D r a g   &   D r o p   O r d e r i n g   C o n s t r a i n t 
+ -   * * D a t e : * *   2 0 2 6 - 0 6 - 2 9 
+ -   * * C o n t e x t : * *   I m p l e m e n t i n g   M 4 . 4   S m a r t   S o r t i n g   a l o n g s i d e   M 3 . 1 1   D r a g - a n d - D r o p   f u n c t i o n a l i t y . 
+ -   * * D e c i s i o n : * *   D r a g - a n d - d r o p   m a n u a l   r e o r d e r i n g   i s   o n l y   e n a b l e d   w h e n   t h e   u s e r ' s   a c t i v e   s o r t   o p t i o n   i s   s e t   t o   ' M a n u a l ' . 
+ -   * * R e a s o n : * *   S o r t i n g   t a s k s   d y n a m i c a l l y   d y n a m i c a l l y   ( e . g .   b y   D a t e   o r   P r i o r i t y )   o v e r r i d e s   t h e   e x p l i c i t   o r d e r i n g   o f   t a s k s .   R e o r d e r i n g   t a s k s   m a n u a l l y   w h i l e   s o r t e d   b y   a n   e x t e r n a l   c r i t e r i o n   i n t r o d u c e s   l o g i c a l   a m b i g u i t y   a n d   d a t a   c o r r u p t i o n   f o r   p e r s i s t e n t   p o s i t i o n   i n d i c e s . 
+ 
+ # # #   0 2 2 .   S o r t i n g   P e r s i s t e n c e 
+ -   * * D a t e : * *   2 0 2 6 - 0 6 - 2 9 
+ -   * * C o n t e x t : * *   M 4 . 4   S m a r t   S o r t i n g   p r e f e r e n c e s . 
+ -   * * D e c i s i o n : * *   S o r t i n g   p r e f e r e n c e s   ( O p t i o n   a n d   O r d e r )   a r e   p e r s i s t e d   s t r i c t l y   u s i n g   \ s h a r e d _ p r e f e r e n c e s \ . 
+ -   * * R e a s o n : * *   S o r t i n g   i s   a n   a p p l i c a t i o n   p r e f e r e n c e ,   n o t   c o r e   u s e r   d o m a i n   d a t a   ( l i k e   T a s k s ) .   M a n a g i n g   i t   o u t s i d e   o f   I s a r   a l l o w s   q u i c k   r e t r i e v a l   w i t h o u t   b l o c k i n g   d a t a b a s e   m i g r a t i o n s   o r   i n c r e a s i n g   q u e r y   o v e r h e a d . 
+ 
+  
+ 

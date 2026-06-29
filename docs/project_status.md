@@ -2,11 +2,11 @@
 
 ## Current Milestone
 
-- Milestone: M4.3
-- Name: Intelligent Task Search
+- Milestone: M4.4
+- Name: Smart Sorting
 - Status: Completed
-- Validation: Implemented debouncedSearchQueryProvider and searchedTasksProvider. Built TaskSearchBar and HighlightText to visually match queries in task titles and descriptions. Integrated search seamlessly on top of filtering on the Home Screen. Analyzed, tested, and built.
-- Overall Progress: Phase 4 organization is progressing. Tags, Filters, and Search are complete.
+- Validation: Implemented `SortPreferences`, `SortRepository`, and `SortNotifier`. Added `SortBottomSheet` for users to select sort options and order. Created `sortedTasksProvider` to sort tasks appropriately while maintaining relative manual positions for stability. Disabled drag-and-drop when manual sorting is not active. Analyzed, tested, and built.
+- Overall Progress: Phase 4 organization is progressing. Tags, Filters, Search, and Sorting are complete.
 
 ## Completed
 
@@ -81,7 +81,8 @@
 - [x] M4.1 Tags
 - [x] M4.2 Filters
 - [x] M4.3 Search
-- [ ] M4: Organization (M4.4 Sorting, M4.5 Bulk Actions, M4.6 Validation)
+- [x] M4.4 Sorting
+- [ ] M4: Organization (M4.5 Smart Lists, M4.6 Bulk Actions)
 - [ ] M5: Time Management (M5.1 Calendar, M5.2 Due Dates, M5.3 Reminders, M5.4 Repeat Rules, M5.5 WorkManager, M5.6 Validation)
 - [ ] M6: Notes & Rich Content (M6.1 Rich Notes, M6.2 Flutter Quill, M6.3 Attachments, M6.4 Validation)
 - [ ] M7: Statistics (M7.1 Dashboard, M7.2 Productivity, M7.3 Charts, M7.4 Insights)
@@ -92,7 +93,7 @@
 
 ## Next Milestone
 
-- Milestone: Performance Optimization Pass / M4.4 — Sorting
+- Milestone: Performance Optimization Pass / M4.5 — Smart Lists
 
 ## Development Order
 

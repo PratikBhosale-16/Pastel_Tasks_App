@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-06-29
+
+### Completed
+
+- M4.4: Implemented Smart Sorting. Created persistent sorting preferences via `SortPreferences` (saving to `shared_preferences`). Integrated `sortedTasksProvider` with the search/filter task chain. Sorted tasks can be ascending/descending by date, priority, or alphabetically. Maintained positional stability for identical sort keys. Disabled drag-and-drop manual ordering when sorting by non-manual options. Added `SortBottomSheet` for UI control.
+- M4.3: Implemented Intelligent Task Search. Built `TaskSearchBar`, `HighlightText`, and integrated Riverpod `searchedTasksProvider`. Search runs locally across titles and descriptions and works seamlessly on top of applied filters.
+- M4.2: Implemented Advanced Task Filtering. Added robust `TaskFilter` options including tag matching, status filtering, and priority filtering. Built `FilterBottomSheet` and `ActiveFiltersRow` to seamlessly toggle and visualize state. Integrated with Isar local queries via Riverpod.
+- M4.1: Implemented Tag Management. Added complete tag creation, editing, color assignment, and deletion. Integrated tagging seamlessly into `AddTaskBottomSheet` and `TaskCard`. Tag metadata maps successfully to domain models and persists to Isar.
+- M3.12: Executed M3 UX Polish. Completed final Home screen UI fixes, updated greeting text, unified priority dot colors, enforced default task left borders, restored Task lifecycle undo functionality correctly against the Isar store, and removed animation jank. Verified behavior locally via flutter analyze/test.
+
 ## 2026-06-27
 
 ### Completed

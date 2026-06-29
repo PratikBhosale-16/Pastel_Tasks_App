@@ -32,6 +32,9 @@ import 'package:pastel_tasks/features/filter/presentation/widgets/active_filters
 import 'package:pastel_tasks/features/filter/presentation/widgets/filter_bottom_sheet.dart';
 import 'package:pastel_tasks/features/search/presentation/providers/search_providers.dart';
 import 'package:pastel_tasks/features/search/presentation/widgets/task_search_bar.dart';
+import 'package:pastel_tasks/features/sorting/domain/enums/sort_option.dart';
+import 'package:pastel_tasks/features/sorting/presentation/providers/sort_providers.dart';
+import 'package:pastel_tasks/features/sorting/presentation/widgets/sort_bottom_sheet.dart';
 import 'package:pastel_tasks/shared/widgets/empty_state/empty_state.dart';
 import 'package:uuid/uuid.dart';
 
@@ -144,7 +147,9 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final taskListAsync = ref.watch(searchedTasksProvider);
+    final taskListAsync = ref.watch(sortedTasksProvider);
+    final sortPrefs = ref.watch(sortPreferencesProvider);
+    final isManualSort = sortPrefs.option == TaskSortOption.manual;
     final todayStr = DateFormat.yMMMMd().format(DateTime.now());
 
     return Scaffold(
@@ -182,6 +187,13 @@ class HomeScreen extends ConsumerWidget {
             tooltip: 'Tags',
             onPressed: () {
               context.push(RouteNames.tagsPath);
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.sort),
+            tooltip: 'Sort Tasks',
+            onPressed: () {
+              SortBottomSheet.show(context);
             },
           ),
           IconButton(
@@ -234,19 +246,20 @@ class HomeScreen extends ConsumerWidget {
                   SliverReorderableList(
                     proxyDecorator: _proxyDecorator,
                     itemCount: pinnedTasks.length,
-                    onReorder: (oldIndex, newIndex) {
+                    onReorder: isManualSort ? (oldIndex, newIndex) {
                       if (newIndex > oldIndex) newIndex -= 1;
                       final tasksCopy = List<Task>.from(pinnedTasks);
                       final task = tasksCopy.removeAt(oldIndex);
                       tasksCopy.insert(newIndex, task);
                       final orderedIds = tasksCopy.map((t) => t.id).toList();
                       ref.read(taskNotifierProvider.notifier).reorder(orderedIds);
-                    },
+                    } : (_, __) {},
                     itemBuilder: (context, index) {
                       final task = pinnedTasks[index];
                       return ReorderableDelayedDragStartListener(
                         key: ValueKey(task.id),
                         index: index,
+                        enabled: isManualSort,
                         child: Padding(
                           padding: const EdgeInsets.only(bottom: 12, left: 16, right: 16),
                           child: TaskCard(task: task),
@@ -266,19 +279,20 @@ class HomeScreen extends ConsumerWidget {
                   SliverReorderableList(
                     proxyDecorator: _proxyDecorator,
                     itemCount: pendingTasks.length,
-                    onReorder: (oldIndex, newIndex) {
+                    onReorder: isManualSort ? (oldIndex, newIndex) {
                       if (newIndex > oldIndex) newIndex -= 1;
                       final tasksCopy = List<Task>.from(pendingTasks);
                       final task = tasksCopy.removeAt(oldIndex);
                       tasksCopy.insert(newIndex, task);
                       final orderedIds = tasksCopy.map((t) => t.id).toList();
                       ref.read(taskNotifierProvider.notifier).reorder(orderedIds);
-                    },
+                    } : (_, __) {},
                     itemBuilder: (context, index) {
                       final task = pendingTasks[index];
                       return ReorderableDelayedDragStartListener(
                         key: ValueKey(task.id),
                         index: index,
+                        enabled: isManualSort,
                         child: Padding(
                           padding: const EdgeInsets.only(bottom: 12, left: 16, right: 16),
                           child: TaskCard(task: task),
@@ -306,19 +320,20 @@ class HomeScreen extends ConsumerWidget {
                   SliverReorderableList(
                     proxyDecorator: _proxyDecorator,
                     itemCount: completedTasks.length,
-                    onReorder: (oldIndex, newIndex) {
+                    onReorder: isManualSort ? (oldIndex, newIndex) {
                       if (newIndex > oldIndex) newIndex -= 1;
                       final tasksCopy = List<Task>.from(completedTasks);
                       final task = tasksCopy.removeAt(oldIndex);
                       tasksCopy.insert(newIndex, task);
                       final orderedIds = tasksCopy.map((t) => t.id).toList();
                       ref.read(taskNotifierProvider.notifier).reorder(orderedIds);
-                    },
+                    } : (_, __) {},
                     itemBuilder: (context, index) {
                       final task = completedTasks[index];
                       return ReorderableDelayedDragStartListener(
                         key: ValueKey(task.id),
                         index: index,
+                        enabled: isManualSort,
                         child: Padding(
                           padding: const EdgeInsets.only(bottom: 12, left: 16, right: 16),
                           child: TaskCard(task: task),
