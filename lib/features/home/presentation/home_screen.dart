@@ -427,40 +427,7 @@ floatingActionButton: isSelectionMode
         label: const Text('New Task'),
         elevation: 2,
       ),
-      bottomNavigationBar: isSelectionMode 
-        ? null 
-        : NavigationBar(
-        selectedIndex: 0,
-        onDestinationSelected: (idx) {
-          if (idx == 1) {
-            context.push(RouteNames.calendarPath);
-          } else if (idx == 2) {
-            context.push(RouteNames.tagsPath);
-          }
-        },
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.inbox_rounded),
-            label: 'Inbox',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.calendar_month_rounded),
-            label: 'Calendar',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.tag_rounded),
-            label: 'Tags',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.bar_chart_rounded),
-            label: 'Stats',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.settings_rounded),
-            label: 'Settings',
-          ),
-        ],
-      ),
+
     );
   }
 }

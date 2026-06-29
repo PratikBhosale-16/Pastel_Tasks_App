@@ -30,19 +30,7 @@ class CalendarEmptyState extends ConsumerWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 16.0),
-          PrimaryButton(
-            label: 'Create Task',
-            onPressed: () {
-              final selectedDate = ref.read(selectedDateProvider);
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (context) => const AddTaskBottomSheet(),
-              );
-            },
-          ),
+
         ],
       ),
     );

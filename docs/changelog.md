@@ -53,6 +53,9 @@
   - Implemented real-time dynamic rendering of repeating tasks onto the calendar grid without writing duplicates to the database by leveraging `RepeatRule` projections in `monthTasksProvider`.
   - Polished the Empty State for days without tasks using a smooth `AnimatedSwitcher` fading/sliding transition.
   - Cleaned up custom theme tokens to strictly use Material 3 `Theme.of(context)` equivalents to ensure robust build stability.
+  - Completed Calendar module UI synchronization to align with Inbox design language and architecture (using StatefulShellRoute).
+  - Configured modal bottom sheets with `useRootNavigator: true` to prevent UI bleeding under the calendar.
+  - Integrated `calendarAccentColorProvider` from Settings to personalize the Calendar highlights.
 - **M4 Tags UI Redesign**:
   - Redesigned `TagsScreen` to a responsive 2-column staggered grid layout.
   - Built interactive `TagGridCard` with inline task count, progress bars, and up to 3 task previews.

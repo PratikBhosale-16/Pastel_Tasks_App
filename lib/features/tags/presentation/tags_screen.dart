@@ -281,38 +281,7 @@ class _TagsScreenState extends ConsumerState<TagsScreen> with SingleTickerProvid
         label: const Text('New Tag'),
         elevation: 2,
       ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: 2,
-        onDestinationSelected: (idx) {
-          if (idx == 0) {
-            context.go(RouteNames.homePath);
-          } else if (idx == 1) {
-            context.push(RouteNames.calendarPath);
-          }
-        },
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.inbox_rounded),
-            label: 'Inbox',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.calendar_month_rounded),
-            label: 'Calendar',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.tag_rounded),
-            label: 'Tags',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.bar_chart_rounded),
-            label: 'Stats',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.settings_rounded),
-            label: 'Settings',
-          ),
-        ],
-      ),
+
     );
   }
 }

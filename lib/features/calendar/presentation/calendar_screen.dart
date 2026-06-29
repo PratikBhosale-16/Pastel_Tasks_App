@@ -9,6 +9,7 @@ import 'package:pastel_tasks/features/search/presentation/providers/search_provi
 import 'package:pastel_tasks/features/search/presentation/widgets/task_search_bar.dart';
 import 'package:pastel_tasks/features/tasks/presentation/widgets/task_card/task_card.dart';
 import 'package:pastel_tasks/shared/layout/app_scaffold.dart';
+import 'package:pastel_tasks/features/smart_lists/presentation/widgets/smart_lists_drawer.dart';
 
 import 'package:go_router/go_router.dart';
 import 'package:pastel_tasks/app/router/route_names.dart';
@@ -28,41 +29,44 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
   Widget build(BuildContext context) {
     final query = ref.watch(searchQueryProvider);
     final searchResults = ref.watch(searchedTasksProvider);
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     return AppScaffold(
+      drawer: const SmartListsDrawer(),
+      appBar: AppBar(
+        title: _isSearching
+            ? const TaskSearchBar()
+            : Text(
+                'Calendar',
+                style: theme.textTheme.headlineMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: colorScheme.onSurface,
+                ),
+              ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              _isSearching ? Icons.close : Icons.search,
+              color: colorScheme.onSurfaceVariant,
+            ),
+            onPressed: () {
+              setState(() {
+                _isSearching = !_isSearching;
+                if (!_isSearching) {
+                  ref.read(searchQueryProvider.notifier).clear();
+                }
+              });
+            },
+          ),
+          const SizedBox(width: 8),
+        ],
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+      ),
       body: SafeArea(
         child: Column(
           children: [
-            // Header / Search Bar area
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: _isSearching
-                        ? const TaskSearchBar()
-                        : const SizedBox.shrink(),
-                  ),
-                  if (!_isSearching)
-                    const Spacer(),
-                  IconButton(
-                    icon: Icon(
-                      _isSearching ? Icons.close : Icons.search,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _isSearching = !_isSearching;
-                        if (!_isSearching) {
-                          ref.read(searchQueryProvider.notifier).clear();
-                        }
-                      });
-                    },
-                  ),
-                ],
-              ),
-            ),
-            
             Expanded(
               child: Stack(
                 children: [
@@ -86,7 +90,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                   if (_isSearching && query.isNotEmpty)
                     Positioned.fill(
                       child: Container(
-                        color: Theme.of(context).scaffoldBackgroundColor,
+                        color: theme.scaffoldBackgroundColor,
                         child: (searchResults.value ?? []).isEmpty
                             ? const Center(child: Text('No matching tasks'))
                             : ListView.builder(
@@ -111,9 +115,6 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                                           ref.read(searchQueryProvider.notifier).clear();
                                         });
                                       },
-                                      // We wrap the TaskCard with AbsorbPointer so tapping 
-                                      // anywhere jumps to the date rather than triggering 
-                                      // the card's own tap actions immediately in the search list.
                                       child: AbsorbPointer(
                                         child: TaskCard(task: task),
                                       ),
@@ -131,11 +132,10 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          // The selected date was `ref.read(selectedDateProvider)`
-          // Currently AddTaskBottomSheet does not accept initialDate.
-          showModalBottomSheet(
+          showModalBottomSheet<void>(
             context: context,
             isScrollControlled: true,
+            useRootNavigator: true,
             backgroundColor: Colors.transparent,
             builder: (context) => const AddTaskBottomSheet(),
           );
@@ -143,38 +143,6 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
         icon: const Icon(Icons.add),
         label: const Text('New Task'),
         elevation: 2,
-      ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: 1,
-        onDestinationSelected: (idx) {
-          if (idx == 0) {
-            context.go(RouteNames.homePath);
-          } else if (idx == 2) {
-            context.push(RouteNames.tagsPath);
-          }
-        },
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.inbox_rounded),
-            label: 'Inbox',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.calendar_month_rounded),
-            label: 'Calendar',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.tag_rounded),
-            label: 'Tags',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.bar_chart_rounded),
-            label: 'Stats',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.settings_rounded),
-            label: 'Settings',
-          ),
-        ],
       ),
     );
   }

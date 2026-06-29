@@ -31,4 +31,10 @@ abstract final class RouteNames {
 
   /// Calendar route path.
   static const calendarPath = '/calendar';
+
+  /// Settings route name.
+  static const settings = 'settings';
+
+  /// Settings route path.
+  static const settingsPath = '/settings';
 }

@@ -4,6 +4,7 @@ import 'package:pastel_tasks/app/theme/colors.dart';
 import 'package:pastel_tasks/features/calendar/presentation/providers/calendar_providers.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/priority.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/task_status.dart';
+import 'package:pastel_tasks/features/settings/presentation/providers/settings_providers.dart';
 import 'package:pastel_tasks/features/tasks/domain/models/task.dart';
 import 'package:pastel_tasks/features/tasks/presentation/widgets/add_task_bottom_sheet/add_task_bottom_sheet.dart';
 
@@ -22,6 +23,7 @@ class CalendarDayCell extends ConsumerWidget {
     final selectedDate = ref.watch(selectedDateProvider);
     final monthTasksMap = ref.watch(monthTasksProvider);
     final theme = Theme.of(context);
+    final accent = ref.watch(calendarAccentProvider);
 
     final isSelected = date.year == selectedDate.year &&
         date.month == selectedDate.month &&
@@ -38,7 +40,7 @@ class CalendarDayCell extends ConsumerWidget {
       textColor = theme.colorScheme.onSurfaceVariant.withOpacity(0.5);
     }
     if (isSelected) {
-      textColor = theme.colorScheme.primary;
+      textColor = accent.color;
     }
 
     return GestureDetector(
@@ -47,7 +49,7 @@ class CalendarDayCell extends ConsumerWidget {
       },
       onLongPress: () {
         ref.read(selectedDateProvider.notifier).state = date;
-        showModalBottomSheet(
+        showModalBottomSheet<void>(
           context: context,
           isScrollControlled: true,
           backgroundColor: Colors.transparent,
@@ -60,10 +62,10 @@ class CalendarDayCell extends ConsumerWidget {
         curve: Curves.easeOutBack,
         child: Container(
           decoration: BoxDecoration(
-            color: isSelected ? theme.colorScheme.primaryContainer : Colors.transparent,
+            color: isSelected ? accent.color.withOpacity(0.15) : Colors.transparent,
             borderRadius: BorderRadius.circular(12.0),
             border: isToday && !isSelected
-                ? Border.all(color: theme.colorScheme.primary.withOpacity(0.5), width: 1.5)
+                ? Border.all(color: accent.color.withOpacity(0.5), width: 1.5)
                 : null,
           ),
           child: Column(
@@ -78,7 +80,7 @@ class CalendarDayCell extends ConsumerWidget {
               ),
               const SizedBox(height: 4),
               if (tasksForDay.isNotEmpty)
-                _buildTaskIndicators(theme, tasksForDay),
+                _buildTaskIndicators(theme, tasksForDay, accent.color),
             ],
           ),
         ),
@@ -86,7 +88,7 @@ class CalendarDayCell extends ConsumerWidget {
     );
   }
 
-  Widget _buildTaskIndicators(ThemeData theme, List<Task> tasks) {
+  Widget _buildTaskIndicators(ThemeData theme, List<Task> tasks, Color accentColor) {
     final displayTasks = tasks.take(3).toList();
     final overflow = tasks.length > 3 ? tasks.length - 3 : 0;
 
@@ -97,7 +99,7 @@ class CalendarDayCell extends ConsumerWidget {
           if (t.isPinned) {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 1.0),
-              child: Icon(Icons.push_pin, size: 8, color: theme.colorScheme.primary),
+              child: Icon(Icons.push_pin, size: 8, color: accentColor),
             );
           }
           final isCompleted = t.status == TaskStatus.completed;
