@@ -133,7 +133,7 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
                           spacing: 8,
                           runSpacing: 8,
                           children: tags.map<Widget>((tag) {
-                            final isSelected = _currentFilter?.tags?.contains(tag.id) ?? false;
+                            final isSelected = _currentFilter?.tags?.contains(tag.name) ?? false;
                             return FilterChip(
                               label: Text('#${tag.name}'),
                               selected: isSelected,
@@ -141,9 +141,9 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
                                 setState(() {
                                   final currentTags = List<String>.from(_currentFilter?.tags ?? []);
                                   if (selected) {
-                                    currentTags.add(tag.id);
+                                    currentTags.add(tag.name);
                                   } else {
-                                    currentTags.remove(tag.id);
+                                    currentTags.remove(tag.name);
                                   }
                                   _currentFilter = _currentFilter?.copyWith(
                                     tags: currentTags,

@@ -118,7 +118,7 @@ class _TagsScreenState extends ConsumerState<TagsScreen> with SingleTickerProvid
 
   void _onTagTapped(Tag tag) {
     // Apply tag filter and go to home screen
-    ref.read(filterProvider.notifier).updateFilter(TaskFilter(tags: [tag.id]));
+    ref.read(filterProvider.notifier).updateFilter(TaskFilter(tags: [tag.name]));
     context.go(RouteNames.homePath);
   }
 
@@ -223,6 +223,12 @@ class _TagsScreenState extends ConsumerState<TagsScreen> with SingleTickerProvid
             onDragStart: (index) {
               HapticFeedback.mediumImpact();
             },
+            dragWidgetBuilder: (index, child) {
+              return Material(
+                color: Colors.transparent,
+                child: child,
+              );
+            },
             itemCount: tags.length + 1, // +1 for "New Tag" tile
             itemBuilder: (context, index) {
               if (index == tags.length) {
@@ -230,7 +236,7 @@ class _TagsScreenState extends ConsumerState<TagsScreen> with SingleTickerProvid
               }
               
               final tag = tags[index];
-              final tagTasks = allTasks.where((t) => t.tags.contains(tag.id)).toList();
+              final tagTasks = allTasks.where((t) => t.tags.contains(tag.name) && !t.isArchived).toList();
 
               // Staggered animation values
               final double start = (index * 0.1).clamp(0.0, 1.0);
@@ -268,6 +274,42 @@ class _TagsScreenState extends ConsumerState<TagsScreen> with SingleTickerProvid
         },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, st) => Center(child: Text('Error: $err')),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: _showCreateTag,
+        icon: const Icon(Icons.add),
+        label: const Text('New Tag'),
+        elevation: 2,
+      ),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: 2,
+        onDestinationSelected: (idx) {
+          if (idx == 0) {
+            context.go(RouteNames.homePath);
+          }
+        },
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.inbox_rounded),
+            label: 'Inbox',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.calendar_month_rounded),
+            label: 'Calendar',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.tag_rounded),
+            label: 'Tags',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.bar_chart_rounded),
+            label: 'Stats',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.settings_rounded),
+            label: 'Settings',
+          ),
+        ],
       ),
     );
   }

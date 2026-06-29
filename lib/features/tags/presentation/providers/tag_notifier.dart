@@ -63,10 +63,6 @@ class TagNotifier extends AsyncNotifier<List<Tag>> {
     
     final currentList = List<Tag>.from(state.value!);
     
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
-    }
-    
     final tag = currentList.removeAt(oldIndex);
     currentList.insert(newIndex, tag);
     
