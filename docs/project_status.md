@@ -2,11 +2,11 @@
 
 ## Current Milestone
 
-- Milestone: M4.1
-- Name: Tag Management
+- Milestone: M4.2
+- Name: Advanced Task Filtering
 - Status: Completed
-- Validation: Implemented domain models, repository, state notifier, and presentation UI for tags. All tests passed. Build runner successfully generated schema.
-- Overall Progress: Phase 4 organization has started. Tags feature complete.
+- Validation: Implemented domain filter models, repository with persistence, state notifier, and integrated filtering into HomeScreen via Riverpod providers. Added FilterBottomSheet and ActiveFiltersRow. Tests passed.
+- Overall Progress: Phase 4 organization has started. Tags and Filters feature complete.
 
 ## Completed
 
@@ -78,7 +78,9 @@
 
 ## Pending
 
-- [ ] M4: Organization (M4.1 Tags, M4.2 Filters, M4.3 Search, M4.4 Sorting, M4.5 Bulk Actions, M4.6 Validation)
+- [x] M4.1 Tags
+- [x] M4.2 Filters
+- [ ] M4: Organization (M4.3 Search, M4.4 Sorting, M4.5 Bulk Actions, M4.6 Validation)
 - [ ] M5: Time Management (M5.1 Calendar, M5.2 Due Dates, M5.3 Reminders, M5.4 Repeat Rules, M5.5 WorkManager, M5.6 Validation)
 - [ ] M6: Notes & Rich Content (M6.1 Rich Notes, M6.2 Flutter Quill, M6.3 Attachments, M6.4 Validation)
 - [ ] M7: Statistics (M7.1 Dashboard, M7.2 Productivity, M7.3 Charts, M7.4 Insights)
@@ -89,7 +91,7 @@
 
 ## Next Milestone
 
-- Milestone: M4.1 — Tags
+- Milestone: M4.3 — Search
 
 ## Development Order
 

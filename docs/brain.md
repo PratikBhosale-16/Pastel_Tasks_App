@@ -35,9 +35,9 @@
 
 # Current Milestone
 
-- Current milestone: M4.1 Tag Management
+- Current milestone: M4.2 Advanced Task Filtering
 - Status: Completed.
-- Validation: Implemented Tag model, TagCollection, TagRepository, TagNotifier, TagsScreen, and TagFormBottomSheet. Successfully handled UI mapping of dynamic Material Symbols using integer code point string representations. Added tags to Isar database layout. Tests pass.
+- Validation: Implemented `TaskFilter` domain model, `FilterRepository` for local storage, `FilterNotifier` for state management, and updated `filteredTasksProvider` to filter in-memory. Added `FilterBottomSheet` and `ActiveFiltersRow`. Tests pass.
 
 
 # Completed
@@ -141,7 +141,7 @@
 - Preferences: shared_preferences.
 
 # Current Phase: Phase 4 (Organization)
-Current Milestone: M4.1 (Tags) - pending authorization
+Current Milestone: M4.2 (Advanced Task Filtering) - Completed
 
 Completed Milestones:
 - M0.1 - M0.3
@@ -159,16 +159,16 @@ Completed Milestones:
 - M3.10 Archive Task
 - M3.11 Drag & Drop Reordering
 - M3.12 Home Validation
+- M4.1 Tag Management
+- M4.2 Advanced Task Filtering
 
 # Current Blockers
 
 - None.
 
-# Next Milestone
-
-- Next milestone: M3.12 Home Validation
-- Scope: Verification of overall Home screen flow and interactions.
-- Constraint: Do not implement M3.12 until authorized.
+- Next milestone: M4.3 Search
+- Scope: Implementation of task searching functionality.
+- Constraint: Do not implement M4.3 until authorized.
 
 # Notes
 

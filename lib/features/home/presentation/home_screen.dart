@@ -27,6 +27,9 @@ import 'package:pastel_tasks/features/tasks/presentation/widgets/task_card/task_
 import 'package:pastel_tasks/shared/widgets/dialogs/confirmation_dialog.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/priority.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/repeat_rule.dart';
+import 'package:pastel_tasks/features/filter/presentation/providers/filter_providers.dart';
+import 'package:pastel_tasks/features/filter/presentation/widgets/active_filters_row.dart';
+import 'package:pastel_tasks/features/filter/presentation/widgets/filter_bottom_sheet.dart';
 import 'package:pastel_tasks/shared/widgets/empty_state/empty_state.dart';
 import 'package:uuid/uuid.dart';
 
@@ -139,7 +142,7 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final taskListAsync = ref.watch(taskListProvider);
+    final taskListAsync = ref.watch(filteredTasksProvider);
     final todayStr = DateFormat.yMMMMd().format(DateTime.now());
 
     return Scaffold(
@@ -180,10 +183,10 @@ class HomeScreen extends ConsumerWidget {
             },
           ),
           IconButton(
-            icon: const Icon(Icons.search_rounded),
-            tooltip: 'Search Tasks',
+            icon: const Icon(Icons.filter_list_rounded),
+            tooltip: 'Filter Tasks',
             onPressed: () {
-              // Search navigation deferred to future milestones
+              FilterBottomSheet.show(context);
             },
           ),
           const SizedBox(width: 8),
@@ -191,9 +194,13 @@ class HomeScreen extends ConsumerWidget {
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
-      body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300),
-        child: taskListAsync.when(
+      body: Column(
+        children: [
+          const ActiveFiltersRow(),
+          Expanded(
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              child: taskListAsync.when(
           data: (tasks) {
             // Check active/completed tasks only since watchAll doesn't filter.
             // But if the user expects all tasks to be shown here, we'll leave it.
@@ -321,21 +328,18 @@ class HomeScreen extends ConsumerWidget {
               ],
             );
           },
-          error: (err, _) => Center(
-            child: Text(
-              'Failed to load tasks',
-              style: TextStyle(color: colorScheme.error),
-            ),
-          ),
-          loading: () => const Center(
-            child: CircularProgressIndicator(),
-          ),
+          error: (error, stack) => Center(child: Text('Error: $error')),
+          loading: () => const Center(child: CircularProgressIndicator()),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        tooltip: 'Create Task',
+    ),
+  ],
+),
+floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showAddTask(context, ref),
-        child: const Icon(Icons.add_rounded),
+        icon: const Icon(Icons.add),
+        label: const Text('New Task'),
+        elevation: 2,
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: 0,
