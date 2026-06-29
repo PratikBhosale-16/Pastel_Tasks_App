@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pastel_tasks/features/filter/presentation/providers/filter_providers.dart';
+import 'package:pastel_tasks/features/filter/domain/enums/smart_date_filter.dart';
 import 'package:pastel_tasks/features/sorting/domain/enums/sort_option.dart';
 import 'package:pastel_tasks/features/sorting/presentation/providers/sort_providers.dart';
 import 'package:pastel_tasks/features/tags/domain/models/tag.dart';
@@ -91,6 +92,30 @@ class ActiveFiltersRow extends ConsumerWidget {
         label: 'Completed',
         onDeleted: () {
           ref.read(filterProvider.notifier).updateFilter(filter.copyWith(clearCompleted: true));
+        },
+        colorScheme: colorScheme,
+      ));
+    }
+    
+    // Smart Date Filter
+    if (filter.smartDateFilter != null) {
+      chips.add(_buildFilterChip(
+        context,
+        label: _getSmartDateFilterLabel(filter.smartDateFilter!),
+        onDeleted: () {
+          ref.read(filterProvider.notifier).updateFilter(filter.copyWith(clearSmartDate: true));
+        },
+        colorScheme: colorScheme,
+      ));
+    }
+    
+    // Has Tags (Untagged)
+    if (filter.hasTags == false) {
+      chips.add(_buildFilterChip(
+        context,
+        label: 'Untagged',
+        onDeleted: () {
+          ref.read(filterProvider.notifier).updateFilter(filter.copyWith(clearHasTags: true));
         },
         colorScheme: colorScheme,
       ));
@@ -198,6 +223,21 @@ class ActiveFiltersRow extends ConsumerWidget {
         return 'Color';
       case TaskSortOption.tag:
         return 'Tag';
+    }
+  }
+
+  String _getSmartDateFilterLabel(SmartDateFilter filter) {
+    switch (filter) {
+      case SmartDateFilter.today:
+        return 'Today';
+      case SmartDateFilter.tomorrow:
+        return 'Tomorrow';
+      case SmartDateFilter.upcoming:
+        return 'Upcoming';
+      case SmartDateFilter.overdue:
+        return 'Overdue';
+      case SmartDateFilter.completedToday:
+        return 'Completed Today';
     }
   }
 }

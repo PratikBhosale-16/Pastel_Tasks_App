@@ -34,10 +34,11 @@
 - Minimum Android API: Android 12, API 31.
 
 ## Current Milestone
-**M4.5 — Bulk Selection & Bulk Actions** (Complete)
-- Selection mode via long press implemented.
-- Bulk operations (Complete, Archive, Delete, Pin, Priority, Tag, Color) implemented with single Isar transaction batching.
-- Next: Performance Optimization Pass.
+**M4.6 — Smart Lists** (Complete)
+- Implemented `SmartDateFilter` enum and updated `TaskFilter` to support relative dynamic date checking for "Today", "Tomorrow", "Upcoming", "Overdue", and "Completed Today" natively via Riverpod evaluation.
+- Implemented `SmartListsDrawer` offering easy access to predefined views and integrated it into `HomeScreen`.
+- Overall Progress: Phase 4 organization is fully complete. Tags, Filters, Search, Sorting, Bulk Actions, and Smart Lists are done.
+- Next: Performance Optimization Pass / M5 Time Management.
 
 # Completed
 
@@ -162,13 +163,15 @@ Completed Milestones:
 - M4.2 Advanced Task Filtering
 - M4.3 Intelligent Task Search
 - M4.4 Smart Sorting
+- M4.5 Bulk Selection & Bulk Actions
+- M4.6 Smart Lists
 
 # Current Blockers
 
 - None.
 
-- Next milestone: Performance Optimization Pass
-- Scope: Profile performance, resolve any frame drops, then move to M4.5 Smart Lists if applicable.
+- Next milestone: Performance Optimization Pass / M5.1 Calendar
+- Scope: Profile performance, resolve any frame drops, then move to M5.
 - Constraint: Do not implement further until authorized.
 
 # Notes

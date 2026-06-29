@@ -5,6 +5,7 @@ import 'package:pastel_tasks/features/filter/domain/models/task_filter.dart';
 import 'package:pastel_tasks/features/tasks/domain/models/task.dart';
 import 'package:pastel_tasks/features/tasks/presentation/providers/task_providers.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/task_status.dart';
+import 'package:pastel_tasks/features/filter/domain/enums/smart_date_filter.dart';
 
 /// Provider for the FilterRepository.
 final filterRepositoryProvider = Provider<FilterRepository>((ref) {
@@ -58,6 +59,11 @@ final filteredTasksProvider = Provider<AsyncValue<List<Task>>>((ref) {
         final hasAnyTag = filter.tags!.any((t) => task.tags.contains(t));
         if (!hasAnyTag) return false;
       }
+      
+      // HasTags boolean check
+      if (filter.hasTags != null) {
+        if (task.tags.isEmpty == filter.hasTags) return false;
+      }
 
       // Priorities
       if (filter.priorities != null && filter.priorities!.isNotEmpty) {
@@ -108,6 +114,43 @@ final filteredTasksProvider = Provider<AsyncValue<List<Task>>>((ref) {
       } else {
         // By default, hide archived tasks from the general filtered view
         if (task.isArchived) return false;
+      }
+
+      // Smart Date Filters
+      if (filter.smartDateFilter != null) {
+        final now = DateTime.now();
+        final today = DateTime(now.year, now.month, now.day);
+        final tomorrow = today.add(const Duration(days: 1));
+        
+        switch (filter.smartDateFilter!) {
+          case SmartDateFilter.today:
+            if (task.dueDate == null) return false;
+            final taskDate = DateTime(task.dueDate!.year, task.dueDate!.month, task.dueDate!.day);
+            if (taskDate != today) return false;
+            break;
+          case SmartDateFilter.tomorrow:
+            if (task.dueDate == null) return false;
+            final taskDate = DateTime(task.dueDate!.year, task.dueDate!.month, task.dueDate!.day);
+            if (taskDate != tomorrow) return false;
+            break;
+          case SmartDateFilter.upcoming:
+            if (task.dueDate == null) return false;
+            final taskDate = DateTime(task.dueDate!.year, task.dueDate!.month, task.dueDate!.day);
+            if (!taskDate.isAfter(today)) return false;
+            break;
+          case SmartDateFilter.overdue:
+            if (task.dueDate == null) return false;
+            if (task.status == TaskStatus.completed) return false;
+            final taskDate = DateTime(task.dueDate!.year, task.dueDate!.month, task.dueDate!.day);
+            if (!taskDate.isBefore(today)) return false;
+            break;
+          case SmartDateFilter.completedToday:
+            if (task.status != TaskStatus.completed) return false;
+            if (task.completedAt == null) return false;
+            final compDate = DateTime(task.completedAt!.year, task.completedAt!.month, task.completedAt!.day);
+            if (compDate != today) return false;
+            break;
+        }
       }
 
       return true;

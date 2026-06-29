@@ -3,6 +3,7 @@ import 'package:pastel_tasks/features/filter/domain/models/task_filter.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/priority.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/repeat_rule.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/task_status.dart';
+import 'package:pastel_tasks/features/filter/domain/enums/smart_date_filter.dart';
 
 void main() {
   group('TaskFilter', () {
@@ -18,6 +19,8 @@ void main() {
         colors: const ['FF0000'],
         isArchived: false,
         isCompleted: false,
+        smartDateFilter: SmartDateFilter.today,
+        hasTags: true,
       );
 
       final json = filter.toJson();
@@ -57,10 +60,24 @@ void main() {
       final cleared = filter.copyWith(
         clearTags: true,
         clearPinned: true,
+        clearHasTags: true,
       );
 
       expect(cleared.tags, isNull);
       expect(cleared.isPinned, isNull);
+      expect(cleared.hasTags, isNull);
+    });
+
+    test('copyWith clears smartDateFilter correctly', () {
+      final filter = TaskFilter(
+        smartDateFilter: SmartDateFilter.upcoming,
+      );
+
+      final cleared = filter.copyWith(
+        clearSmartDate: true,
+      );
+
+      expect(cleared.smartDateFilter, isNull);
     });
 
     test('hasActiveFilters returns true when filters are set', () {
@@ -69,6 +86,12 @@ void main() {
 
       final filter2 = TaskFilter.empty.copyWith(tags: ['tag1']);
       expect(filter2.hasActiveFilters, isTrue);
+
+      final filter3 = TaskFilter.empty.copyWith(smartDateFilter: SmartDateFilter.today);
+      expect(filter3.hasActiveFilters, isTrue);
+
+      final filter4 = TaskFilter.empty.copyWith(hasTags: false);
+      expect(filter4.hasActiveFilters, isTrue);
     });
 
     test('hasActiveFilters returns false when no filters are set', () {

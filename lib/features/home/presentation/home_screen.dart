@@ -35,6 +35,8 @@ import 'package:pastel_tasks/features/search/presentation/widgets/task_search_ba
 import 'package:pastel_tasks/features/sorting/domain/enums/sort_option.dart';
 import 'package:pastel_tasks/features/sorting/presentation/providers/sort_providers.dart';
 import 'package:pastel_tasks/features/sorting/presentation/widgets/sort_bottom_sheet.dart';
+import 'package:pastel_tasks/features/filter/presentation/widgets/active_filters_row.dart';
+import 'package:pastel_tasks/features/smart_lists/presentation/widgets/smart_lists_drawer.dart';
 import 'package:pastel_tasks/features/selection/presentation/providers/selection_providers.dart';
 import 'package:pastel_tasks/features/selection/presentation/widgets/bulk_actions_bottom_sheet.dart';
 import 'package:pastel_tasks/shared/widgets/empty_state/empty_state.dart';
@@ -159,6 +161,7 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
+      drawer: isSelectionMode ? null : const SmartListsDrawer(),
       appBar: isSelectionMode
           ? AppBar(
               leading: IconButton(

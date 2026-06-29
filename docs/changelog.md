@@ -27,6 +27,10 @@
 
 ## [Unreleased]
 ### Added
+- **M4.6 Smart Lists**:
+  - Implemented `SmartDateFilter` enum and updated `TaskFilter` to support relative dynamic date checking for "Today", "Tomorrow", "Upcoming", "Overdue", and "Completed Today" natively via Riverpod evaluation.
+  - Added `SmartList` domain model and predefined lists repository.
+  - Implemented `SmartListsDrawer` offering easy access to predefined views and integrated it into `HomeScreen`.
 - **M4.5 Bulk Selection & Bulk Actions**:
   - Selection mode via long press on tasks.
   - Multi-select tasks to perform bulk actions via an animated SelectionAppBar.

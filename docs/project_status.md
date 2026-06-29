@@ -2,11 +2,11 @@
 
 ## Current Milestone
 
-- Milestone: M4.4
-- Name: Smart Sorting
+- Milestone: M4.6
+- Name: Smart Lists
 - Status: Completed
-- Validation: Implemented `SortPreferences`, `SortRepository`, and `SortNotifier`. Added `SortBottomSheet` for users to select sort options and order. Created `sortedTasksProvider` to sort tasks appropriately while maintaining relative manual positions for stability. Disabled drag-and-drop when manual sorting is not active. Analyzed, tested, and built.
-- Overall Progress: Phase 4 organization is progressing. Tags, Filters, Search, and Sorting are complete.
+- Validation: Implemented `SmartDateFilter` enum and updated `TaskFilter` to support relative dynamic date checking for "Today", "Tomorrow", "Upcoming", "Overdue", and "Completed Today" natively via Riverpod evaluation. Implemented `SmartListsDrawer` offering easy access to predefined views and integrated it into `HomeScreen`. Analyzed, tested, and built.
+- Overall Progress: Phase 4 organization is fully complete. Tags, Filters, Search, Sorting, Bulk Actions, and Smart Lists are done.
 
 ## Completed
 
@@ -82,7 +82,8 @@
 - [x] M4.2 Filters
 - [x] M4.3 Search
 - [x] M4.4 Sorting
-- [x] M4.5 Organization (Smart Lists, Bulk Actions)
+- [x] M4.5 Bulk Selection & Bulk Actions
+- [x] M4.6 Smart Lists
 - [ ] M5: Time Management (M5.1 Calendar, M5.2 Due Dates, M5.3 Reminders, M5.4 Repeat Rules, M5.5 WorkManager, M5.6 Validation)
 - [ ] M6: Notes & Rich Content (M6.1 Rich Notes, M6.2 Flutter Quill, M6.3 Attachments, M6.4 Validation)
 - [ ] M7: Statistics (M7.1 Dashboard, M7.2 Productivity, M7.3 Charts, M7.4 Insights)
@@ -93,7 +94,7 @@
 
 ## Next Milestone
 
-- Milestone: Performance Optimization Pass / M4.5 — Smart Lists
+- Milestone: Performance Optimization Pass / M5.1 — Calendar
 
 ## Development Order
 
