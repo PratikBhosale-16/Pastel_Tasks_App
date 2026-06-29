@@ -511,7 +511,7 @@ class TaskCard extends ConsumerWidget {
       case Priority.low:
         return Colors.green;
       case Priority.critical:
-        return Colors.redAccent.shade700;
+        return const Color(0xFFB71C1C); // Deep Red
       default:
         return colorScheme.onSurfaceVariant.withValues(alpha: 0.3);
     }

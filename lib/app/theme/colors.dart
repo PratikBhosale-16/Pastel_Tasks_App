@@ -36,4 +36,20 @@ abstract final class AppColors {
 
   /// Dark theme surface.
   static const Color surfaceDark = Color(0xFF1E1E1E);
+
+  /// Extended pastel palette for tasks and tags.
+  static const List<Color> taskColors = [
+    Color(0xFFB8A8FF), // Lavender
+    Color(0xFFA8E6CF), // Mint
+    Color(0xFF81D4FA), // Sky Blue
+    Color(0xFFFFD3B6), // Peach
+    Color(0xFFFFF59D), // Yellow
+    Color(0xFFF48FB1), // Rose
+    Color(0xFF80CBC4), // Teal
+    Color(0xFFCE93D8), // Purple
+    Color(0xFFFFAB91), // Coral
+    Color(0xFFFFF9C4), // Cream
+    Color(0xFFC5E1A5), // Olive
+    Color(0xFFE0E0E0), // Grey
+  ];
 }

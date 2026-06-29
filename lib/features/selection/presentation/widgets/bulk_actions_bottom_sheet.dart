@@ -8,6 +8,9 @@ import 'package:pastel_tasks/features/tasks/domain/models/task.dart';
 import 'package:pastel_tasks/features/tasks/presentation/providers/task_notifier.dart';
 import 'package:pastel_tasks/shared/widgets/dialogs/confirmation_dialog.dart';
 import 'package:pastel_tasks/shared/widgets/chips/selection_chip.dart';
+import 'package:pastel_tasks/features/tags/presentation/providers/tag_notifier.dart';
+import 'package:pastel_tasks/features/tags/presentation/widgets/tag_form_bottom_sheet.dart';
+import 'package:pastel_tasks/app/theme/colors.dart';
 
 class BulkActionsBottomSheet extends ConsumerWidget {
   const BulkActionsBottomSheet({
@@ -213,29 +216,50 @@ class BulkActionsBottomSheet extends ConsumerWidget {
   }
 
   Future<void> _bulkChangeTag(BuildContext context, WidgetRef ref) async {
-    final mockTags = ['Work', 'Personal', 'Health', 'Errands'];
-
     final result = await showDialog<String>(
       context: context,
       builder: (context) {
         return AlertDialog(
           title: const Text('Assign Tag'),
-          content: Wrap(
-            spacing: 8,
-            children: [
-              SelectionChip(
-                label: 'Clear Tag',
-                isSelected: false,
-                onSelected: (_) => Navigator.of(context).pop(''),
-              ),
-              ...mockTags.map((t) {
-                return SelectionChip(
-                  label: t,
-                  isSelected: false,
-                  onSelected: (_) => Navigator.of(context).pop(t),
-                );
-              }),
-            ],
+          content: Consumer(
+            builder: (context, ref, _) {
+              final tagsAsync = ref.watch(tagNotifierProvider);
+              return SingleChildScrollView(
+                child: Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    SelectionChip(
+                      label: 'Clear Tag',
+                      isSelected: false,
+                      onSelected: (_) => Navigator.of(context).pop(''),
+                    ),
+                    SelectionChip(
+                      label: '+ New Tag',
+                      isSelected: false,
+                      onSelected: (_) async {
+                        final newTag = await TagFormBottomSheet.show(context);
+                        if (newTag != null && context.mounted) {
+                          await ref.read(tagNotifierProvider.notifier).create(newTag);
+                          // The provider will update and rebuild the Consumer.
+                        }
+                      },
+                    ),
+                    ...tagsAsync.when(
+                      data: (tags) => tags.map((t) {
+                        return SelectionChip(
+                          label: t.name,
+                          isSelected: false,
+                          onSelected: (_) => Navigator.of(context).pop(t.name),
+                        );
+                      }),
+                      loading: () => [const SizedBox.shrink()],
+                      error: (_, __) => [const SizedBox.shrink()],
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
         );
       },
@@ -254,13 +278,7 @@ class BulkActionsBottomSheet extends ConsumerWidget {
   }
 
   Future<void> _bulkChangeColor(BuildContext context, WidgetRef ref) async {
-    final presetColors = [
-      const Color(0xFFB8A8FF), // Pastel Lavender
-      const Color(0xFFA8E6CF), // Pastel Mint
-      const Color(0xFFFFD3B6), // Pastel Peach
-      const Color(0xFFFFE082), // Warning
-      const Color(0xFFEF9A9A), // Error
-    ];
+    final presetColors = AppColors.taskColors;
 
     final result = await showDialog<String>(
       context: context,

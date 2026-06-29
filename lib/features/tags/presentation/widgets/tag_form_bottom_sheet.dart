@@ -110,10 +110,11 @@ class _TagFormBottomSheetState extends State<TagFormBottomSheet> {
       curve: Curves.easeOutCubic,
       child: Form(
         key: _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
             Text(
               widget.existingTag == null ? 'New Tag' : 'Edit Tag',
               style: theme.textTheme.headlineSmall?.copyWith(
@@ -216,6 +217,7 @@ class _TagFormBottomSheetState extends State<TagFormBottomSheet> {
           ],
         ),
       ),
-    );
+    ),
+  );
   }
 }

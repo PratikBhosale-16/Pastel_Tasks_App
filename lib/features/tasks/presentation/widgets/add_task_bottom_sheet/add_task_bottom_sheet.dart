@@ -8,6 +8,11 @@ import 'package:pastel_tasks/features/tasks/domain/models/task.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/priority.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/repeat_rule.dart';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pastel_tasks/features/tags/presentation/providers/tag_notifier.dart';
+import 'package:pastel_tasks/features/tags/presentation/widgets/tag_form_bottom_sheet.dart';
+import 'package:pastel_tasks/app/theme/colors.dart';
+
 /// Data class representing the result from the add task bottom sheet.
 class AddTaskFormData {
   const AddTaskFormData({
@@ -41,7 +46,7 @@ class AddTaskFormData {
 
 /// A bottom sheet for adding or editing a task.
 /// Returns an [AddTaskFormData] if the user successfully creates/edits a task.
-class AddTaskBottomSheet extends StatefulWidget {
+class AddTaskBottomSheet extends ConsumerStatefulWidget {
   const AddTaskBottomSheet({super.key, this.existingTask});
   
   final Task? existingTask;
@@ -60,10 +65,10 @@ class AddTaskBottomSheet extends StatefulWidget {
   }
 
   @override
-  State<AddTaskBottomSheet> createState() => _AddTaskBottomSheetState();
+  ConsumerState<AddTaskBottomSheet> createState() => _AddTaskBottomSheetState();
 }
 
-class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
+class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
@@ -76,16 +81,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   Color? _selectedColor;
   bool _isPinned = false;
 
-  final List<String> _priorities = ['Low', 'Medium', 'High'];
+  final List<String> _priorities = ['Low', 'Medium', 'High', 'Critical'];
   final List<String> _repeatRules = ['None', 'Daily', 'Weekly', 'Monthly'];
-  final List<String> _mockTags = ['Work', 'Personal', 'Health', 'Errands'];
-  final List<Color> _presetColors = [
-    const Color(0xFFB8A8FF), // Pastel Lavender
-    const Color(0xFFA8E6CF), // Pastel Mint
-    const Color(0xFFFFD3B6), // Pastel Peach
-    const Color(0xFFFFE082), // Warning
-    const Color(0xFFEF9A9A), // Error
-  ];
+  final List<Color> _presetColors = AppColors.taskColors;
 
   @override
   void initState() {
@@ -389,17 +387,44 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                     // Tags
                     Text('Tags', style: Theme.of(context).textTheme.titleSmall),
                     const SizedBox(height: 8),
-                    Wrap(
-                      spacing: 8,
-                      children: _mockTags.map((t) {
-                        return SelectionChip(
-                          label: t,
-                          isSelected: _tag == t,
-                          onSelected: (selected) {
-                            setState(() => _tag = selected ? t : null);
-                          },
-                        );
-                      }).toList(),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          SelectionChip(
+                            label: '+ New Tag',
+                            isSelected: false,
+                            onSelected: (_) async {
+                              final newTag = await TagFormBottomSheet.show(context);
+                              if (newTag != null && mounted) {
+                                await ref.read(tagNotifierProvider.notifier).create(newTag);
+                                setState(() {
+                                  _tag = newTag.name;
+                                });
+                              }
+                            },
+                          ),
+                          const SizedBox(width: 8),
+                          ...ref.watch(tagNotifierProvider).when(
+                            data: (tags) {
+                              return tags.map((t) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: SelectionChip(
+                                    label: t.name,
+                                    isSelected: _tag == t.name,
+                                    onSelected: (selected) {
+                                      setState(() => _tag = selected ? t.name : null);
+                                    },
+                                  ),
+                                );
+                              });
+                            },
+                            loading: () => [const SizedBox.shrink()],
+                            error: (_, __) => [const SizedBox.shrink()],
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 24),
                     
