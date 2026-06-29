@@ -6,7 +6,7 @@
 - Name: Calendar Foundation
 - Status: Planned
 - Validation: N/A
-- Overall Progress: Phase 4 organization is fully completed and validated. Moving to Phase 5.
+- Overall Progress: Phase 4 organization (including post-validation UX polish) is fully completed and validated. Moving to Phase 5.
 
 ## Completed
 

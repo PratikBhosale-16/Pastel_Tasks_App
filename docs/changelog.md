@@ -4,6 +4,14 @@
 
 ### Completed
 
+- M4.6 Post-Validation Bug Fixes & UX Polish:
+  - Fixed `TagFormBottomSheet` Bottom Overflow by implementing a scrollable view for keyboard awareness.
+  - Replaced static tag selections in `AddTaskBottomSheet` and `BulkActionsBottomSheet` with a dynamic horizontal scrolling tag selector driven by `tagNotifierProvider`.
+  - Added "+ New Tag" inline functionality to the dynamic tag selectors.
+  - Added "Critical" priority option, utilizing a deep red color indicator.
+  - Expanded task color palette to 12 Material 3 compatible pastel shades.
+  - Ensured selected task color accurately persists and pre-fills in the Create/Edit UI.
+  - Ensured dynamically created tags are instantly available to Smart Lists, Filters, Search, and Task Editor logic.
 - M4.4: Implemented Smart Sorting. Created persistent sorting preferences via `SortPreferences` (saving to `shared_preferences`). Integrated `sortedTasksProvider` with the search/filter task chain. Sorted tasks can be ascending/descending by date, priority, or alphabetically. Maintained positional stability for identical sort keys. Disabled drag-and-drop manual ordering when sorting by non-manual options. Added `SortBottomSheet` for UI control.
 - M4.3: Implemented Intelligent Task Search. Built `TaskSearchBar`, `HighlightText`, and integrated Riverpod `searchedTasksProvider`. Search runs locally across titles and descriptions and works seamlessly on top of applied filters.
 - M4.2: Implemented Advanced Task Filtering. Added robust `TaskFilter` options including tag matching, status filtering, and priority filtering. Built `FilterBottomSheet` and `ActiveFiltersRow` to seamlessly toggle and visualize state. Integrated with Isar local queries via Riverpod.
