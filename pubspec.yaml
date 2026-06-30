@@ -35,6 +35,7 @@ dependencies:
   riverpod_annotation: any
   share_plus: any
   shared_preferences: any
+  timezone: ^0.11.1
   url_launcher: any
   uuid: any
   workmanager: any

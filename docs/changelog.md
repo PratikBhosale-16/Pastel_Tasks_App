@@ -45,6 +45,16 @@
 
 ## [Unreleased]
 ### Added
+- **M5.2 Smart Notifications & Reminder System**:
+  - Implemented robust background and foreground notification service using `flutter_local_notifications`.
+  - Added Android channel configurations with exact alarm and boot completed permissions.
+  - Implemented WorkManager integration (`workmanager`) for periodic background data sync.
+  - Built comprehensive Notification Settings UI allowing customization of sound, vibration, heads-up, content preview, and quiet hours.
+  - Built Notification History UI showing a chronological list of snoozed, completed, and missed notifications.
+  - Enabled "Complete" and "Snooze" rich actions for notifications directly from the device tray.
+  - Enhanced `TaskNotifier` to seamlessly duplicate and auto-schedule repeating tasks (Daily, Weekly, Monthly, Yearly) upon completion without overwriting task history.
+  - Configured persistent local storage for notification settings using `shared_preferences`.
+  - Configured persistent history for notifications using Isar database collections (`NotificationHistoryCollection`).
 - **M5.1 Premium Calendar Screen**:
   - Implemented a completely redesigned Calendar screen using a modern premium aesthetic inspired by Stitch but rooted in the Pastel Tasks design language.
   - Built custom `MonthCalendar` with smooth gesture swiping between months and custom dot indicators for task density.

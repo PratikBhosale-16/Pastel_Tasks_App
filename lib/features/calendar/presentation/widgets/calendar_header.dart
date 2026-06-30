@@ -20,11 +20,47 @@ class CalendarHeader extends ConsumerWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            monthFormat.format(viewingMonth),
-            style: theme.textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: theme.colorScheme.onSurface,
+          GestureDetector(
+            onTap: () async {
+              final selectedDate = await showDialog<DateTime>(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('Select Year'),
+                    content: SizedBox(
+                      width: 300,
+                      height: 300,
+                      child: YearPicker(
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                        initialDate: viewingMonth,
+                        selectedDate: viewingMonth,
+                        onChanged: (DateTime dateTime) {
+                          Navigator.pop(context, dateTime);
+                        },
+                      ),
+                    ),
+                  );
+                },
+              );
+              if (selectedDate != null) {
+                ref.read(viewingMonthProvider.notifier).update((state) => 
+                  DateTime(selectedDate.year, state.month, 1));
+              }
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  monthFormat.format(viewingMonth),
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurface,
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Icon(Icons.arrow_drop_down, color: theme.colorScheme.onSurfaceVariant),
+              ],
             ),
           ),
           Row(

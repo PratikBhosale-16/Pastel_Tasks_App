@@ -6,6 +6,7 @@ import 'package:pastel_tasks/app/app.dart';
 import 'package:pastel_tasks/core/logging/app_logger.dart';
 import 'package:pastel_tasks/infrastructure/database/isar/database_service.dart';
 import 'package:pastel_tasks/core/services/notification_service.dart';
+import 'package:pastel_tasks/core/services/workmanager_service.dart';
 
 /// Starts the PastelTasks application shell.
 Future<void> bootstrap() async {
@@ -23,6 +24,7 @@ Future<void> bootstrap() async {
       }
       
       await NotificationService.instance.initialize();
+      await WorkManagerService.instance.initialize();
 
       runApp(
         const ProviderScope(

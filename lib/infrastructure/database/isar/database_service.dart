@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pastel_tasks/infrastructure/database/isar/collections/reminder_collection.dart';
 import 'package:pastel_tasks/infrastructure/database/isar/collections/tag_collection.dart';
 import 'package:pastel_tasks/infrastructure/database/isar/collections/task_collection.dart';
+import 'package:pastel_tasks/infrastructure/database/isar/collections/notification_history_collection.dart';
 import 'package:pastel_tasks/infrastructure/database/isar/migrations/database_migration.dart';
 
 /// Service managing the Isar database instance and transactions.
@@ -45,6 +46,7 @@ class DatabaseService {
           TaskCollectionSchema,
           TagCollectionSchema,
           ReminderCollectionSchema,
+          NotificationHistoryCollectionSchema,
         ],
         directory: dirPath,
       );

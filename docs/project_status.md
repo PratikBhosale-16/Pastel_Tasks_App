@@ -3,10 +3,10 @@
 ## Current Milestone
 
 - Milestone: M5.2
-- Name: Due Dates
-- Status: Planned
-- Validation: N/A
-- Overall Progress: Phase 5 (Time Management) started. M5.1 Calendar Foundation is completed.
+- Name: Smart Notifications & Reminder System
+- Status: Completed
+- Validation: Validated with flutter analyze
+- Overall Progress: Phase 5 (Time Management) in progress. M5.2 is completed.
 
 ## Completed
 
@@ -86,8 +86,9 @@
 - [x] M4.6 Smart Lists
 - [x] M4.7 Organization Validation & Freeze
 - [x] M5.1 Calendar Foundation
-- [ ] M5: Time Management (M5.2 Due Dates, M5.3 Reminders, M5.4 Repeat Rules, M5.5 WorkManager, M5.6 Validation)
-- [ ] M6: Notes & Rich Content (M6.1 Rich Notes, M6.2 Flutter Quill, M6.3 Attachments, M6.4 Validation)
+- [x] M5.2 Smart Notifications & Reminder System
+- [ ] M5.3 Notes & Rich Content (Moved forward)
+- [ ] M6: Statistics (M7.1 Dashboard, M7.2 Productivity, M7.3 Charts, M7.4 Insights)
 - [ ] M7: Statistics (M7.1 Dashboard, M7.2 Productivity, M7.3 Charts, M7.4 Insights)
 - [ ] M8: Backup (M8.1 Google Sign In, M8.2 Drive Backup, M8.3 Restore, M8.4 Export, M8.5 Import)
 - [ ] M9: Settings (Theme, Language, Notifications, Backup Settings, About)
@@ -96,7 +97,7 @@
 
 ## Next Milestone
 
-- Milestone: M5.2 — Due Dates
+- Milestone: M5.3 / M6 — Notes & Rich Content
 
 ## Development Order
 

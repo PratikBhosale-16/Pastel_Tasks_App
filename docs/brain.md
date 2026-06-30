@@ -34,9 +34,9 @@
 - Minimum Android API: Android 12, API 31.
 
 ## Current Milestone
-**M5.1 Premium Calendar Screen**
-- Next milestone: M5.2 Due Dates
-- Focus: Implemented a completely redesigned Calendar screen using a modern premium aesthetic inspired by Stitch but rooted in the Pastel Tasks design language. Integrated dynamic task projections for repeat rules on the monthly grid, animated header transitions, and an interactive daily agenda synchronized with selected dates. Ensure strict use of Material 3 `Theme.of(context)` to maintain theme stability.
+**M5.2 Smart Notifications & Reminder System**
+- Next milestone: M5.3 / M6 Notes & Rich Content
+- Focus: Implemented a robust local notification system using `flutter_local_notifications` and `workmanager`. Included Notification Settings, Notification History, repeating task handling (auto-generating the next occurrence upon completion), Android Notification Channels, exact alarm permissions, and boot completed receiver. Settings are persisted with Isar and SharedPreferences.
 
 # Completed
 

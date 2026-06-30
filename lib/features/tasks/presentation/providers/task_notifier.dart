@@ -3,6 +3,10 @@ import 'package:pastel_tasks/core/errors/failure.dart';
 import 'package:pastel_tasks/features/tasks/domain/models/task.dart';
 import 'package:pastel_tasks/features/tasks/presentation/providers/repository_providers.dart';
 import 'package:pastel_tasks/features/tasks/presentation/providers/task_providers.dart';
+import 'package:pastel_tasks/features/tasks/domain/enums/task_status.dart';
+import 'package:pastel_tasks/features/tasks/domain/enums/repeat_rule.dart';
+import 'package:pastel_tasks/core/result/result.dart';
+import 'package:uuid/uuid.dart';
 
 /// Notifier handling task state mutations.
 class TaskNotifier extends AsyncNotifier<void> {
@@ -25,6 +29,28 @@ class TaskNotifier extends AsyncNotifier<void> {
   Future<void> updateTask(Task task) async {
     state = const AsyncLoading();
     final repo = ref.read(taskRepositoryProvider);
+
+    if (task.status == TaskStatus.completed && task.repeatRule != RepeatRule.none) {
+      final oldTaskResult = await repo.getById(task.id);
+      if (oldTaskResult is Success<Task?> && oldTaskResult.value != null) {
+        final oldTask = oldTaskResult.value!;
+        if (oldTask.status != TaskStatus.completed) {
+          final nextDueDate = _calculateNextDueDate(task.dueDate ?? DateTime.now(), task.repeatRule);
+          
+          final nextTask = task.copyWith(
+            id: const Uuid().v4(),
+            status: TaskStatus.pending,
+            dueDate: nextDueDate,
+            completedAt: null,
+            clearCompletedAt: true,
+            createdAt: DateTime.now().toUtc(),
+            updatedAt: DateTime.now().toUtc(),
+          );
+          await repo.create(nextTask);
+        }
+      }
+    }
+
     final result = await repo.update(task);
     if (result is Failure) {
       state = AsyncError((result as Failure).exception, StackTrace.current);
@@ -157,6 +183,20 @@ class TaskNotifier extends AsyncNotifier<void> {
       state = const AsyncData(null);
     } catch (e, st) {
       state = AsyncError(e, st);
+    }
+  }
+  DateTime? _calculateNextDueDate(DateTime baseDate, RepeatRule rule) {
+    switch (rule) {
+      case RepeatRule.daily:
+        return baseDate.add(const Duration(days: 1));
+      case RepeatRule.weekly:
+        return baseDate.add(const Duration(days: 7));
+      case RepeatRule.monthly:
+        return DateTime(baseDate.year, baseDate.month + 1, baseDate.day, baseDate.hour, baseDate.minute);
+      case RepeatRule.yearly:
+        return DateTime(baseDate.year + 1, baseDate.month, baseDate.day, baseDate.hour, baseDate.minute);
+      case RepeatRule.none:
+        return null;
     }
   }
 }

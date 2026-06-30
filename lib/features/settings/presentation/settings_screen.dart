@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pastel_tasks/features/settings/presentation/providers/settings_providers.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -44,6 +46,39 @@ class SettingsScreen extends ConsumerWidget {
               onTap: () {
                 _showAccentColorPicker(context, ref, accent);
               },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+            child: Text(
+              'Notifications',
+              style: theme.textTheme.titleSmall?.copyWith(
+                color: theme.colorScheme.primary,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Card(
+            child: Column(
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.notifications),
+                  title: const Text('Notification Settings'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    context.go('/settings/notification_settings');
+                  },
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.history),
+                  title: const Text('Notification History'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    context.go('/settings/notification_history');
+                  },
+                ),
+              ],
             ),
           ),
         ],

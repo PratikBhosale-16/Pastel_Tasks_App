@@ -3,12 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pastel_tasks/core/providers/core_providers.dart';
 
 enum CalendarAccent {
-  purple('Purple', Colors.purple),
-  blue('Blue', Colors.blue),
-  green('Green', Colors.green),
-  pink('Pink', Colors.pink),
+  lavender('Lavender', Colors.deepPurple),
+  skyBlue('Sky Blue', Colors.lightBlue),
+  mint('Mint', Colors.teal),
   orange('Orange', Colors.orange),
-  teal('Teal', Colors.teal);
+  pink('Pink', Colors.pink),
+  indigo('Indigo', Colors.indigo),
+  emerald('Emerald', Colors.green);
 
   final String label;
   final MaterialColor color;
@@ -17,7 +18,7 @@ enum CalendarAccent {
 }
 
 class CalendarAccentNotifier extends StateNotifier<CalendarAccent> {
-  CalendarAccentNotifier(this.ref) : super(CalendarAccent.purple) {
+  CalendarAccentNotifier(this.ref) : super(CalendarAccent.lavender) {
     _loadPreference();
   }
 

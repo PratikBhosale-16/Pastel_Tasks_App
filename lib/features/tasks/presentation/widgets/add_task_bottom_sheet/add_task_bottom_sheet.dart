@@ -52,11 +52,12 @@ class AddTaskBottomSheet extends ConsumerStatefulWidget {
   final Task? existingTask;
 
   /// Displays the bottom sheet and returns the captured form data.
-  static Future<AddTaskFormData?> show(BuildContext context, {Task? existingTask}) {
+  static Future<AddTaskFormData?> show(BuildContext context, {Task? existingTask, bool useRootNavigator = false}) {
     return showModalBottomSheet<AddTaskFormData>(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
+      useRootNavigator: useRootNavigator,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
@@ -288,10 +289,15 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
         ),
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeOutCubic,
-        child: SafeArea(
-              child: Form(
-                key: _formKey,
-                child: ListView(
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+          ),
+          child: SafeArea(
+            child: Form(
+              key: _formKey,
+              child: ListView(
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                   children: [
                     // Handle
@@ -567,7 +573,8 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
                 ),
               ),
             ),
-      ),
+          ),
+        ),
     );
   }
 }

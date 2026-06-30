@@ -6,6 +6,8 @@ import 'package:pastel_tasks/features/tasks/presentation/archive_screen.dart';
 import 'package:pastel_tasks/features/tags/presentation/tags_screen.dart';
 import 'package:pastel_tasks/features/calendar/presentation/calendar_screen.dart';
 import 'package:pastel_tasks/features/settings/presentation/settings_screen.dart';
+import 'package:pastel_tasks/features/settings/presentation/notification_settings_screen.dart';
+import 'package:pastel_tasks/features/settings/presentation/notification_history_screen.dart';
 import 'package:pastel_tasks/features/stats/presentation/stats_screen.dart';
 import 'package:pastel_tasks/shared/layout/app_shell_scaffold.dart';
 /// Application router used by the app shell.
@@ -63,6 +65,16 @@ final appRouter = GoRouter(
               name: RouteNames.settings,
               path: RouteNames.settingsPath,
               builder: (context, state) => const SettingsScreen(),
+              routes: [
+                GoRoute(
+                  path: 'notification_settings',
+                  builder: (context, state) => const NotificationSettingsScreen(),
+                ),
+                GoRoute(
+                  path: 'notification_history',
+                  builder: (context, state) => const NotificationHistoryScreen(),
+                ),
+              ],
             ),
           ],
         ),
