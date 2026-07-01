@@ -31,7 +31,7 @@ final class NotificationService {
     );
 
     await _flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
+      settings: initializationSettings,
       onDidReceiveNotificationResponse: (NotificationResponse notificationResponse) {
         appLogger.info('Foreground notification action received: ${notificationResponse.actionId}');
       },
@@ -60,11 +60,11 @@ final class NotificationService {
     final tz.TZDateTime tzScheduledDate = tz.TZDateTime.from(scheduledDate, tz.local);
     
     await _flutterLocalNotificationsPlugin.zonedSchedule(
-      id,
-      title,
-      body,
-      tzScheduledDate,
-      const NotificationDetails(
+      id: id,
+      title: title,
+      body: body,
+      scheduledDate: tzScheduledDate,
+      notificationDetails: const NotificationDetails(
         android: AndroidNotificationDetails(
           'pastel_tasks_reminders',
           'Reminders',
@@ -87,14 +87,13 @@ final class NotificationService {
         ),
       ),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
       payload: payload,
     );
     appLogger.info('Scheduled notification $id for $tzScheduledDate');
   }
 
   Future<void> cancelNotification(int id) async {
-    await _flutterLocalNotificationsPlugin.cancel(id);
+    await _flutterLocalNotificationsPlugin.cancel(id: id);
     appLogger.info('Cancelled notification $id');
   }
 

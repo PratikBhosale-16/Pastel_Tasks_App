@@ -28,7 +28,7 @@ class WorkManagerService {
       'pastel_tasks_periodic_sync_task',
       frequency: const Duration(hours: 4),
       constraints: Constraints(
-        networkType: NetworkType.not_required,
+        networkType: NetworkType.notRequired,
         requiresBatteryNotLow: true,
       ),
     );

@@ -4,8 +4,7 @@ import 'package:pastel_tasks/infrastructure/database/isar/collections/notificati
 import 'package:pastel_tasks/infrastructure/database/isar/database_service.dart';
 
 final notificationHistoryProvider = FutureProvider<List<NotificationHistoryCollection>>((ref) async {
-  final isar = DatabaseService.instance.isar;
-  if (isar == null) throw Exception('Isar not initialized');
+  final isar = DatabaseService.instance.instanceOrThrow;
 
   return isar.notificationHistoryCollections
       .where()

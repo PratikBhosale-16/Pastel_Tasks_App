@@ -6,6 +6,7 @@ import 'package:pastel_tasks/features/tasks/presentation/providers/task_provider
 import 'package:pastel_tasks/features/tasks/domain/enums/task_status.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/repeat_rule.dart';
 import 'package:pastel_tasks/core/result/result.dart';
+import 'package:pastel_tasks/core/services/notification_service.dart';
 import 'package:uuid/uuid.dart';
 
 /// Notifier handling task state mutations.
@@ -21,6 +22,7 @@ class TaskNotifier extends AsyncNotifier<void> {
     if (result is Failure) {
       state = AsyncError((result as Failure).exception, StackTrace.current);
     } else {
+      await _syncTaskNotification(task);
       state = const AsyncData(null);
     }
   }
@@ -55,6 +57,7 @@ class TaskNotifier extends AsyncNotifier<void> {
     if (result is Failure) {
       state = AsyncError((result as Failure).exception, StackTrace.current);
     } else {
+      await _syncTaskNotification(task);
       state = const AsyncData(null);
     }
   }
@@ -67,6 +70,7 @@ class TaskNotifier extends AsyncNotifier<void> {
     if (result is Failure) {
       state = AsyncError((result as Failure).exception, StackTrace.current);
     } else {
+      await _cancelTaskNotification(id);
       state = const AsyncData(null);
     }
   }
@@ -79,6 +83,7 @@ class TaskNotifier extends AsyncNotifier<void> {
     if (result is Failure) {
       state = AsyncError((result as Failure).exception, StackTrace.current);
     } else {
+      await _cancelTaskNotification(id);
       state = const AsyncData(null);
     }
   }
@@ -139,6 +144,9 @@ class TaskNotifier extends AsyncNotifier<void> {
     if (result is Failure) {
       state = AsyncError((result as Failure).exception, StackTrace.current);
     } else {
+      for (final task in tasks) {
+        await _syncTaskNotification(task);
+      }
       state = const AsyncData(null);
     }
   }
@@ -151,6 +159,9 @@ class TaskNotifier extends AsyncNotifier<void> {
     if (result is Failure) {
       state = AsyncError((result as Failure).exception, StackTrace.current);
     } else {
+      for (final id in ids) {
+        await _cancelTaskNotification(id);
+      }
       state = const AsyncData(null);
     }
   }
@@ -178,6 +189,9 @@ class TaskNotifier extends AsyncNotifier<void> {
           state = AsyncError((result as Failure).exception, StackTrace.current);
           return;
         }
+        for (final task in updatedTasks) {
+          await _syncTaskNotification(task);
+        }
       }
       
       state = const AsyncData(null);
@@ -198,6 +212,29 @@ class TaskNotifier extends AsyncNotifier<void> {
       case RepeatRule.none:
         return null;
     }
+  }
+
+  Future<void> _syncTaskNotification(Task task) async {
+    final notificationId = task.id.hashCode;
+    
+    // Always cancel existing before re-scheduling or to clean up
+    await NotificationService.instance.cancelNotification(notificationId);
+    
+    if (task.status == TaskStatus.pending && task.reminder != null && task.reminder!.enabled) {
+      if (task.reminder!.triggerTime.isAfter(DateTime.now())) {
+        await NotificationService.instance.scheduleNotification(
+          id: notificationId,
+          title: task.title,
+          body: task.description.isNotEmpty ? task.description : 'You have a reminder for this task.',
+          scheduledDate: task.reminder!.triggerTime,
+          payload: task.id,
+        );
+      }
+    }
+  }
+
+  Future<void> _cancelTaskNotification(String taskId) async {
+    await NotificationService.instance.cancelNotification(taskId.hashCode);
   }
 }
 

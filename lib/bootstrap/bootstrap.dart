@@ -10,11 +10,11 @@ import 'package:pastel_tasks/core/services/workmanager_service.dart';
 
 /// Starts the PastelTasks application shell.
 Future<void> bootstrap() async {
-  WidgetsFlutterBinding.ensureInitialized();
   final logger = AppLogger.instance;
 
   await runZonedGuarded<Future<void>>(
     () async {
+      WidgetsFlutterBinding.ensureInitialized();
       logger.initialize();
       
       try {
@@ -24,6 +24,7 @@ Future<void> bootstrap() async {
       }
       
       await NotificationService.instance.initialize();
+      await NotificationService.instance.requestPermissions();
       await WorkManagerService.instance.initialize();
 
       runApp(
