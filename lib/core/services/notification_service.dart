@@ -5,11 +5,51 @@ import 'package:pastel_tasks/core/logging/app_logger.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pastel_tasks/infrastructure/database/isar/database_service.dart';
+import 'package:pastel_tasks/features/tasks/presentation/providers/task_notifier.dart';
+import 'package:pastel_tasks/features/tasks/presentation/providers/repository_providers.dart';
+import 'package:pastel_tasks/features/tasks/domain/enums/task_status.dart';
+import 'package:pastel_tasks/core/result/result.dart';
+import 'package:pastel_tasks/features/tasks/domain/models/task.dart';
+
 /// Background entry point for notification actions
 @pragma('vm:entry-point')
-void notificationTapBackground(NotificationResponse notificationResponse) {
+void notificationTapBackground(NotificationResponse notificationResponse) async {
   appLogger.info('Background notification action received: ${notificationResponse.actionId}');
-  // We'll implement background handling for "Complete" and "Snooze" here
+  final taskId = notificationResponse.payload;
+  if (taskId == null || taskId.isEmpty) return;
+
+  await DatabaseService.instance.initialize();
+  final container = ProviderContainer();
+
+  final taskRepo = container.read(taskRepositoryProvider);
+  final taskResult = await taskRepo.getById(taskId);
+  
+  if (taskResult is Success<Task?> && taskResult.value != null) {
+    final task = taskResult.value!;
+
+    if (notificationResponse.actionId == 'action_complete') {
+      final updatedTask = task.copyWith(
+        status: TaskStatus.completed,
+        updatedAt: DateTime.now().toUtc(),
+        completedAt: DateTime.now().toUtc(),
+        clearCompletedAt: false,
+      );
+      await container.read(taskNotifierProvider.notifier).updateTask(updatedTask);
+    } else if (notificationResponse.actionId == 'action_snooze') {
+      if (task.reminder != null) {
+        final newTriggerTime = DateTime.now().add(const Duration(minutes: 15));
+        final updatedTask = task.copyWith(
+          reminder: task.reminder!.copyWith(
+            triggerTime: newTriggerTime,
+          ),
+          updatedAt: DateTime.now().toUtc(),
+        );
+        await container.read(taskNotifierProvider.notifier).updateTask(updatedTask);
+      }
+    }
+  }
 }
 
 /// Root notification service structure.
@@ -34,6 +74,7 @@ final class NotificationService {
       settings: initializationSettings,
       onDidReceiveNotificationResponse: (NotificationResponse notificationResponse) {
         appLogger.info('Foreground notification action received: ${notificationResponse.actionId}');
+        notificationTapBackground(notificationResponse);
       },
       onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
     );

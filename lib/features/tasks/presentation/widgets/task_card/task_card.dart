@@ -480,8 +480,15 @@ class TaskCard extends ConsumerWidget {
                                         : (isOverdue ? colorScheme.error : colorScheme.onSurfaceVariant),
                                     fontWeight: isOverdue ? FontWeight.bold : FontWeight.normal,
                                   ),
-                                )
-                              else if (task.reminder != null)
+                                ),
+                              if (task.dueDate != null && task.reminder != null)
+                                Text(
+                                  ', ',
+                                  style: theme.textTheme.labelMedium?.copyWith(
+                                    color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
+                                  ),
+                                ),
+                              if (task.reminder != null)
                                 Text(
                                   _formatReminderTime(task.reminder!.triggerTime),
                                   style: theme.textTheme.labelMedium?.copyWith(
