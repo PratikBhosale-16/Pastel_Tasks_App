@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pastel_tasks/app/theme/spacing.dart';
 import 'package:pastel_tasks/features/tasks/domain/models/task.dart';
+import 'package:pastel_tasks/features/tasks/domain/models/reminder.dart';
+import 'package:uuid/uuid.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/priority.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/repeat_rule.dart';
 import 'package:pastel_tasks/features/tasks/presentation/providers/task_notifier.dart';
@@ -151,12 +153,35 @@ class _ArchiveScreenState extends ConsumerState<ArchiveScreen> {
       }
     }
 
+    Reminder? generateReminder(String taskId) {
+      if (formData.reminder == null) return null;
+      final baseDate = formData.dueDate ?? DateTime.now();
+      var triggerTime = DateTime(
+        baseDate.year,
+        baseDate.month,
+        baseDate.day,
+        formData.reminder!.hour,
+        formData.reminder!.minute,
+      );
+      if (formData.dueDate == null && triggerTime.isBefore(DateTime.now())) {
+        triggerTime = triggerTime.add(const Duration(days: 1));
+      }
+      return Reminder(
+        id: task.reminder?.id ?? const Uuid().v4(),
+        taskId: taskId,
+        triggerTime: triggerTime,
+        repeatRule: parseRepeatRule(formData.repeatRule),
+        enabled: true,
+      );
+    }
+
     final updatedTask = task.copyWith(
       title: formData.title,
       description: formData.description,
       priority: parsePriority(formData.priority),
       tags: formData.tag != null ? [formData.tag!] : [],
       dueDate: formData.dueDate,
+      reminder: generateReminder(task.id),
       repeatRule: parseRepeatRule(formData.repeatRule),
       color: formData.color?.value.toRadixString(16) ?? '',
       isPinned: formData.isPinned,

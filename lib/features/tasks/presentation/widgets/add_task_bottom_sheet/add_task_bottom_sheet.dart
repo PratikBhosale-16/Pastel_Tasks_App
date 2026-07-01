@@ -96,6 +96,9 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
       _priority = _formatPriority(task.priority);
       _tagId = task.tags.isNotEmpty ? task.tags.first : null;
       _dueDate = task.dueDate;
+      if (task.reminder != null) {
+        _reminder = TimeOfDay.fromDateTime(task.reminder!.triggerTime);
+      }
       _repeatRule = _formatRepeatRule(task.repeatRule);
       if (task.color.isNotEmpty) {
         _selectedColor = Color(int.parse(task.color, radix: 16));

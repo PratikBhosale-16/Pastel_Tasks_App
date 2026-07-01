@@ -9,6 +9,7 @@ import 'package:pastel_tasks/features/tasks/domain/enums/priority.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/repeat_rule.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/task_status.dart';
 import 'package:pastel_tasks/features/tasks/domain/models/task.dart';
+import 'package:pastel_tasks/features/tasks/domain/models/reminder.dart';
 import 'package:pastel_tasks/features/tasks/presentation/providers/task_notifier.dart';
 import 'package:pastel_tasks/features/tasks/presentation/providers/task_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -74,8 +75,32 @@ class HomeScreen extends ConsumerWidget {
       }
     }
 
+    Reminder? generateReminder(String taskId) {
+      if (formData.reminder == null) return null;
+      final baseDate = formData.dueDate ?? DateTime.now();
+      var triggerTime = DateTime(
+        baseDate.year,
+        baseDate.month,
+        baseDate.day,
+        formData.reminder!.hour,
+        formData.reminder!.minute,
+      );
+      if (formData.dueDate == null && triggerTime.isBefore(DateTime.now())) {
+        triggerTime = triggerTime.add(const Duration(days: 1));
+      }
+      return Reminder(
+        id: const Uuid().v4(),
+        taskId: taskId,
+        triggerTime: triggerTime,
+        repeatRule: parseRepeatRule(formData.repeatRule),
+        enabled: true,
+      );
+    }
+
+    final taskId = const Uuid().v4();
+
     final task = Task(
-      id: const Uuid().v4(),
+      id: taskId,
       title: formData.title,
       description: formData.description,
       status: TaskStatus.pending,
@@ -85,7 +110,7 @@ class HomeScreen extends ConsumerWidget {
       updatedAt: now,
       dueDate: formData.dueDate,
       completedAt: null,
-      reminder: null,
+      reminder: generateReminder(taskId),
       repeatRule: parseRepeatRule(formData.repeatRule),
       position: now.millisecondsSinceEpoch.toDouble(),
       isPinned: formData.isPinned,

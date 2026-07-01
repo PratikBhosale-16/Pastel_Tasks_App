@@ -9,6 +9,8 @@ import 'package:pastel_tasks/features/tasks/domain/enums/priority.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/repeat_rule.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/task_status.dart';
 import 'package:pastel_tasks/features/tasks/domain/models/task.dart';
+import 'package:pastel_tasks/features/tasks/domain/models/reminder.dart';
+import 'package:uuid/uuid.dart';
 import 'package:pastel_tasks/features/tasks/presentation/providers/task_notifier.dart';
 import 'package:pastel_tasks/features/tasks/presentation/widgets/add_task_bottom_sheet/add_task_bottom_sheet.dart';
 import 'package:pastel_tasks/features/search/presentation/providers/search_providers.dart';
@@ -84,6 +86,28 @@ class TaskCard extends ConsumerWidget {
       }
     }
 
+    Reminder? generateReminder(String taskId) {
+      if (formData.reminder == null) return null;
+      final baseDate = formData.dueDate ?? DateTime.now();
+      var triggerTime = DateTime(
+        baseDate.year,
+        baseDate.month,
+        baseDate.day,
+        formData.reminder!.hour,
+        formData.reminder!.minute,
+      );
+      if (formData.dueDate == null && triggerTime.isBefore(DateTime.now())) {
+        triggerTime = triggerTime.add(const Duration(days: 1));
+      }
+      return Reminder(
+        id: task.reminder?.id ?? const Uuid().v4(),
+        taskId: taskId,
+        triggerTime: triggerTime,
+        repeatRule: parseRepeatRule(formData.repeatRule),
+        enabled: true,
+      );
+    }
+
     final updatedTask = task.copyWith(
       title: formData.title,
       description: formData.description,
@@ -91,6 +115,7 @@ class TaskCard extends ConsumerWidget {
       tags: formData.tag != null ? [formData.tag!] : [],
       updatedAt: DateTime.now().toUtc(),
       dueDate: formData.dueDate,
+      reminder: generateReminder(task.id),
       repeatRule: parseRepeatRule(formData.repeatRule),
       isPinned: formData.isPinned,
       color: formData.color?.value.toRadixString(16) ?? '',

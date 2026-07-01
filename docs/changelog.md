@@ -46,6 +46,7 @@
 ## [Unreleased]
 ### Added
 - **M5.2 Smart Notifications & Reminder System**:
+  - Fixed a critical UI bug where reminders created via the bottom sheet were ignored and not assigned to the Task object, preventing notifications from being scheduled.
   - Implemented robust background and foreground notification service using `flutter_local_notifications`.
   - Added Android channel configurations with exact alarm and boot completed permissions.
   - Implemented WorkManager integration (`workmanager`) for periodic background data sync.
