@@ -182,6 +182,7 @@ class _ArchiveScreenState extends ConsumerState<ArchiveScreen> {
       tags: formData.tag != null ? [formData.tag!] : [],
       dueDate: formData.dueDate,
       reminder: generateReminder(task.id),
+      clearReminder: formData.reminder == null,
       repeatRule: parseRepeatRule(formData.repeatRule),
       color: formData.color?.value.toRadixString(16) ?? '',
       isPinned: formData.isPinned,

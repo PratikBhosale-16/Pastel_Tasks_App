@@ -101,6 +101,7 @@ class Task extends Equatable {
     List<String>? attachments,
     String? notes,
     bool clearCompletedAt = false,
+    bool clearReminder = false,
   }) {
     return Task(
       id: id ?? this.id,
@@ -113,7 +114,7 @@ class Task extends Equatable {
       updatedAt: updatedAt ?? this.updatedAt,
       dueDate: dueDate ?? this.dueDate,
       completedAt: clearCompletedAt ? null : (completedAt ?? this.completedAt),
-      reminder: reminder ?? this.reminder,
+      reminder: clearReminder ? null : (reminder ?? this.reminder),
       repeatRule: repeatRule ?? this.repeatRule,
       position: position ?? this.position,
       isPinned: isPinned ?? this.isPinned,

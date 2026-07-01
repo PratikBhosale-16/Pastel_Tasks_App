@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pastel_tasks/core/errors/failure.dart';
 import 'package:pastel_tasks/features/tasks/domain/models/task.dart';
+import 'package:pastel_tasks/features/tasks/domain/models/reminder.dart';
 import 'package:pastel_tasks/features/tasks/presentation/providers/repository_providers.dart';
 import 'package:pastel_tasks/features/tasks/presentation/providers/task_providers.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/task_status.dart';
@@ -39,14 +40,27 @@ class TaskNotifier extends AsyncNotifier<void> {
         if (oldTask.status != TaskStatus.completed) {
           final nextDueDate = _calculateNextDueDate(task.dueDate ?? DateTime.now(), task.repeatRule);
           
+          final nextTaskId = const Uuid().v4();
+          Reminder? nextReminder;
+          if (task.reminder != null && nextDueDate != null) {
+             final diff = nextDueDate.difference(task.dueDate ?? DateTime.now());
+             nextReminder = task.reminder!.copyWith(
+                id: const Uuid().v4(),
+                taskId: nextTaskId,
+                triggerTime: task.reminder!.triggerTime.add(diff),
+             );
+          }
+
           final nextTask = task.copyWith(
-            id: const Uuid().v4(),
+            id: nextTaskId,
             status: TaskStatus.pending,
             dueDate: nextDueDate,
             completedAt: null,
             clearCompletedAt: true,
             createdAt: DateTime.now().toUtc(),
             updatedAt: DateTime.now().toUtc(),
+            reminder: nextReminder,
+            clearReminder: task.reminder == null,
           );
           await repo.create(nextTask);
         }

@@ -116,6 +116,7 @@ class TaskCard extends ConsumerWidget {
       updatedAt: DateTime.now().toUtc(),
       dueDate: formData.dueDate,
       reminder: generateReminder(task.id),
+      clearReminder: formData.reminder == null,
       repeatRule: parseRepeatRule(formData.repeatRule),
       isPinned: formData.isPinned,
       color: formData.color?.value.toRadixString(16) ?? '',

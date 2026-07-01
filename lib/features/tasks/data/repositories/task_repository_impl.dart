@@ -3,10 +3,12 @@ import 'package:pastel_tasks/core/errors/app_exception.dart';
 import 'package:pastel_tasks/core/errors/failure.dart';
 import 'package:pastel_tasks/core/result/result.dart';
 import 'package:pastel_tasks/features/tasks/data/mappers/task_mapper.dart';
+import 'package:pastel_tasks/features/tasks/data/mappers/reminder_mapper.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/task_status.dart';
 import 'package:pastel_tasks/features/tasks/domain/models/task.dart';
 import 'package:pastel_tasks/features/tasks/domain/repositories/task_repository.dart';
 import 'package:pastel_tasks/infrastructure/database/isar/collections/task_collection.dart';
+import 'package:pastel_tasks/infrastructure/database/isar/collections/reminder_collection.dart';
 import 'package:pastel_tasks/infrastructure/database/isar/database_service.dart';
 
 /// Isar implementation of [TaskRepository].
@@ -17,12 +19,24 @@ class TaskRepositoryImpl implements TaskRepository {
 
   final DatabaseService _dbService;
 
+  Future<Task> _mapTask(Isar isar, TaskCollection collection) async {
+    final reminderColl = await isar.reminderCollections.filter().taskIdEqualTo(collection.uuid).findFirst();
+    final task = collection.toDomain();
+    if (reminderColl != null) {
+      return task.copyWith(reminder: reminderColl.toDomain());
+    }
+    return task;
+  }
+
   @override
   Future<Result<Task>> create(Task task) async {
     try {
       final collection = task.toIsar();
       await _dbService.write((isar) async {
         await isar.taskCollections.put(collection);
+        if (task.reminder != null) {
+          await isar.reminderCollections.put(task.reminder!.toIsar());
+        }
       });
       return Success(task);
     } catch (e) {
@@ -39,6 +53,17 @@ class TaskRepositoryImpl implements TaskRepository {
 
         final updated = task.toIsar()..id = existing.id;
         await isar.taskCollections.put(updated);
+
+        final existingReminder = await isar.reminderCollections.filter().taskIdEqualTo(task.id).findFirst();
+        if (task.reminder != null) {
+          final updatedRem = task.reminder!.toIsar();
+          if (existingReminder != null) {
+            updatedRem.id = existingReminder.id;
+          }
+          await isar.reminderCollections.put(updatedRem);
+        } else if (existingReminder != null) {
+          await isar.reminderCollections.delete(existingReminder.id);
+        }
       });
       return Success(task);
     } catch (e) {
@@ -53,6 +78,10 @@ class TaskRepositoryImpl implements TaskRepository {
         final existing = await isar.taskCollections.filter().uuidEqualTo(id).findFirst();
         if (existing != null) {
           await isar.taskCollections.delete(existing.id);
+          final existingReminder = await isar.reminderCollections.filter().taskIdEqualTo(id).findFirst();
+          if (existingReminder != null) {
+            await isar.reminderCollections.delete(existingReminder.id);
+          }
         }
       });
       return const Success(null);
@@ -63,7 +92,6 @@ class TaskRepositoryImpl implements TaskRepository {
 
   @override
   Future<Result<void>> softDelete(String id) async {
-    // Soft delete maps to changing the status to archived in the current domain model context.
     try {
       await _dbService.write((isar) async {
         final existing = await isar.taskCollections.filter().uuidEqualTo(id).findFirst();
@@ -116,8 +144,9 @@ class TaskRepositoryImpl implements TaskRepository {
   Future<Result<Task?>> getById(String id) async {
     try {
       return await _dbService.read((isar) async {
-        final task = await isar.taskCollections.filter().uuidEqualTo(id).findFirst();
-        return Success(task?.toDomain());
+        final taskColl = await isar.taskCollections.filter().uuidEqualTo(id).findFirst();
+        if (taskColl == null) return const Success(null);
+        return Success(await _mapTask(isar, taskColl));
       });
     } catch (e) {
       return StorageFailure(StorageException('Failed to get task by id', cause: e));
@@ -128,14 +157,17 @@ class TaskRepositoryImpl implements TaskRepository {
   Future<Result<List<Task>>> getAll() async {
     try {
       return await _dbService.read((isar) async {
-        final tasks = await isar.taskCollections.where().sortByPosition().findAll();
-        return Success(tasks.map((e) => e.toDomain()).toList());
+        final tasksColl = await isar.taskCollections.where().sortByPosition().findAll();
+        final domainTasks = <Task>[];
+        for (final t in tasksColl) {
+          domainTasks.add(await _mapTask(isar, t));
+        }
+        return Success(domainTasks);
       });
     } catch (e) {
       return StorageFailure(StorageException('Failed to get all tasks', cause: e));
     }
   }
-
 
   @override
   Future<Result<void>> pin(String id) async {
@@ -225,9 +257,9 @@ class TaskRepositoryImpl implements TaskRepository {
     try {
       final isar = _dbService.instanceOrThrow;
       final query = isar.taskCollections.filter().uuidEqualTo(id).build();
-      return query.watch(fireImmediately: true).map((results) {
+      return query.watch(fireImmediately: true).asyncMap((results) async {
         if (results.isEmpty) return const Success(null);
-        return Success(results.first.toDomain());
+        return Success(await _mapTask(isar, results.first));
       });
     } catch (e) {
       return Stream.value(StorageFailure(StorageException('Failed to watch task', cause: e)));
@@ -242,7 +274,13 @@ class TaskRepositoryImpl implements TaskRepository {
           .where()
           .sortByPosition()
           .watch(fireImmediately: true)
-          .map((tasks) => Success(tasks.map((e) => e.toDomain()).toList()));
+          .asyncMap((tasks) async {
+            final domainTasks = <Task>[];
+            for (final t in tasks) {
+              domainTasks.add(await _mapTask(isar, t));
+            }
+            return Success(domainTasks);
+          });
     } catch (e) {
       return Stream.value(StorageFailure(StorageException('Failed to watch all tasks', cause: e)));
     }
@@ -257,6 +295,17 @@ class TaskRepositoryImpl implements TaskRepository {
           if (existing != null) {
             final updated = task.toIsar()..id = existing.id;
             await isar.taskCollections.put(updated);
+            
+            final existingReminder = await isar.reminderCollections.filter().taskIdEqualTo(task.id).findFirst();
+            if (task.reminder != null) {
+              final updatedRem = task.reminder!.toIsar();
+              if (existingReminder != null) {
+                updatedRem.id = existingReminder.id;
+              }
+              await isar.reminderCollections.put(updatedRem);
+            } else if (existingReminder != null) {
+              await isar.reminderCollections.delete(existingReminder.id);
+            }
           }
         }
       });
@@ -274,6 +323,10 @@ class TaskRepositoryImpl implements TaskRepository {
           final existing = await isar.taskCollections.filter().uuidEqualTo(id).findFirst();
           if (existing != null) {
             await isar.taskCollections.delete(existing.id);
+            final existingReminder = await isar.reminderCollections.filter().taskIdEqualTo(id).findFirst();
+            if (existingReminder != null) {
+              await isar.reminderCollections.delete(existingReminder.id);
+            }
           }
         }
       });
