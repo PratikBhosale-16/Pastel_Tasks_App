@@ -97,6 +97,51 @@ class ActiveFiltersRow extends ConsumerWidget {
       ));
     }
     
+    // Archived
+    if (filter.isArchived == true) {
+      chips.add(_buildFilterChip(
+        context,
+        label: 'Archived',
+        onDeleted: () {
+          ref.read(filterProvider.notifier).updateFilter(filter.copyWith(clearArchived: true));
+        },
+        colorScheme: colorScheme,
+      ));
+    }
+
+    // Has Due Date
+    if (filter.hasDueDate == false) {
+      chips.add(_buildFilterChip(
+        context,
+        label: 'No Due Date',
+        onDeleted: () {
+          ref.read(filterProvider.notifier).updateFilter(filter.copyWith(clearDueDate: true));
+        },
+        colorScheme: colorScheme,
+      ));
+    } else if (filter.hasDueDate == true) {
+      chips.add(_buildFilterChip(
+        context,
+        label: 'Has Due Date',
+        onDeleted: () {
+          ref.read(filterProvider.notifier).updateFilter(filter.copyWith(clearDueDate: true));
+        },
+        colorScheme: colorScheme,
+      ));
+    }
+
+    // Repeat Rules
+    if (filter.repeatRules != null && filter.repeatRules!.isNotEmpty) {
+      chips.add(_buildFilterChip(
+        context,
+        label: 'Repeating',
+        onDeleted: () {
+          ref.read(filterProvider.notifier).updateFilter(filter.copyWith(clearRepeatRules: true));
+        },
+        colorScheme: colorScheme,
+      ));
+    }
+    
     // Smart Date Filter
     if (filter.smartDateFilter != null) {
       chips.add(_buildFilterChip(

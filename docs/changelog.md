@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-07-02
+
+### Fixed (Post-M5.3 Bug Fixes & UX Polish)
+
+- **Filter Clearing**: Added "Properties" filter section in `SortAndFilterBottomSheet` with chips for Archived, Repeating, No Due Date, and Pinned. Added corresponding dismissible chips in `ActiveFiltersRow`.
+- **Task Date Removal**: Fixed `Task.copyWith` to support `clearDueDate` flag, allowing users to remove a due date from a task via the edit bottom sheet.
+- **Status Bar Visibility**: Added `AppBarTheme` with `SystemUiOverlayStyle.dark` to ensure the system status bar (time, battery, signal) is visible on all screens with light backgrounds.
+- **Stat Card Labels**: Improved `AnimatedStatCard` title visibility so "Today", "This Week", and "Total" labels are clearly distinguishable.
+
 ## 2026-06-29
 
 ### Completed

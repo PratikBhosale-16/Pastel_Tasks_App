@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pastel_tasks/app/theme/animations.dart';
 import 'package:pastel_tasks/app/theme/colors.dart';
 import 'package:pastel_tasks/app/theme/radius.dart';
@@ -58,6 +59,16 @@ abstract final class AppTheme {
       scaffoldBackgroundColor: scaffoldBackground,
       textTheme: textTheme,
       extensions: const [PastelThemeExtension()],
+      
+      // AppBar
+      appBarTheme: AppBarTheme(
+        backgroundColor: scaffoldBackground,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        systemOverlayStyle: colorScheme.brightness == Brightness.dark
+            ? SystemUiOverlayStyle.light
+            : SystemUiOverlayStyle.dark,
+      ),
       
       // Inputs
       inputDecorationTheme: InputDecorationTheme(

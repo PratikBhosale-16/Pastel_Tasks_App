@@ -34,9 +34,9 @@
 - Minimum Android API: Android 12, API 31.
 
 ## Current Milestone
-**M5.3 Advanced Statistics Dashboard**
+**Post-M5.3 Bug Fixes & UX Polish**
 - Next milestone: M5.4 Backup & Restore
-- Focus: Implemented a premium productivity dashboard using `fl_chart`. Computes extensive metrics (streaks, productivity score, daily/weekly completion, heatmap, and priority breakdown) completely locally on-device based on the existing task history.
+- Focus: Fixed multiple post-M5.3 UX issues: filter clearing (Archived, Repeating, No Due Date), task date removal, stat card labels, and system status bar visibility across all screens.
 
 # Completed
 
@@ -150,7 +150,7 @@
 - Preferences: shared_preferences.
 
 # Current Phase: Phase 5 (Time Management)
-Current Milestone: M5.1 (Calendar Foundation) - Planned
+Current Milestone: Post-M5.3 Bug Fixes - Completed
 
 Completed Milestones:
 - M0.1 - M0.3

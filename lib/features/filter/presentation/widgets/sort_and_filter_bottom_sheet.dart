@@ -171,6 +171,52 @@ class SortAndFilterBottomSheet extends ConsumerWidget {
                   ],
                 ),
 
+                // PROPERTIES
+                ExpansionTile(
+                  title: const Text('Properties', style: TextStyle(fontWeight: FontWeight.w600)),
+                  childrenPadding: const EdgeInsets.all(16),
+                  children: [
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        FilterChip(
+                          label: const Text('Archived'),
+                          selected: filter.isArchived == true,
+                          onSelected: (selected) {
+                            updateFilter(filter.copyWith(isArchived: selected ? true : null, clearArchived: !selected));
+                          },
+                        ),
+                        FilterChip(
+                          label: const Text('Repeating'),
+                          selected: filter.repeatRules != null && filter.repeatRules!.isNotEmpty,
+                          onSelected: (selected) {
+                            if (selected) {
+                              updateFilter(filter.copyWith(repeatRules: [RepeatRule.daily, RepeatRule.weekly, RepeatRule.monthly, RepeatRule.yearly]));
+                            } else {
+                              updateFilter(filter.copyWith(clearRepeatRules: true));
+                            }
+                          },
+                        ),
+                        FilterChip(
+                          label: const Text('No Due Date'),
+                          selected: filter.hasDueDate == false,
+                          onSelected: (selected) {
+                            updateFilter(filter.copyWith(hasDueDate: selected ? false : null, clearDueDate: !selected));
+                          },
+                        ),
+                        FilterChip(
+                          label: const Text('Pinned'),
+                          selected: filter.isPinned == true,
+                          onSelected: (selected) {
+                            updateFilter(filter.copyWith(isPinned: selected ? true : null, clearPinned: !selected));
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+
                 // PRIORITY
                 ExpansionTile(
                   title: const Text('Priority', style: TextStyle(fontWeight: FontWeight.w600)),

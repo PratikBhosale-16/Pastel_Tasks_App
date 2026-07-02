@@ -102,6 +102,7 @@ class Task extends Equatable {
     String? notes,
     bool clearCompletedAt = false,
     bool clearReminder = false,
+    bool clearDueDate = false,
   }) {
     return Task(
       id: id ?? this.id,
@@ -112,7 +113,7 @@ class Task extends Equatable {
       tags: tags ?? this.tags,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
-      dueDate: dueDate ?? this.dueDate,
+      dueDate: clearDueDate ? null : (dueDate ?? this.dueDate),
       completedAt: clearCompletedAt ? null : (completedAt ?? this.completedAt),
       reminder: clearReminder ? null : (reminder ?? this.reminder),
       repeatRule: repeatRule ?? this.repeatRule,
