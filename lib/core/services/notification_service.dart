@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/widgets.dart';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:pastel_tasks/core/logging/app_logger.dart';
@@ -19,6 +20,9 @@ void notificationTapBackground(NotificationResponse notificationResponse) async 
   appLogger.info('Background notification action received: ${notificationResponse.actionId}');
   final taskId = notificationResponse.payload;
   if (taskId == null || taskId.isEmpty) return;
+  
+  WidgetsFlutterBinding.ensureInitialized();
+  tz.initializeTimeZones();
 
   await DatabaseService.instance.initialize();
   final container = ProviderContainer();
