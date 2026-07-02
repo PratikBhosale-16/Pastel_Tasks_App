@@ -30,12 +30,22 @@ class TaskCard extends ConsumerWidget {
   /// The task domain model to display.
   final Task task;
 
-  String _formatReminderTime(DateTime time) {
+  String _formatRelativeDate(DateTime date) {
     final now = DateTime.now();
-    if (time.year == now.year && time.month == now.month && time.day == now.day) {
-      return 'Today • ${DateFormat.jm().format(time)}';
+    final today = DateTime(now.year, now.month, now.day);
+    final targetDate = DateTime(date.year, date.month, date.day);
+    
+    if (targetDate == today) {
+      return 'Today';
+    } else if (targetDate == today.add(const Duration(days: 1))) {
+      return 'Tomorrow';
+    } else if (targetDate == today.subtract(const Duration(days: 1))) {
+      return 'Yesterday';
+    } else if (date.year == now.year) {
+      return DateFormat.MMMd().format(date);
+    } else {
+      return DateFormat.yMMMd().format(date);
     }
-    return '${DateFormat.MMMd().format(time)} • ${DateFormat.jm().format(time)}';
   }
 
   String _getRepeatLabel(RepeatRule rule) {
@@ -467,56 +477,45 @@ class TaskCard extends ConsumerWidget {
                       Expanded(
                         child: Align(
                           alignment: Alignment.centerRight,
-                          child: Text.rich(
-                            TextSpan(
-                              children: [
-                                if (task.dueDate != null)
-                                  TextSpan(
-                                    text: task.dueDate!.year == now.year 
-                                        ? DateFormat.MMMd().format(task.dueDate!)
-                                        : DateFormat.yMMMd().format(task.dueDate!),
-                                    style: TextStyle(
-                                      color: isArchived 
-                                          ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) 
-                                          : (isOverdue ? colorScheme.error : colorScheme.onSurfaceVariant),
-                                      fontWeight: isOverdue ? FontWeight.bold : FontWeight.normal,
-                                    ),
+                          child: Wrap(
+                            alignment: WrapAlignment.end,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            spacing: 4,
+                            runSpacing: 2,
+                            children: [
+                              if (task.dueDate != null)
+                                Text(
+                                  '${_formatRelativeDate(task.dueDate!)}${task.reminder != null ? ',' : ''}',
+                                  style: theme.textTheme.labelMedium?.copyWith(
+                                    color: isArchived 
+                                        ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) 
+                                        : (isOverdue ? colorScheme.error : colorScheme.onSurfaceVariant),
+                                    fontWeight: isOverdue ? FontWeight.bold : FontWeight.normal,
                                   ),
-                                if (task.dueDate != null && task.reminder != null)
-                                  TextSpan(
-                                    text: ', ',
-                                    style: TextStyle(
-                                      color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
+                                ),
+                              if (task.reminder != null)
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      task.dueDate != null
+                                          ? DateFormat.jm().format(task.reminder!.triggerTime)
+                                          : '${_formatRelativeDate(task.reminder!.triggerTime)} • ${DateFormat.jm().format(task.reminder!.triggerTime)}',
+                                      style: theme.textTheme.labelMedium?.copyWith(
+                                        color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
+                                      ),
                                     ),
-                                  ),
-                                if (task.reminder != null)
-                                  TextSpan(
-                                    text: task.dueDate != null
-                                        ? DateFormat.jm().format(task.reminder!.triggerTime)
-                                        : _formatReminderTime(task.reminder!.triggerTime),
-                                    style: TextStyle(
-                                      color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
-                                    ),
-                                  ),
-                                if (task.reminder != null) ...[
-                                  const WidgetSpan(child: SizedBox(width: 4)),
-                                  WidgetSpan(
-                                    alignment: PlaceholderAlignment.middle,
-                                    child: Icon(
+                                    const SizedBox(width: 4),
+                                    Icon(
                                       Icons.alarm,
                                       size: 14,
                                       color: isArchived 
                                           ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) 
                                           : colorScheme.onSurfaceVariant,
                                     ),
-                                  ),
-                                ],
-                              ],
-                            ),
-                            style: theme.textTheme.labelMedium,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            textAlign: TextAlign.right,
+                                  ],
+                                ),
+                            ],
                           ),
                         ),
                       ),
