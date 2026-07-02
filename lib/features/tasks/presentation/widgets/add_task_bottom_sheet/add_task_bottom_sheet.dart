@@ -604,11 +604,9 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
                             tooltip: widget.existingTask!.isArchived ? 'Restore' : 'Archive',
                           ),
                           const Spacer(),
-                        ],
-                        Expanded(
-                          flex: 2,
-                          child: SecondaryButton(
+                          SecondaryButton(
                             label: 'Cancel',
+                            isFullWidth: false,
                             onPressed: () async {
                               if (_hasUnsavedChanges()) {
                                 final discard = await _showDiscardDialog();
@@ -620,17 +618,40 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
                               }
                             },
                           ),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          flex: isEditMode ? 1 : 2,
-                          child: PrimaryButton(
-                            label: isEditMode ? 'Save' : 'Create Task',
+                          const SizedBox(width: 8),
+                          PrimaryButton(
+                            label: 'Save',
+                            isFullWidth: false,
                             onPressed: (_titleController.text.trim().isEmpty || _titleController.text.length > 80)
                                 ? null
                                 : _submit,
                           ),
-                        ),
+                        ] else ...[
+                          Expanded(
+                            child: SecondaryButton(
+                              label: 'Cancel',
+                              onPressed: () async {
+                                if (_hasUnsavedChanges()) {
+                                  final discard = await _showDiscardDialog();
+                                  if (discard && mounted) {
+                                    Navigator.of(context).pop();
+                                  }
+                                } else {
+                                  Navigator.of(context).pop();
+                                }
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: PrimaryButton(
+                              label: 'Create Task',
+                              onPressed: (_titleController.text.trim().isEmpty || _titleController.text.length > 80)
+                                  ? null
+                                  : _submit,
+                            ),
+                          ),
+                        ],
                       ],
                     ),
                     const SizedBox(height: 16),
