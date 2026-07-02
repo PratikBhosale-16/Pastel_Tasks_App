@@ -34,9 +34,9 @@
 - Minimum Android API: Android 12, API 31.
 
 ## Current Milestone
-**M5.2 Smart Notifications & Reminder System**
-- Next milestone: M5.3 / M6 Notes & Rich Content
-- Focus: Implemented a robust local notification system using `flutter_local_notifications` and `workmanager`. Included Notification Settings, Notification History, repeating task handling (auto-generating the next occurrence upon completion), Android Notification Channels, exact alarm permissions, and boot completed receiver. Settings are persisted with Isar and SharedPreferences.
+**M5.3 Advanced Statistics Dashboard**
+- Next milestone: M5.4 Backup & Restore
+- Focus: Implemented a premium productivity dashboard using `fl_chart`. Computes extensive metrics (streaks, productivity score, daily/weekly completion, heatmap, and priority breakdown) completely locally on-device based on the existing task history.
 
 # Completed
 

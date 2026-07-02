@@ -45,6 +45,13 @@
 
 ## [Unreleased]
 ### Added
+- **M5.3 Advanced Statistics Dashboard**:
+  - Transformed the placeholder Stats page into a premium productivity dashboard.
+  - Implemented real-time on-device metrics calculation via `StatsProvider`.
+  - Added visual insights including: completed today/week/month, total tasks completed, average completion time, and most productive weekday/hour.
+  - Created an interactive GitHub-style contribution Heatmap representing 14 weeks of activity.
+  - Integrated `fl_chart` to display a bar chart of completions over the last 7 days and a pie chart detailing task priority breakdown.
+  - Added animated progress gauges (using `TweenAnimationBuilder`) and streak indicators for Current and Longest Streak metrics.
 - **M5.2 Smart Notifications & Reminder System**:
   - Fixed a critical UI bug where reminders created via the bottom sheet were ignored and not assigned to the Task object, preventing notifications from being scheduled.
   - Implemented robust background and foreground notification service using `flutter_local_notifications`.

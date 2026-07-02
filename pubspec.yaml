@@ -12,6 +12,7 @@ dependencies:
   connectivity_plus: any
   device_info_plus: any
   equatable: any
+  fl_chart: ^1.2.0
   flutter:
     sdk: flutter
   flutter_local_notifications: any
