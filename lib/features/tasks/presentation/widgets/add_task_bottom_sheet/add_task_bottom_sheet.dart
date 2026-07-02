@@ -255,7 +255,7 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
     final picked = await showDatePicker(
       context: context,
       initialDate: _dueDate ?? DateTime.now(),
-      firstDate: DateTime.now(),
+      firstDate: DateTime(2000),
       lastDate: DateTime.now().add(const Duration(days: 365 * 5)),
     );
     if (picked != null && mounted) {
@@ -439,22 +439,84 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
                     
                     // Dates & Reminders
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Date & Reminder', style: Theme.of(context).textTheme.titleSmall),
+                        if (isEditMode && (_dueDate != null || _reminder != null))
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              padding: EdgeInsets.zero,
+                              minimumSize: const Size(0, 0),
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _dueDate = null;
+                                _reminder = null;
+                              });
+                            },
+                            child: const Text('Clear Both'),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
                       children: [
                         Expanded(
-                          child: OutlinedButton.icon(
-                            onPressed: _pickDueDate,
-                            icon: const Icon(Icons.calendar_today_rounded),
-                            label: Text(_dueDate != null
-                                ? '${_dueDate!.year}-${_dueDate!.month.toString().padLeft(2, '0')}-${_dueDate!.day.toString().padLeft(2, '0')}'
-                                : 'Due Date'),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: OutlinedButton.icon(
+                                  style: OutlinedButton.styleFrom(
+                                    padding: EdgeInsets.symmetric(horizontal: _dueDate != null ? 8 : 16),
+                                  ),
+                                  onPressed: _pickDueDate,
+                                  icon: const Icon(Icons.calendar_today_rounded, size: 18),
+                                  label: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(_dueDate != null
+                                        ? '${_dueDate!.year}-${_dueDate!.month.toString().padLeft(2, '0')}-${_dueDate!.day.toString().padLeft(2, '0')}'
+                                        : 'Due Date'),
+                                  ),
+                                ),
+                              ),
+                              if (_dueDate != null)
+                                IconButton(
+                                  icon: const Icon(Icons.close, size: 18),
+                                  onPressed: () => setState(() => _dueDate = null),
+                                  padding: const EdgeInsets.only(left: 4),
+                                  constraints: const BoxConstraints(),
+                                  visualDensity: VisualDensity.compact,
+                                ),
+                            ],
                           ),
                         ),
-                        const SizedBox(width: 16),
+                        const SizedBox(width: 8),
                         Expanded(
-                          child: OutlinedButton.icon(
-                            onPressed: _pickReminder,
-                            icon: const Icon(Icons.alarm_rounded),
-                            label: Text(_reminder?.format(context) ?? 'Reminder'),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: OutlinedButton.icon(
+                                  style: OutlinedButton.styleFrom(
+                                    padding: EdgeInsets.symmetric(horizontal: _reminder != null ? 8 : 16),
+                                  ),
+                                  onPressed: _pickReminder,
+                                  icon: const Icon(Icons.alarm_rounded, size: 18),
+                                  label: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(_reminder?.format(context) ?? 'Reminder'),
+                                  ),
+                                ),
+                              ),
+                              if (_reminder != null)
+                                IconButton(
+                                  icon: const Icon(Icons.close, size: 18),
+                                  onPressed: () => setState(() => _reminder = null),
+                                  padding: const EdgeInsets.only(left: 4),
+                                  constraints: const BoxConstraints(),
+                                  visualDensity: VisualDensity.compact,
+                                ),
+                            ],
                           ),
                         ),
                       ],
