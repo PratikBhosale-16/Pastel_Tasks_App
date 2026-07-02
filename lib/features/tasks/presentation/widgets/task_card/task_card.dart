@@ -467,46 +467,56 @@ class TaskCard extends ConsumerWidget {
                       Expanded(
                         child: Align(
                           alignment: Alignment.centerRight,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              if (task.dueDate != null)
-                                Text(
-                                  task.dueDate!.year == now.year 
-                                      ? DateFormat.MMMd().format(task.dueDate!)
-                                      : DateFormat.yMMMd().format(task.dueDate!),
-                                  style: theme.textTheme.labelMedium?.copyWith(
-                                    color: isArchived 
-                                        ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) 
-                                        : (isOverdue ? colorScheme.error : colorScheme.onSurfaceVariant),
-                                    fontWeight: isOverdue ? FontWeight.bold : FontWeight.normal,
+                          child: Text.rich(
+                            TextSpan(
+                              children: [
+                                if (task.dueDate != null)
+                                  TextSpan(
+                                    text: task.dueDate!.year == now.year 
+                                        ? DateFormat.MMMd().format(task.dueDate!)
+                                        : DateFormat.yMMMd().format(task.dueDate!),
+                                    style: TextStyle(
+                                      color: isArchived 
+                                          ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) 
+                                          : (isOverdue ? colorScheme.error : colorScheme.onSurfaceVariant),
+                                      fontWeight: isOverdue ? FontWeight.bold : FontWeight.normal,
+                                    ),
                                   ),
-                                ),
-                              if (task.dueDate != null && task.reminder != null)
-                                Text(
-                                  ', ',
-                                  style: theme.textTheme.labelMedium?.copyWith(
-                                    color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
+                                if (task.dueDate != null && task.reminder != null)
+                                  TextSpan(
+                                    text: ', ',
+                                    style: TextStyle(
+                                      color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
+                                    ),
                                   ),
-                                ),
-                              if (task.reminder != null)
-                                Text(
-                                  _formatReminderTime(task.reminder!.triggerTime),
-                                  style: theme.textTheme.labelMedium?.copyWith(
-                                    color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
+                                if (task.reminder != null)
+                                  TextSpan(
+                                    text: task.dueDate != null
+                                        ? DateFormat.jm().format(task.reminder!.triggerTime)
+                                        : _formatReminderTime(task.reminder!.triggerTime),
+                                    style: TextStyle(
+                                      color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
+                                    ),
                                   ),
-                                ),
-                              if (task.reminder != null) ...[
-                                const SizedBox(width: 4),
-                                Icon(
-                                  Icons.alarm,
-                                  size: 14,
-                                  color: isArchived 
-                                      ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) 
-                                      : colorScheme.onSurfaceVariant,
-                                ),
+                                if (task.reminder != null) ...[
+                                  const WidgetSpan(child: SizedBox(width: 4)),
+                                  WidgetSpan(
+                                    alignment: PlaceholderAlignment.middle,
+                                    child: Icon(
+                                      Icons.alarm,
+                                      size: 14,
+                                      color: isArchived 
+                                          ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) 
+                                          : colorScheme.onSurfaceVariant,
+                                    ),
+                                  ),
+                                ],
                               ],
-                            ],
+                            ),
+                            style: theme.textTheme.labelMedium,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            textAlign: TextAlign.right,
                           ),
                         ),
                       ),
