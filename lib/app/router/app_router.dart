@@ -9,6 +9,7 @@ import 'package:pastel_tasks/features/settings/presentation/settings_screen.dart
 import 'package:pastel_tasks/features/settings/presentation/notification_settings_screen.dart';
 import 'package:pastel_tasks/features/settings/presentation/notification_history_screen.dart';
 import 'package:pastel_tasks/features/stats/presentation/stats_screen.dart';
+import 'package:pastel_tasks/features/backup/presentation/screens/backup_screen.dart';
 import 'package:pastel_tasks/shared/layout/app_shell_scaffold.dart';
 /// Application router used by the app shell.
 final appRouter = GoRouter(
@@ -73,6 +74,10 @@ final appRouter = GoRouter(
                 GoRoute(
                   path: 'notification_history',
                   builder: (context, state) => const NotificationHistoryScreen(),
+                ),
+                GoRoute(
+                  path: 'backup',
+                  builder: (context, state) => const BackupScreen(),
                 ),
               ],
             ),

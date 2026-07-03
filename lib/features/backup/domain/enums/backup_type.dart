@@ -1,0 +1,4 @@
+enum BackupType {
+  local,
+  googleDrive,
+}

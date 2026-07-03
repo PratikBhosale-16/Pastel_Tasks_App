@@ -2,11 +2,11 @@
 
 ## Current Milestone
 
-- Milestone: M5.3
-- Name: Advanced Statistics Dashboard
+- Milestone: M5.4
+- Name: Backup & Restore System
 - Status: Completed
-- Validation: Validated with flutter analyze and flutter build apk
-- Overall Progress: Phase 5 in progress. M5.3 is completed.
+- Validation: Validated with flutter analyze and flutter test
+- Overall Progress: Phase 5 in progress. M5.4 is completed.
 
 ## Completed
 
@@ -26,10 +26,11 @@
 - M5.1 Premium Calendar
 - M5.2 Smart Notifications
 - M5.3 Advanced Statistics Dashboard
+- M5.4 Backup & Restore System
 
 ## Pending
 
-- [ ] M5.4 Backup & Restore
+- [x] M5.4 Backup & Restore
 - [ ] M5.5 Personalization
 - [ ] M5.6 Android Home Screen Widgets
 - [ ] M5.7 Search 2.0
@@ -43,7 +44,7 @@
 
 ## Next Milestone
 
-- Milestone: M5.4 Backup & Restore
+- Milestone: M5.5 Personalization
 
 ## Notes
 

@@ -34,9 +34,10 @@
 - Minimum Android API: Android 12, API 31.
 
 ## Current Milestone
-**Post-M5.3 Bug Fixes & UX Polish**
-- Next milestone: M5.4 Backup & Restore
-- Focus: Fixed multiple post-M5.3 UX issues: filter clearing (Archived, Repeating, No Due Date), task date removal, stat card labels, and system status bar visibility across all screens.
+**M5.4 Backup & Restore System**
+- Status: Completed.
+- Next milestone: TBD (Waiting for user instruction).
+- Focus: Implemented local and Google Drive backup system with AES encryption, ZIP compression, and Workmanager for automatic backups.
 
 # Completed
 
@@ -175,14 +176,17 @@ Completed Milestones:
 - M4.5 Bulk Selection & Bulk Actions
 - M4.6 Smart Lists
 - M4.7 Organization Validation & Freeze
+- M5.1 Premium Calendar
+- M5.2 Smart Notifications
+- M5.3 Advanced Statistics Dashboard
+- M5.4 Backup & Restore System
 
 # Current Blockers
 
 - None.
 
-- Next milestone: M5.1 Calendar
-- Scope: Foundation for Calendar and Due Dates logic.
-- Constraint: Do not implement M6.
+- Next milestone: Waiting for user instruction.
+- Scope: TBD
 
 # Notes
 

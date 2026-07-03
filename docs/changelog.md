@@ -54,6 +54,13 @@
 
 ## [Unreleased]
 ### Added
+- **M5.4 Backup & Restore System**:
+  - Implemented local `.json` (and encrypted `.enc.json`) backups.
+  - Implemented Google Drive backups leveraging the hidden AppData folder.
+  - Integrated `archive` and `encrypt` packages for ZIP compression and AES-GCM encryption of backup payloads.
+  - Added background automatic backup jobs via `WorkManager`.
+  - Built `BackupScreen` with options to Merge or Replace existing data during restoration.
+  - Developed custom serializers inside `BackupMapper` to convert Isar domain collections and SharedPreferences directly into JSON.
 - **M5.3 Advanced Statistics Dashboard**:
   - Transformed the placeholder Stats page into a premium productivity dashboard.
   - Implemented real-time on-device metrics calculation via `StatsProvider`.

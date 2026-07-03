@@ -94,6 +94,30 @@ class SettingsScreen extends ConsumerWidget {
               ],
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+            child: Text(
+              'Data & Backup',
+              style: theme.textTheme.titleSmall?.copyWith(
+                color: theme.colorScheme.primary,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Card(
+            child: Column(
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.cloud_sync),
+                  title: const Text('Backup & Restore'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    context.go('/settings/backup');
+                  },
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

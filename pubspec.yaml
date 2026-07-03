@@ -8,22 +8,28 @@ environment:
 
 dependencies:
   animations: any
+  archive: ^4.0.9
   collection: any
   connectivity_plus: any
   device_info_plus: any
+  encrypt: ^5.0.3
   equatable: any
+  extension_google_sign_in_as_googleapis_auth: ^2.0.12
+  file_picker: ^8.1.4
   fl_chart: ^1.2.0
   flutter:
     sdk: flutter
   flutter_local_notifications: any
+  flutter_plugin_android_lifecycle: 2.0.20
   flutter_quill: 11.5.1
   flutter_riverpod: any
   flutter_secure_storage: any
   flutter_svg: any
   go_router: any
-  google_sign_in: any
-  googleapis: any
-  googleapis_auth: any
+  google_sign_in: ^6.2.1
+  googleapis: ^16.0.0
+  googleapis_auth: ^2.3.2
+  http: ^1.6.0
   intl: any
   isar: any
   isar_flutter_libs: any
