@@ -7,6 +7,7 @@ import 'package:pastel_tasks/features/tasks/domain/enums/repeat_rule.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/task_status.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/priority.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 class BackupMapper {
   static BackupPayload createPayload({
@@ -34,6 +35,7 @@ class BackupMapper {
   static Map<String, dynamic> _taskCollectionToJson(TaskCollection task) {
     return {
       'id': task.id,
+      'uuid': task.uuid,
       'title': task.title,
       'description': task.description,
       'status': task.status.name,
@@ -55,6 +57,7 @@ class BackupMapper {
 
   static TaskCollection taskCollectionFromJson(Map<String, dynamic> json) {
     return TaskCollection()
+      ..uuid = json['uuid'] as String? ?? const Uuid().v4()
       ..title = json['title'] as String
       ..description = json['description'] as String
       ..status = TaskStatus.values.firstWhere((e) => e.name == json['status'], orElse: () => TaskStatus.pending)
@@ -75,6 +78,7 @@ class BackupMapper {
   static Map<String, dynamic> _tagCollectionToJson(TagCollection tag) {
     return {
       'id': tag.id,
+      'uuid': tag.uuid,
       'name': tag.name,
       'color': tag.color,
       'icon': tag.icon,
@@ -85,6 +89,7 @@ class BackupMapper {
 
   static TagCollection tagCollectionFromJson(Map<String, dynamic> json) {
     return TagCollection()
+      ..uuid = json['uuid'] as String? ?? const Uuid().v4()
       ..name = json['name'] as String
       ..color = json['color'] as String
       ..icon = json['icon'] as String
@@ -106,7 +111,7 @@ class BackupMapper {
 
   static ReminderCollection reminderCollectionFromJson(Map<String, dynamic> json) {
     return ReminderCollection()
-      ..uuid = json['uuid'] as String
+      ..uuid = json['uuid'] as String? ?? const Uuid().v4()
       ..taskId = json['taskId'] as String
       ..reminderDate = DateTime.parse(json['reminderDate'] as String)
       ..notificationId = json['notificationId'] as int

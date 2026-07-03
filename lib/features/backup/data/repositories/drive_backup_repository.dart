@@ -1,67 +1,45 @@
 import 'dart:convert';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sign_in_as_googleapis_auth.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
-import 'package:http/http.dart' as http;
 import 'package:pastel_tasks/features/backup/domain/enums/backup_type.dart';
 import 'package:pastel_tasks/features/backup/domain/models/backup_payload.dart';
 import 'package:pastel_tasks/features/backup/domain/repositories/backup_repository.dart';
-
-
+import 'package:pastel_tasks/features/settings/domain/repositories/account_service.dart';
 
 class DriveBackupRepository implements BackupRepository {
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: [
-      drive.DriveApi.driveAppdataScope,
-    ],
-  );
+  final AccountService _accountService;
 
-  GoogleSignInAccount? _currentUser;
-  drive.DriveApi? _driveApi;
+  DriveBackupRepository(this._accountService);
 
   @override
   BackupType get type => BackupType.googleDrive;
 
   @override
   Future<void> initialize() async {
-    _currentUser = await _googleSignIn.signInSilently();
-    if (_currentUser != null) {
-      await _initDriveApi();
-    }
+    await _accountService.initialize();
   }
 
   Future<void> signIn() async {
-    _currentUser = await _googleSignIn.signIn();
-    if (_currentUser != null) {
-      await _initDriveApi();
-    } else {
-      throw Exception('Google Sign-In failed or was cancelled.');
-    }
+    await _accountService.signIn();
   }
 
   Future<void> signOut() async {
-    await _googleSignIn.signOut();
-    _currentUser = null;
-    _driveApi = null;
+    await _accountService.signOut();
   }
 
-  bool get isSignedIn => _currentUser != null;
-  String? get userEmail => _currentUser?.email;
+  bool get isSignedIn => !_accountService.currentProfile.isGuest;
+  String? get userEmail => _accountService.currentProfile.email;
 
-  Future<void> _initDriveApi() async {
-    final authenticateClient = await _googleSignIn.authenticatedClient();
-    if (authenticateClient == null) {
+  Future<drive.DriveApi> _getDriveApi() async {
+    final client = await _accountService.getAuthenticatedClient();
+    if (client == null) {
       throw Exception('Failed to obtain authenticated HTTP client for Google Drive.');
     }
-    _driveApi = drive.DriveApi(authenticateClient);
+    return drive.DriveApi(client);
   }
 
   @override
   Future<String> createBackup(BackupPayload payload, {String? password}) async {
-    if (_driveApi == null) {
-      throw Exception('Google Drive API not initialized. Please sign in first.');
-    }
-
+    final api = await _getDriveApi();
     final jsonString = jsonEncode(payload.toJson());
     final bytes = utf8.encode(jsonString);
 
@@ -73,7 +51,7 @@ class DriveBackupRepository implements BackupRepository {
     final media = drive.Media(Stream.value(bytes), bytes.length);
 
     // Check if backup already exists to overwrite it
-    final existingFiles = await _driveApi!.files.list(
+    final existingFiles = await api.files.list(
       spaces: 'appDataFolder',
       q: "name='pastel_backup_latest.json'",
     );
@@ -81,13 +59,13 @@ class DriveBackupRepository implements BackupRepository {
     drive.File result;
     if (existingFiles.files != null && existingFiles.files!.isNotEmpty) {
       final fileId = existingFiles.files!.first.id!;
-      result = await _driveApi!.files.update(
+      result = await api.files.update(
         drive.File(),
         fileId,
         uploadMedia: media,
       );
     } else {
-      result = await _driveApi!.files.create(
+      result = await api.files.create(
         fileMetadata,
         uploadMedia: media,
       );
@@ -98,11 +76,9 @@ class DriveBackupRepository implements BackupRepository {
 
   @override
   Future<BackupPayload> restoreBackup(String reference, {String? password}) async {
-    if (_driveApi == null) {
-      throw Exception('Google Drive API not initialized. Please sign in first.');
-    }
+    final api = await _getDriveApi();
 
-    final media = await _driveApi!.files.get(
+    final media = await api.files.get(
       reference,
       downloadOptions: drive.DownloadOptions.fullMedia,
     ) as drive.Media;
@@ -116,11 +92,12 @@ class DriveBackupRepository implements BackupRepository {
 
   @override
   Future<List<Map<String, dynamic>>> getAvailableBackups() async {
-    if (_driveApi == null) {
+    if (!isSignedIn) {
       return [];
     }
+    final api = await _getDriveApi();
 
-    final response = await _driveApi!.files.list(
+    final response = await api.files.list(
       spaces: 'appDataFolder',
       $fields: 'files(id, name, modifiedTime, size)',
     );
@@ -133,7 +110,7 @@ class DriveBackupRepository implements BackupRepository {
           'name': file.name,
           'date': file.modifiedTime,
           'size': int.tryParse(file.size ?? '0') ?? 0,
-          'isEncrypted': false, // For simplicity, we are not encrypting drive backups yet or we can use CryptoService
+          'isEncrypted': false, // For simplicity, we are not encrypting drive backups yet
         });
       }
     }
@@ -152,8 +129,9 @@ class DriveBackupRepository implements BackupRepository {
 
   @override
   Future<void> deleteBackup(String reference) async {
-    if (_driveApi != null) {
-      await _driveApi!.files.delete(reference);
+    if (isSignedIn) {
+      final api = await _getDriveApi();
+      await api.files.delete(reference);
     }
   }
 

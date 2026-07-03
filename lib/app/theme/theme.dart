@@ -12,10 +12,10 @@ abstract final class AppTheme {
   const AppTheme._();
 
   /// The light theme.
-  static ThemeData get light {
+  static ThemeData light({Color seedColor = AppColors.primary}) {
     final colorScheme = ColorScheme.fromSeed(
-      seedColor: AppColors.primary,
-      primary: AppColors.primary,
+      seedColor: seedColor,
+      primary: seedColor,
       secondary: AppColors.secondary,
       tertiary: AppColors.tertiary,
       surface: AppColors.surfaceLight,
@@ -30,10 +30,10 @@ abstract final class AppTheme {
   }
 
   /// The dark theme.
-  static ThemeData get dark {
+  static ThemeData dark({Color seedColor = AppColors.primary}) {
     final colorScheme = ColorScheme.fromSeed(
-      seedColor: AppColors.primary,
-      primary: AppColors.primary,
+      seedColor: seedColor,
+      primary: seedColor,
       secondary: AppColors.secondary,
       tertiary: AppColors.tertiary,
       surface: AppColors.surfaceDark,

@@ -2,11 +2,11 @@
 
 ## Current Milestone
 
-- Milestone: M5.4
-- Name: Backup & Restore System
+- Milestone: M5.5
+- Name: Personalization & Settings
 - Status: Completed
 - Validation: Validated with flutter analyze and flutter test
-- Overall Progress: Phase 5 in progress. M5.4 is completed.
+- Overall Progress: Phase 5 in progress. M5.5 is completed.
 
 ## Completed
 
@@ -23,16 +23,15 @@
 - `lib/main.dart` calls `bootstrap()` only.
 - M3 Home Experience (All M3 features completed).
 - M4 Organization (All M4 features completed).
-- M5.1 Premium Calendar
-- M5.2 Smart Notifications
-- M5.3 Advanced Statistics Dashboard
-- M5.4 Backup & Restore System
+- [x] M5.1 Premium Calendar (Complete)
+- [x] M5.2 Smart Notifications (Complete)
+- [x] M5.3 Advanced Statistics Dashboard (Complete)
+- [x] M5.4 Backup & Restore System (Complete)
+- [x] M5.5 Personalization & Settings (Complete)
 
 ## Pending
 
-- [x] M5.4 Backup & Restore
-- [ ] M5.5 Personalization
-- [ ] M5.6 Android Home Screen Widgets
+- [ ] M5.6 Final Polish & Beta Release
 - [ ] M5.7 Search 2.0
 - [ ] M5.8 Performance & Polish
 - [ ] M6.0 AI Productivity Assistant
@@ -44,7 +43,7 @@
 
 ## Next Milestone
 
-- Milestone: M5.5 Personalization
+- Milestone: M5.6 Final Polish & Beta Release
 
 ## Notes
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-07-03
+
+### Completed
+
+- M5.5: Implemented data-driven Settings UI architecture. Replaced static screens with dynamic `SettingsSection` and `SettingsItem` rendering. Added `SettingsDropdownTile` and `SettingsInfoTile`. Created exhaustive settings configurations across 12 categories (Appearance, Calendar, Backup, etc.). Added instantaneous client-side search filtering. Connected application-wide `ThemeMode` and `AppAccent` customisation to the root `MaterialApp`. Restored `calendarShowCompletedSwitch` to maintain calendar compatibility. Updated `ProfileCard` to support robust Guest vs Signed-In logic, prompting users toward Google Drive backups.
+
+
 ## 2026-07-02
 
 ### Fixed (Post-M5.3 Bug Fixes & UX Polish)
@@ -54,6 +61,14 @@
 
 ## [Unreleased]
 ### Added
+- **Pre-M5.5 Architectural Refactoring: Data-Driven Settings Module**:
+  - Refactored the entire Settings module to be data-driven.
+  - Implemented core domain models: `SettingsItem`, `SettingsSection`, and `ProfileModel`.
+  - Refactored `SettingsScreen` into a unified list builder iterating over `settingsSectionsProvider`.
+  - Created `AccountService` and `GoogleAccountService` to prepare for cloud backups and display user profiles at the top of the settings page.
+  - Added persistent SharedPreferences integration via `LocalSettingsRepository`.
+  - Refactored existing settings ("Calendar Accent Color", "Show Completed Tasks in Calendar") to map to the new dynamic layout without breaking domain behavior.
+  - Decoupled `DriveBackupRepository` by injecting `AccountService` for Google Sign-In state and `http.Client`.
 - **M5.4 Backup & Restore System**:
   - Implemented local `.json` (and encrypted `.enc.json`) backups.
   - Implemented Google Drive backups leveraging the hidden AppData folder.
@@ -61,6 +76,7 @@
   - Added background automatic backup jobs via `WorkManager`.
   - Built `BackupScreen` with options to Merge or Replace existing data during restoration.
   - Developed custom serializers inside `BackupMapper` to convert Isar domain collections and SharedPreferences directly into JSON.
+  - Fixed `LateInitializationError` during backup restore by safely falling back to generate a new `uuid` when it is missing from legacy backup payloads.
 - **M5.3 Advanced Statistics Dashboard**:
   - Transformed the placeholder Stats page into a premium productivity dashboard.
   - Implemented real-time on-device metrics calculation via `StatsProvider`.

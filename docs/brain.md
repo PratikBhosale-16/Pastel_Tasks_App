@@ -9,6 +9,10 @@
 
 # Architecture
 
+- **Current Milestone**: M5.6 — Final Polish & Beta Release
+- **Progress**: M5.5 Personalization & Settings UI completed. Ready to start M5.6.
+- **Active Architecture**: Feature-First, Clean Architecture, MVVM, Riverpod, GoRouter, Isar. Data-driven UI for Settings module.
+
 - Feature First project organization.
 - Clean Architecture boundaries.
 - MVVM presentation pattern.
@@ -180,6 +184,7 @@ Completed Milestones:
 - M5.2 Smart Notifications
 - M5.3 Advanced Statistics Dashboard
 - M5.4 Backup & Restore System
+- M5.5 Personalization & Settings
 
 # Current Blockers
 

@@ -10,6 +10,7 @@ import 'package:pastel_tasks/core/providers/core_providers.dart';
 import 'package:pastel_tasks/infrastructure/database/isar/collections/tag_collection.dart';
 import 'package:pastel_tasks/infrastructure/database/isar/collections/task_collection.dart';
 import 'package:pastel_tasks/infrastructure/database/isar/collections/reminder_collection.dart';
+import 'package:pastel_tasks/features/settings/presentation/providers/account_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:isar/isar.dart';
 
@@ -21,7 +22,8 @@ final localBackupRepositoryProvider = Provider<BackupRepository>((ref) {
 });
 
 final driveBackupRepositoryProvider = Provider<DriveBackupRepository>((ref) {
-  return DriveBackupRepository();
+  final accountService = ref.watch(accountServiceProvider);
+  return DriveBackupRepository(accountService);
 });
 
 final backupServiceStateProvider = StateNotifierProvider<BackupServiceNotifier, AsyncValue<void>>((ref) {

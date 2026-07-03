@@ -130,10 +130,16 @@ Living documents remain in `docs/`.
 
 ### Reason
 
-Handling multi-select operations by looping over individual TaskRepository.update and TaskRepository.delete methods would result in UI jank when updating hundreds of tasks due to transaction overhead. Instead, we added ulkUpdate and ulkDelete to the repository interface.
+Handling multi-select operations by looping over individual TaskRepository.update and TaskRepository.delete methods would result in UI jank when updating hundreds of tasks due to transaction overhead. Instead, we added  ulkUpdate and  ulkDelete to the repository interface.
 
 ### Architecture
 
-- Implemented ulkUpdate(List<Task>) and ulkDelete(List<String>).
+- Implemented  ulkUpdate(List<Task>) and  ulkDelete(List<String>).
 - Under the hood, Isar processes these in a single _dbService.write(...) transaction.
 - This ensures high performance for bulk modifications.
+
+### Settings Module Refactoring (Pre-M5.5)
+- **Date:** 2026-07-03
+- **Context:** The Settings screen was hardcoded, making it difficult to introduce new configuration items during M5 without extensive UI boilerplate.
+- **Decision:** Built a data-driven Settings architecture powered by `settingsSectionsProvider`.
+- **Reason:** Migrating `SettingsScreen` to map over strongly typed domain models (`SettingsItem`, `SettingsSection`) decouples presentation from logic, allowing settings (and future dynamic capabilities, like feature flags) to be added simply by defining new metadata objects.
