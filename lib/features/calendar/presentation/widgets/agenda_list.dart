@@ -60,12 +60,15 @@ class AgendaList extends ConsumerWidget {
                           )),
                       if (completedTasks.isNotEmpty) ...[
                         const SizedBox(height: 16.0),
-                        Text(
-                          'Completed',
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
+                        Row(
+                          children: [
+                            Expanded(child: Divider(color: theme.colorScheme.outlineVariant)),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8),
+                              child: Text('Completed', style: theme.textTheme.labelMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
+                            ),
+                            Expanded(child: Divider(color: theme.colorScheme.outlineVariant)),
+                          ],
                         ),
                         const SizedBox(height: 12.0),
                         ...completedTasks.map((task) => Padding(
