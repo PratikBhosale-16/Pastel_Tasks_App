@@ -47,12 +47,25 @@ class AddTaskFormData {
 /// A bottom sheet for adding or editing a task.
 /// Returns an [AddTaskFormData] if the user successfully creates/edits a task.
 class AddTaskBottomSheet extends ConsumerStatefulWidget {
-  const AddTaskBottomSheet({super.key, this.existingTask});
+  const AddTaskBottomSheet({
+    super.key,
+    this.existingTask,
+    this.initialDate,
+    this.initialTagId,
+  });
   
   final Task? existingTask;
+  final DateTime? initialDate;
+  final String? initialTagId;
 
   /// Displays the bottom sheet and returns the captured form data.
-  static Future<AddTaskFormData?> show(BuildContext context, {Task? existingTask, bool useRootNavigator = false}) {
+  static Future<AddTaskFormData?> show(
+    BuildContext context, {
+    Task? existingTask,
+    DateTime? initialDate,
+    String? initialTagId,
+    bool useRootNavigator = false,
+  }) {
     return showModalBottomSheet<AddTaskFormData>(
       context: context,
       isScrollControlled: true,
@@ -61,7 +74,11 @@ class AddTaskBottomSheet extends ConsumerStatefulWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
-      builder: (_) => AddTaskBottomSheet(existingTask: existingTask),
+      builder: (_) => AddTaskBottomSheet(
+        existingTask: existingTask,
+        initialDate: initialDate,
+        initialTagId: initialTagId,
+      ),
     );
   }
 
@@ -104,6 +121,9 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
         _selectedColor = Color(int.parse(task.color, radix: 16));
       }
       _isPinned = task.isPinned;
+    } else {
+      _dueDate = widget.initialDate;
+      _tagId = widget.initialTagId;
     }
   }
 

@@ -42,97 +42,12 @@ import 'package:pastel_tasks/features/smart_lists/presentation/widgets/smart_lis
 import 'package:pastel_tasks/features/selection/presentation/providers/selection_providers.dart';
 import 'package:pastel_tasks/features/selection/presentation/widgets/bulk_actions_bottom_sheet.dart';
 import 'package:pastel_tasks/shared/widgets/empty_state/empty_state.dart';
-import 'package:uuid/uuid.dart';
+import 'package:pastel_tasks/features/tasks/presentation/utils/task_creation_helper.dart';
 
 /// Primary entry point for the task management application.
 class HomeScreen extends ConsumerWidget {
   /// Creates the home screen.
   const HomeScreen({super.key});
-
-  Future<void> _showAddTask(BuildContext context, WidgetRef ref) async {
-    final formData = await AddTaskBottomSheet.show(context);
-    if (formData == null || !context.mounted) return;
-
-    final now = DateTime.now().toUtc();
-    
-    Priority parsePriority(String p) {
-      switch (p) {
-        case 'Low': return Priority.low;
-        case 'High': return Priority.high;
-        case 'Critical': return Priority.critical;
-        case 'Medium':
-        default: return Priority.medium;
-      }
-    }
-
-    RepeatRule parseRepeatRule(String r) {
-      switch (r) {
-        case 'Daily': return RepeatRule.daily;
-        case 'Weekly': return RepeatRule.weekly;
-        case 'Monthly': return RepeatRule.monthly;
-        case 'None':
-        default: return RepeatRule.none;
-      }
-    }
-
-    Reminder? generateReminder(String taskId) {
-      if (formData.reminder == null) return null;
-      final baseDate = formData.dueDate ?? DateTime.now();
-      var triggerTime = DateTime(
-        baseDate.year,
-        baseDate.month,
-        baseDate.day,
-        formData.reminder!.hour,
-        formData.reminder!.minute,
-      );
-      if (formData.dueDate == null && triggerTime.isBefore(DateTime.now())) {
-        triggerTime = triggerTime.add(const Duration(days: 1));
-      }
-      return Reminder(
-        id: const Uuid().v4(),
-        taskId: taskId,
-        triggerTime: triggerTime,
-        repeatRule: parseRepeatRule(formData.repeatRule),
-        enabled: true,
-      );
-    }
-
-    final taskId = const Uuid().v4();
-
-    final task = Task(
-      id: taskId,
-      title: formData.title,
-      description: formData.description,
-      status: TaskStatus.pending,
-      priority: parsePriority(formData.priority),
-      tags: formData.tag != null ? [formData.tag!] : [],
-      createdAt: now,
-      updatedAt: now,
-      dueDate: formData.dueDate,
-      completedAt: null,
-      reminder: generateReminder(taskId),
-      repeatRule: parseRepeatRule(formData.repeatRule),
-      position: now.millisecondsSinceEpoch.toDouble(),
-      isPinned: formData.isPinned,
-      isArchived: false,
-      color: formData.color?.value.toRadixString(16) ?? '',
-      attachments: const [],
-    );
-
-    await ref.read(taskNotifierProvider.notifier).create(task);
-    if (!context.mounted) return;
-
-    final state = ref.read(taskNotifierProvider);
-    if (state.hasError) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to create task')),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Task created successfully')),
-      );
-    }
-  }
 
 
 
@@ -285,7 +200,11 @@ class HomeScreen extends ConsumerWidget {
               } else {
                 return EmptyState.taskList(
                   key: const ValueKey('empty_state'),
-                  onPrimaryAction: () => _showAddTask(context, ref),
+                  onPrimaryAction: () {
+                    final filter = ref.read(filterProvider).valueOrNull;
+                    final initialTag = (filter?.tags != null && filter!.tags!.isNotEmpty) ? filter.tags!.first : null;
+                    TaskCreationHelper.showAddTask(context, ref, initialTagId: initialTag);
+                  },
                 );
               }
             }
@@ -447,7 +366,11 @@ floatingActionButton: isSelectionMode
         foregroundColor: colorScheme.onSecondaryContainer,
       )
     : FloatingActionButton.extended(
-        onPressed: () => _showAddTask(context, ref),
+        onPressed: () {
+          final filter = ref.read(filterProvider).valueOrNull;
+          final initialTag = (filter?.tags != null && filter!.tags!.isNotEmpty) ? filter.tags!.first : null;
+          TaskCreationHelper.showAddTask(context, ref, initialTagId: initialTag);
+        },
         icon: const Icon(Icons.add),
         label: const Text('New Task'),
         elevation: 2,

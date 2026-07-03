@@ -14,6 +14,7 @@ import 'package:pastel_tasks/features/smart_lists/presentation/widgets/smart_lis
 import 'package:go_router/go_router.dart';
 import 'package:pastel_tasks/app/router/route_names.dart';
 import 'package:pastel_tasks/features/tasks/presentation/widgets/add_task_bottom_sheet/add_task_bottom_sheet.dart';
+import 'package:pastel_tasks/features/tasks/presentation/utils/task_creation_helper.dart';
 
 class CalendarScreen extends ConsumerStatefulWidget {
   const CalendarScreen({super.key});
@@ -132,12 +133,12 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          showModalBottomSheet<void>(
-            context: context,
-            isScrollControlled: true,
+          final selectedDate = ref.read(selectedDateProvider);
+          TaskCreationHelper.showAddTask(
+            context,
+            ref,
+            initialDate: selectedDate,
             useRootNavigator: true,
-            backgroundColor: Colors.transparent,
-            builder: (context) => const AddTaskBottomSheet(),
           );
         },
         icon: const Icon(Icons.add),
