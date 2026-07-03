@@ -47,3 +47,31 @@ final calendarAccentProvider =
     StateNotifierProvider<CalendarAccentNotifier, CalendarAccent>((ref) {
   return CalendarAccentNotifier(ref);
 });
+
+class CalendarShowCompletedNotifier extends StateNotifier<bool> {
+  CalendarShowCompletedNotifier(this.ref) : super(false) {
+    _loadPreference();
+  }
+
+  final Ref ref;
+  static const _key = 'calendar_show_completed';
+
+  Future<void> _loadPreference() async {
+    final prefs = ref.read(preferencesProvider);
+    final value = await prefs.read(_key);
+    if (value != null) {
+      state = value == 'true';
+    }
+  }
+
+  Future<void> toggle() async {
+    state = !state;
+    final prefs = ref.read(preferencesProvider);
+    await prefs.write(_key, state.toString());
+  }
+}
+
+final calendarShowCompletedProvider =
+    StateNotifierProvider<CalendarShowCompletedNotifier, bool>((ref) {
+  return CalendarShowCompletedNotifier(ref);
+});

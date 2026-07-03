@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:pastel_tasks/features/calendar/presentation/providers/calendar_providers.dart';
 import 'package:pastel_tasks/features/tasks/presentation/widgets/task_card/task_card.dart';
 import 'package:pastel_tasks/features/calendar/presentation/widgets/calendar_empty_state.dart';
+import 'package:pastel_tasks/features/tasks/domain/enums/task_status.dart';
 
 class AgendaList extends ConsumerWidget {
   const AgendaList({super.key});
@@ -14,6 +15,9 @@ class AgendaList extends ConsumerWidget {
     final tasks = ref.watch(agendaTasksProvider);
     final dateFormat = DateFormat('MMMM d');
     final theme = Theme.of(context);
+
+    final uncompletedTasks = tasks.where((t) => t.status != TaskStatus.completed).toList();
+    final completedTasks = tasks.where((t) => t.status == TaskStatus.completed).toList();
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -48,12 +52,28 @@ class AgendaList extends ConsumerWidget {
                 ? CalendarEmptyState(key: ValueKey('empty-${selectedDate.toIso8601String()}'))
                 : Column(
                     key: ValueKey('list-${selectedDate.toIso8601String()}'),
-                    children: tasks.map((task) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 12.0),
-                        child: TaskCard(task: task),
-                      );
-                    }).toList(),
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ...uncompletedTasks.map((task) => Padding(
+                            padding: const EdgeInsets.only(bottom: 12.0),
+                            child: TaskCard(task: task),
+                          )),
+                      if (completedTasks.isNotEmpty) ...[
+                        const SizedBox(height: 16.0),
+                        Text(
+                          'Completed',
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                        const SizedBox(height: 12.0),
+                        ...completedTasks.map((task) => Padding(
+                              padding: const EdgeInsets.only(bottom: 12.0),
+                              child: TaskCard(task: task),
+                            )),
+                      ],
+                    ],
                   ),
           ),
         ],

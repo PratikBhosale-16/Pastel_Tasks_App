@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/repeat_rule.dart';
 import 'package:pastel_tasks/features/tasks/domain/models/task.dart';
+import 'package:pastel_tasks/features/tasks/domain/enums/task_status.dart';
 import 'package:pastel_tasks/features/tasks/presentation/providers/task_providers.dart';
+import 'package:pastel_tasks/features/settings/presentation/providers/settings_providers.dart';
 
 /// The date currently selected by the user in the calendar.
 final selectedDateProvider = StateProvider<DateTime>((ref) {
@@ -45,7 +47,10 @@ bool _doesTaskOccurOnDate(Task task, DateTime targetDate) {
 /// This projects repeating tasks onto all their occurrences in the month.
 final monthTasksProvider = Provider<Map<DateTime, List<Task>>>((ref) {
   final allTasksAsync = ref.watch(taskListProvider);
-  final tasks = (allTasksAsync.value ?? []).where((t) => !t.isArchived).toList();
+  final showCompleted = ref.watch(calendarShowCompletedProvider);
+  final tasks = (allTasksAsync.value ?? [])
+      .where((t) => !t.isArchived && (showCompleted || t.status != TaskStatus.completed))
+      .toList();
   final viewingMonth = ref.watch(viewingMonthProvider);
 
   final map = <DateTime, List<Task>>{};
@@ -68,7 +73,10 @@ final monthTasksProvider = Provider<Map<DateTime, List<Task>>>((ref) {
 final agendaTasksProvider = Provider<List<Task>>((ref) {
   final selectedDate = ref.watch(selectedDateProvider);
   final allTasksAsync = ref.watch(taskListProvider);
-  final tasks = (allTasksAsync.value ?? []).where((t) => !t.isArchived).toList();
+  final showCompleted = ref.watch(calendarShowCompletedProvider);
+  final tasks = (allTasksAsync.value ?? [])
+      .where((t) => !t.isArchived && (showCompleted || t.status != TaskStatus.completed))
+      .toList();
 
   final dayTasks = tasks.where((t) => _doesTaskOccurOnDate(t, selectedDate)).toList();
 

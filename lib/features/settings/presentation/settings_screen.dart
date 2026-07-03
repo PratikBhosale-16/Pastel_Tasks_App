@@ -11,6 +11,7 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final accent = ref.watch(calendarAccentProvider);
+    final showCompleted = ref.watch(calendarShowCompletedProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -32,20 +33,32 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ),
           Card(
-            child: ListTile(
-              title: const Text('Calendar Accent Color'),
-              subtitle: Text(accent.label),
-              trailing: Container(
-                width: 24,
-                height: 24,
-                decoration: BoxDecoration(
-                  color: accent.color,
-                  shape: BoxShape.circle,
+            child: Column(
+              children: [
+                ListTile(
+                  title: const Text('Calendar Accent Color'),
+                  subtitle: Text(accent.label),
+                  trailing: Container(
+                    width: 24,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      color: accent.color,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  onTap: () {
+                    _showAccentColorPicker(context, ref, accent);
+                  },
                 ),
-              ),
-              onTap: () {
-                _showAccentColorPicker(context, ref, accent);
-              },
+                const Divider(height: 1),
+                SwitchListTile(
+                  title: const Text('Show Completed Tasks in Calendar'),
+                  value: showCompleted,
+                  onChanged: (value) {
+                    ref.read(calendarShowCompletedProvider.notifier).toggle();
+                  },
+                ),
+              ],
             ),
           ),
           Padding(
