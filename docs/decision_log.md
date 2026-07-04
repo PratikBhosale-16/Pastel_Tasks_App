@@ -143,3 +143,8 @@ Handling multi-select operations by looping over individual TaskRepository.updat
 - **Context:** The Settings screen was hardcoded, making it difficult to introduce new configuration items during M5 without extensive UI boilerplate.
 - **Decision:** Built a data-driven Settings architecture powered by `settingsSectionsProvider`.
 - **Reason:** Migrating `SettingsScreen` to map over strongly typed domain models (`SettingsItem`, `SettingsSection`) decouples presentation from logic, allowing settings (and future dynamic capabilities, like feature flags) to be added simply by defining new metadata objects.
+
+## [2026-07-04] Unified Responsive Android Widget
+**Context:** User requested 5 specific widget layouts but wanted them to dynamically respond to user resize actions on the launcher.
+**Decision:** Instead of using 5 different AppWidgetProvider classes, implemented a single ResponsiveWidgetProvider that listens to onAppWidgetOptionsChanged and dynamically swaps RemoteViews layouts depending on the active cell grid (columns/rows).
+**Consequence:** A cleaner widget picker for the user (only 1 widget to drag) and flawless responsive transitions. Required deleting old size-based providers.

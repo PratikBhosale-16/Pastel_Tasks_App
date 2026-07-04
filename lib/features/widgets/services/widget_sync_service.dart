@@ -5,6 +5,7 @@ import 'package:isar/isar.dart';
 import 'package:pastel_tasks/core/providers/core_providers.dart';
 import 'package:pastel_tasks/infrastructure/database/isar/collections/task_collection.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/task_status.dart';
+import 'package:pastel_tasks/features/tasks/domain/enums/repeat_rule.dart';
 
 class WidgetSyncService {
   final Isar _isar;
@@ -29,6 +30,10 @@ class WidgetSyncService {
       'title': t.title,
       'priority': t.priority.index,
       'dueDate': t.dueDate?.millisecondsSinceEpoch,
+      'hasReminder': t.reminderId != null,
+      'isRepeat': t.repeatRule != RepeatRule.none,
+      'isPinned': t.isPinned,
+      'tags': t.tags.toList(),
     }).toList());
 
     // 2. Fetch Upcoming Tasks (Next 5 tasks after today)
@@ -44,6 +49,10 @@ class WidgetSyncService {
       'title': t.title,
       'priority': t.priority.index,
       'dueDate': t.dueDate?.millisecondsSinceEpoch,
+      'hasReminder': t.reminderId != null,
+      'isRepeat': t.repeatRule != RepeatRule.none,
+      'isPinned': t.isPinned,
+      'tags': t.tags.toList(),
     }).toList());
 
     // 3. Progress Widget Data
@@ -76,15 +85,9 @@ class WidgetSyncService {
       // Ignore in tests
     }
 
-    // 5. Trigger Updates for all providers
+    // 5. Trigger Updates for Responsive Widget
     try {
-      await HomeWidget.updateWidget(androidName: 'QuickAddWidgetProvider');
-      await HomeWidget.updateWidget(androidName: 'TodaysTasksWidgetProvider');
-      await HomeWidget.updateWidget(androidName: 'UpcomingTasksWidgetProvider');
-      await HomeWidget.updateWidget(androidName: 'ProgressWidgetProvider');
-      await HomeWidget.updateWidget(androidName: 'CalendarWidgetProvider');
-      await HomeWidget.updateWidget(androidName: 'SmartListsWidgetProvider');
-      await HomeWidget.updateWidget(androidName: 'StatisticsWidgetProvider');
+      await HomeWidget.updateWidget(androidName: 'ResponsiveWidgetProvider');
     } on Exception {
       // Ignore for tests
     }

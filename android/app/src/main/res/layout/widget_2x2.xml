@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/widget_bg"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingBottom="12dp">
+            
+            <ImageView
+                android:id="@+id/btn_add"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/widget_btn_primary"
+                android:src="@drawable/ic_add_white"
+                android:padding="8dp" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/btn_refresh"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_refresh"
+                android:padding="4dp"
+                android:layout_marginEnd="8dp" />
+
+            <ImageView
+                android:id="@+id/btn_settings"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_settings"
+                android:padding="4dp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/widget_divider"
+            android:layout_marginBottom="12dp" />
+
+        <TextView
+            android:id="@+id/empty_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="All caught up!"
+            android:textColor="@color/widget_text_secondary"
+            android:visibility="gone" />
+
+        <!-- Task 1 -->
+        <LinearLayout
+            android:id="@+id/container_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingVertical="8dp">
+            
+            <ImageView
+                android:id="@+id/check_1"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/widget_checkbox_outline"
+                android:layout_marginEnd="12dp" />
+                
+            <TextView
+                android:id="@+id/task_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/widget_text_primary"
+                android:textSize="15sp"
+                android:maxLines="1"
+                android:ellipsize="end" />
+        </LinearLayout>
+
+        <!-- Task 2 -->
+        <LinearLayout
+            android:id="@+id/container_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingVertical="8dp">
+            
+            <ImageView
+                android:id="@+id/check_2"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/widget_checkbox_outline"
+                android:layout_marginEnd="12dp" />
+                
+            <TextView
+                android:id="@+id/task_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/widget_text_primary"
+                android:textSize="15sp"
+                android:maxLines="1"
+                android:ellipsize="end" />
+        </LinearLayout>
+        
+        <!-- Task 3 -->
+        <LinearLayout
+            android:id="@+id/container_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingVertical="8dp">
+            
+            <ImageView
+                android:id="@+id/check_3"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/widget_checkbox_outline"
+                android:layout_marginEnd="12dp" />
+                
+            <TextView
+                android:id="@+id/task_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/widget_text_primary"
+                android:textSize="15sp"
+                android:maxLines="1"
+                android:ellipsize="end" />
+        </LinearLayout>
+
+    </LinearLayout>
+</FrameLayout>

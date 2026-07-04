@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/widget_bg"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingHorizontal="24dp">
+
+        <RelativeLayout
+            android:layout_width="64dp"
+            android:layout_height="64dp">
+            
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:max="100"
+                android:progressDrawable="@drawable/widget_circular_progress"
+                android:indeterminate="false" />
+                
+            <TextView
+                android:id="@+id/progress_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="@color/widget_text_primary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/btn_add"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="@drawable/widget_btn_primary"
+            android:src="@drawable/ic_add_white"
+            android:padding="16dp"
+            android:contentDescription="Add Task" />
+            
+    </LinearLayout>
+</FrameLayout>
