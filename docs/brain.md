@@ -9,8 +9,8 @@
 
 # Architecture
 
-- **Current Milestone**: M5.6 — Final Polish & Beta Release
-- **Progress**: M5.5 Personalization & Settings UI completed. Ready to start M5.6.
+- **Current Milestone**: M5.7 — Search 2.0
+- **Progress**: M5.6 Android Home Screen Widgets completed using home_widget and Material You dynamic colors. Ready to start M5.7 Search 2.0.
 - **Active Architecture**: Feature-First, Clean Architecture, MVVM, Riverpod, GoRouter, Isar. Data-driven UI for Settings module.
 
 - Feature First project organization.

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dark Mode Pastel Colors (Pre-Android 12) -->
+    <color name="widget_background">#1C1B1F</color>
+    <color name="widget_surface">#2D2B31</color>
+    <color name="widget_primary">#D0BCFF</color>
+    <color name="widget_on_primary">#381E72</color>
+    <color name="widget_text_primary">#E6E1E5</color>
+    <color name="widget_text_secondary">#CAC4D0</color>
+</resources>

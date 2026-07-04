@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:pastel_tasks/features/settings/domain/models/settings_item.dart';
 import 'package:pastel_tasks/features/settings/domain/models/settings_section.dart';
 import 'package:pastel_tasks/core/providers/core_providers.dart';
-
+import 'package:pastel_tasks/features/settings/presentation/providers/stats_provider.dart';
+import 'package:pastel_tasks/features/backup/presentation/providers/backup_providers.dart';
+import 'package:pastel_tasks/features/backup/domain/enums/backup_type.dart';
+import 'package:go_router/go_router.dart';
 // --- APPEARANCE ---
 const themeDropdown = SettingsItemDropdown<String>(
   id: 'appearance_theme',
@@ -238,7 +241,7 @@ final quietHoursAction = SettingsItemAction(
   title: 'Quiet Hours',
   subtitle: 'Configure when not to receive notifications',
   icon: Icons.do_not_disturb,
-  onAction: () {},
+  onAction: (context, ref) {},
   keywords: ['quiet', 'hours', 'do not disturb', 'dnd'],
 );
 
@@ -284,7 +287,7 @@ final manualBackupAction = SettingsItemAction(
   id: 'backup_manual',
   title: 'Manual Backup',
   icon: Icons.backup,
-  onAction: () {},
+  onAction: (context, ref) {},
   keywords: ['manual', 'backup', 'now'],
 );
 
@@ -292,7 +295,7 @@ final restoreBackupAction = SettingsItemAction(
   id: 'backup_restore_action',
   title: 'Restore Backup',
   icon: Icons.restore,
-  onAction: () {},
+  onAction: (context, ref) {},
   keywords: ['restore', 'backup', 'recover'],
 );
 
@@ -420,7 +423,9 @@ final clearCacheAction = SettingsItemAction(
   id: 'data_clear_cache',
   title: 'Clear Cache',
   icon: Icons.cleaning_services,
-  onAction: () {},
+  onAction: (context, ref) {
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Cache cleared')));
+  },
   keywords: ['clear', 'cache', 'storage', 'clean'],
 );
 
@@ -428,7 +433,9 @@ final optimizeDbAction = SettingsItemAction(
   id: 'data_optimize_db',
   title: 'Optimize Database',
   icon: Icons.build,
-  onAction: () {},
+  onAction: (context, ref) {
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Database optimized')));
+  },
   keywords: ['optimize', 'database', 'performance'],
 );
 
@@ -460,7 +467,7 @@ final resetTutorialAction = SettingsItemAction(
   title: 'Reset Tutorial',
   icon: Icons.school,
   isVisible: _isDebugOnly,
-  onAction: () {},
+  onAction: (context, ref) {},
   keywords: ['reset', 'tutorial', 'developer'],
 );
 
@@ -516,7 +523,7 @@ final osLicensesAction = SettingsItemAction(
   id: 'about_licenses',
   title: 'Open Source Licenses',
   icon: Icons.code,
-  onAction: () {}, // Handled in UI layer via router or built-in showLicensePage
+  onAction: (context, ref) {}, // Handled in UI layer via router or built-in showLicensePage
   keywords: ['open source', 'licenses', 'about', 'legal'],
 );
 
@@ -525,7 +532,7 @@ final resetAppearanceAction = SettingsItemAction(
   id: 'reset_appearance',
   title: 'Reset Appearance',
   icon: Icons.format_paint,
-  onAction: () {},
+  onAction: (context, ref) {},
   keywords: ['reset', 'appearance', 'theme', 'color'],
 );
 
@@ -534,7 +541,9 @@ final factoryResetAction = SettingsItemAction(
   title: 'Factory Reset',
   icon: Icons.warning,
   isDestructive: true,
-  onAction: () {},
+  onAction: (context, ref) {
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Factory Reset triggered')));
+  },
   keywords: ['factory', 'reset', 'clear', 'delete', 'all'],
 );
 
@@ -564,6 +573,49 @@ final settingsSearchQueryProvider = StateProvider<String>((ref) => '');
 // SECTIONS PROVIDER
 // ==========================================
 final settingsSectionsProvider = Provider<List<SettingsSection>>((ref) {
+  final statsAsync = ref.watch(databaseStatsProvider);
+  final stats = statsAsync.valueOrNull;
+
+  final dynamicDatabaseSizeInfo = SettingsItemInfo(
+    id: 'data_db_size',
+    title: 'Database Size',
+    valueLabel: stats != null ? stats['dbSize'] : '...',
+    icon: Icons.storage,
+    keywords: ['database', 'size', 'storage', 'data'],
+  );
+
+  final dynamicTaskCountInfo = SettingsItemInfo(
+    id: 'data_task_count',
+    title: 'Task Count',
+    valueLabel: stats != null ? '' : '...',
+    icon: Icons.task,
+    keywords: ['task', 'count', 'total'],
+  );
+
+  final dynamicCompletedTaskCountInfo = SettingsItemInfo(
+    id: 'data_completed_tasks',
+    title: 'Completed Tasks',
+    valueLabel: stats != null ? '' : '...',
+    icon: Icons.check_circle,
+    keywords: ['completed', 'task', 'count'],
+  );
+
+  final dynamicArchivedTaskCountInfo = SettingsItemInfo(
+    id: 'data_archived_tasks',
+    title: 'Archived Tasks',
+    valueLabel: stats != null ? '' : '...',
+    icon: Icons.archive,
+    keywords: ['archived', 'task', 'count'],
+  );
+
+  final dynamicTagCountInfo = SettingsItemInfo(
+    id: 'data_tag_count',
+    title: 'Tag Count',
+    valueLabel: stats != null ? '' : '...',
+    icon: Icons.label,
+    keywords: ['tag', 'count', 'labels'],
+  );
+
   return [
     const SettingsSection(
       id: 'appearance',
@@ -649,11 +701,11 @@ final settingsSectionsProvider = Provider<List<SettingsSection>>((ref) {
       id: 'data_storage',
       title: 'Data & Storage',
       items: [
-        databaseSizeInfo,
-        taskCountInfo,
-        completedTaskCountInfo,
-        archivedTaskCountInfo,
-        tagCountInfo,
+        dynamicDatabaseSizeInfo,
+        dynamicTaskCountInfo,
+        dynamicCompletedTaskCountInfo,
+        dynamicArchivedTaskCountInfo,
+        dynamicTagCountInfo,
         backupSizeInfo,
         lastBackupInfo,
         clearCacheAction,

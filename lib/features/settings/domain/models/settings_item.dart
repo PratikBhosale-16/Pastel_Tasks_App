@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 abstract class SettingsItem extends Equatable {
   final String id;
@@ -59,7 +60,7 @@ class SettingsItemNavigation extends SettingsItem {
 }
 
 class SettingsItemAction extends SettingsItem {
-  final VoidCallback onAction;
+  final void Function(BuildContext context, WidgetRef ref) onAction;
   final bool isDestructive;
 
   const SettingsItemAction({

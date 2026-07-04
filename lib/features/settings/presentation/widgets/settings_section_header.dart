@@ -9,7 +9,7 @@ class SettingsSectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 24, bottom: 8),
+      padding: const EdgeInsets.only(left: 32, right: 32, top: 24, bottom: 8),
       child: Text(
         title,
         style: theme.textTheme.titleSmall?.copyWith(
@@ -20,3 +20,4 @@ class SettingsSectionHeader extends StatelessWidget {
     );
   }
 }
+

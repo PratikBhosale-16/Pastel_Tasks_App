@@ -44,19 +44,19 @@ class SettingsNavigationTile extends StatelessWidget {
   }
 }
 
-class SettingsActionTile extends StatelessWidget {
+class SettingsActionTile extends ConsumerWidget {
   final SettingsItemAction item;
 
   const SettingsActionTile({super.key, required this.item});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final color = item.isDestructive ? Theme.of(context).colorScheme.error : null;
     return ListTile(
       title: Text(item.title, style: TextStyle(color: color)),
       subtitle: item.subtitle != null ? Text(item.subtitle!) : null,
       leading: item.icon != null ? Icon(item.icon, color: color) : null,
-      onTap: item.onAction,
+      onTap: () => item.onAction(context, ref),
     );
   }
 }
@@ -98,9 +98,16 @@ class SettingsDropdownTile<T> extends ConsumerWidget {
       trailing: DropdownButton<String>(
         value: state.value ?? (item.defaultValue as String),
         underline: const SizedBox(),
+        alignment: AlignmentDirectional.centerEnd,
+        isDense: true,
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        ),
+        icon: const Icon(Icons.arrow_drop_down),
         items: (item.options as List<String>).map((String value) {
           return DropdownMenuItem<String>(
             value: value,
+            alignment: AlignmentDirectional.centerEnd,
             child: Text((item.labelBuilder as String Function(String))(value)),
           );
         }).toList(),

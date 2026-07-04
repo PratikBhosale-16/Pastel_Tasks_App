@@ -28,12 +28,13 @@
 - [x] M5.3 Advanced Statistics Dashboard (Complete)
 - [x] M5.4 Backup & Restore System (Complete)
 - [x] M5.5 Personalization & Settings (Complete)
+- [x] M5.6 Android Home Screen Widgets (Complete)
 
 ## Pending
 
-- [ ] M5.6 Final Polish & Beta Release
 - [ ] M5.7 Search 2.0
-- [ ] M5.8 Performance & Polish
+- [ ] M5.8 Performance & Production Polish
+- [ ] M5.9 Offline Reliability & Data Integrity
 - [ ] M6.0 AI Productivity Assistant
 - [ ] M6.1 Notes & Attachments
 - [ ] M6.2 Collaboration
@@ -43,7 +44,7 @@
 
 ## Next Milestone
 
-- Milestone: M5.6 Final Polish & Beta Release
+- Milestone: M5.7 Search 2.0
 
 ## Notes
 
