@@ -105,17 +105,14 @@ class CalendarDayCell extends ConsumerWidget {
           final isCompleted = t.status == TaskStatus.completed;
           Color dotColor = theme.colorScheme.outline;
           switch (t.priority) {
-            case Priority.critical:
-              dotColor = AppColors.error;
-              break;
             case Priority.high:
-              dotColor = AppColors.warning;
+              dotColor = Colors.red;
               break;
             case Priority.medium:
-              dotColor = AppColors.success;
+              dotColor = Colors.orange;
               break;
             case Priority.low:
-              dotColor = AppColors.info;
+              dotColor = Colors.green;
               break;
           }
 

@@ -616,15 +616,11 @@ class TaskCard extends ConsumerWidget {
   Color _getPriorityColor(Priority priority, ColorScheme colorScheme) {
     switch (priority) {
       case Priority.high:
-        return colorScheme.error;
+        return Colors.red;
       case Priority.medium:
         return Colors.orange;
       case Priority.low:
         return Colors.green;
-      case Priority.critical:
-        return const Color(0xFFB71C1C); // Deep Red
-      default:
-        return colorScheme.onSurfaceVariant.withValues(alpha: 0.3);
     }
   }
 }

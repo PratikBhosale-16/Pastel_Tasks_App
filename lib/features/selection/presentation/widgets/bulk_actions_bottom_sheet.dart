@@ -180,7 +180,6 @@ class BulkActionsBottomSheet extends ConsumerWidget {
       {'label': 'Low', 'value': Priority.low},
       {'label': 'Medium', 'value': Priority.medium},
       {'label': 'High', 'value': Priority.high},
-      {'label': 'Critical', 'value': Priority.critical},
     ];
 
     final result = await showDialog<Priority>(

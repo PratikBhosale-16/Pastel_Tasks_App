@@ -20,7 +20,7 @@ const _smartListGroups = [
   SmartListGroup('General', Icons.inbox_outlined, ['inbox', 'today', 'tomorrow', 'upcoming']),
   SmartListGroup('Time & Schedule', Icons.alarm, ['overdue', 'this_week', 'this_month', 'no_due_date']),
   SmartListGroup('Task Status', Icons.task_alt, ['active', 'completed_today', 'completed', 'archived']),
-  SmartListGroup('Organization', Icons.star_border, ['pinned', 'high_priority', 'medium_priority', 'low_priority', 'critical', 'repeating', 'untagged', 'no_reminder']),
+  SmartListGroup('Organization', Icons.star_border, ['pinned', 'high_priority', 'medium_priority', 'low_priority', 'repeating', 'untagged', 'no_reminder']),
 ];
 
 class SmartListsDrawer extends ConsumerWidget {
@@ -40,12 +40,12 @@ class SmartListsDrawer extends ConsumerWidget {
               child: Row(
                 children: [
                   Icon(
-                    Icons.view_list_rounded,
+                    Icons.task_alt,
                     color: theme.colorScheme.primary,
                   ),
                   const SizedBox(width: 12),
                   Text(
-                    'Smart Lists',
+                    'Pastel Tasks',
                     style: theme.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
@@ -67,7 +67,7 @@ class SmartListsDrawer extends ConsumerWidget {
                     return Theme(
                       data: theme.copyWith(dividerColor: Colors.transparent),
                       child: ExpansionTile(
-                        initiallyExpanded: true,
+                        initiallyExpanded: false,
                         leading: Icon(group.icon),
                         title: Text(
                           group.title,
@@ -76,10 +76,8 @@ class SmartListsDrawer extends ConsumerWidget {
                           ),
                         ),
                         children: groupLists.map((smartList) {
-                          final isLast = groupLists.last == smartList;
                           return _SmartListTile(
                             smartList: smartList,
-                            isLast: isLast,
                           );
                         }).toList(),
                       ),
@@ -97,10 +95,9 @@ class SmartListsDrawer extends ConsumerWidget {
 }
 
 class _SmartListTile extends ConsumerWidget {
-  const _SmartListTile({required this.smartList, this.isLast = false});
+  const _SmartListTile({required this.smartList});
 
   final SmartList smartList;
-  final bool isLast;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -113,25 +110,13 @@ class _SmartListTile extends ConsumerWidget {
     }
 
     return ListTile(
-      leading: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(width: 16),
-          Text(
-            isLast ? '└─' : '├─',
-            style: TextStyle(
-              color: theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
-              fontFamily: 'monospace',
-              fontSize: 16,
-            ),
-          ),
-          const SizedBox(width: 12),
-          Icon(
-            smartList.icon,
-            color: smartList.color,
-            size: 20,
-          ),
-        ],
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 16.0),
+        child: Icon(
+          smartList.icon,
+          color: smartList.color,
+          size: 20,
+        ),
       ),
       minLeadingWidth: 0,
       title: Text(
@@ -191,7 +176,7 @@ class _CategoriesExpansionTile extends ConsumerWidget {
         return Theme(
           data: theme.copyWith(dividerColor: Colors.transparent),
           child: ExpansionTile(
-          initiallyExpanded: true,
+          initiallyExpanded: false,
           title: Text(
             'Categories',
             style: theme.textTheme.titleMedium?.copyWith(
@@ -211,28 +196,14 @@ class _CategoriesExpansionTile extends ConsumerWidget {
               }
 
               final Color tagColor = Color(int.parse(tag.color, radix: 16));
-              final isLast = tag == tags.last;
-
               return ListTile(
-                leading: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const SizedBox(width: 16),
-                    Text(
-                      isLast ? '└─' : '├─',
-                      style: TextStyle(
-                        color: theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
-                        fontFamily: 'monospace',
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Icon(
-                      IconData(int.tryParse(tag.icon) ?? Icons.label.codePoint, fontFamily: 'MaterialIcons'),
-                      color: tagColor,
-                      size: 20,
-                    ),
-                  ],
+                leading: Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: Icon(
+                    IconData(int.tryParse(tag.icon) ?? Icons.label.codePoint, fontFamily: 'MaterialIcons'),
+                    color: tagColor,
+                    size: 20,
+                  ),
                 ),
                 minLeadingWidth: 0,
                 title: Text(

@@ -445,13 +445,11 @@ const _TaskCollectionpriorityEnumValueMap = {
   'low': 0,
   'medium': 1,
   'high': 2,
-  'critical': 3,
 };
 const _TaskCollectionpriorityValueEnumMap = {
   0: Priority.low,
   1: Priority.medium,
   2: Priority.high,
-  3: Priority.critical,
 };
 const _TaskCollectionrepeatRuleEnumValueMap = {
   'none': 0,

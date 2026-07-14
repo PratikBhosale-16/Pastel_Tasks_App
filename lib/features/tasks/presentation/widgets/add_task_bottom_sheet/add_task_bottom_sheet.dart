@@ -141,12 +141,10 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
   Color _getPriorityColor(Priority priority, ThemeData theme) {
     switch (priority) {
       case Priority.low:
-        return Colors.blue;
+        return Colors.green;
       case Priority.medium:
-        return theme.colorScheme.onSurfaceVariant; // Default un-highlighted state
-      case Priority.high:
         return Colors.orange;
-      case Priority.critical:
+      case Priority.high:
         return Colors.red;
     }
   }
@@ -461,19 +459,15 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
                       itemBuilder: (BuildContext context) => <PopupMenuEntry<Priority>>[
                         const PopupMenuItem<Priority>(
                           value: Priority.low,
-                          child: Text('Low Priority', style: TextStyle(color: Colors.blue)),
+                          child: Text('Low Priority', style: TextStyle(color: Colors.green)),
                         ),
-                        PopupMenuItem<Priority>(
+                        const PopupMenuItem<Priority>(
                           value: Priority.medium,
-                          child: Text('Medium Priority', style: TextStyle(color: theme.colorScheme.onSurfaceVariant)),
+                          child: Text('Medium Priority', style: TextStyle(color: Colors.orange)),
                         ),
                         const PopupMenuItem<Priority>(
                           value: Priority.high,
-                          child: Text('High Priority', style: TextStyle(color: Colors.orange)),
-                        ),
-                        const PopupMenuItem<Priority>(
-                          value: Priority.critical,
-                          child: Text('Critical Priority', style: TextStyle(color: Colors.red)),
+                          child: Text('High Priority', style: TextStyle(color: Colors.red)),
                         ),
                       ],
                     ),

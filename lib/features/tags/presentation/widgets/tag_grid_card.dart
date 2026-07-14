@@ -20,12 +20,10 @@ class TagGridCard extends StatelessWidget {
 
   Color _getPriorityColor(Priority priority) {
     switch (priority) {
-      case Priority.critical:
-        return Colors.red;
       case Priority.high:
-        return Colors.orange;
+        return Colors.red;
       case Priority.medium:
-        return Colors.amber;
+        return Colors.orange;
       case Priority.low:
         return Colors.green;
     }

@@ -135,13 +135,7 @@ class SmartListsRepository {
         color: Color(0xFFC5E1A5),
         filter: TaskFilter(priorities: [Priority.low]),
       ),
-      const SmartList(
-        id: 'critical',
-        title: 'Critical',
-        icon: Icons.warning_rounded,
-        color: Color(0xFFEF9A9A),
-        filter: TaskFilter(priorities: [Priority.critical]),
-      ),
+
       const SmartList(
         id: 'repeating',
         title: 'Repeating',
