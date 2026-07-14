@@ -253,6 +253,18 @@ class TaskFilter extends Equatable {
           final compDate = DateTime(task.completedAt!.year, task.completedAt!.month, task.completedAt!.day);
           if (compDate != today) return false;
           break;
+        case SmartDateFilter.thisWeek:
+          if (task.dueDate == null) return false;
+          final taskDate = DateTime(task.dueDate!.year, task.dueDate!.month, task.dueDate!.day);
+          // Assuming week starts on Monday
+          final weekStart = today.subtract(Duration(days: today.weekday - 1));
+          final weekEnd = weekStart.add(const Duration(days: 6));
+          if (taskDate.isBefore(weekStart) || taskDate.isAfter(weekEnd)) return false;
+          break;
+        case SmartDateFilter.thisMonth:
+          if (task.dueDate == null) return false;
+          if (task.dueDate!.year != today.year || task.dueDate!.month != today.month) return false;
+          break;
       }
     }
 

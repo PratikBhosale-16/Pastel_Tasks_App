@@ -8,6 +8,21 @@ import 'package:pastel_tasks/features/tags/presentation/providers/tag_notifier.d
 import 'package:pastel_tasks/features/filter/domain/models/task_filter.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/task_status.dart';
 
+class SmartListGroup {
+  final String title;
+  final IconData icon;
+  final List<String> listIds;
+
+  const SmartListGroup(this.title, this.icon, this.listIds);
+}
+
+const _smartListGroups = [
+  SmartListGroup('General', Icons.inbox_outlined, ['inbox', 'today', 'tomorrow', 'upcoming']),
+  SmartListGroup('Time & Schedule', Icons.alarm, ['overdue', 'this_week', 'this_month', 'no_due_date']),
+  SmartListGroup('Task Status', Icons.task_alt, ['active', 'completed_today', 'completed', 'archived']),
+  SmartListGroup('Organization', Icons.star_border, ['pinned', 'high_priority', 'medium_priority', 'low_priority', 'critical', 'repeating', 'untagged', 'no_reminder']),
+];
+
 class SmartListsDrawer extends ConsumerWidget {
   const SmartListsDrawer({super.key});
 
@@ -40,24 +55,37 @@ class SmartListsDrawer extends ConsumerWidget {
             ),
             const Divider(height: 1),
             Expanded(
-              child: CustomScrollView(
-                slivers: [
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    sliver: SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          final smartList = smartLists[index];
-                          return _SmartListTile(smartList: smartList);
-                        },
-                        childCount: smartLists.length,
+              child: ListView(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                children: [
+                  ..._smartListGroups.map((group) {
+                    final groupLists = group.listIds
+                        .map((id) => smartLists.cast<SmartList?>().firstWhere((sl) => sl?.id == id, orElse: () => null))
+                        .whereType<SmartList>()
+                        .toList();
+
+                    return Theme(
+                      data: theme.copyWith(dividerColor: Colors.transparent),
+                      child: ExpansionTile(
+                        initiallyExpanded: true,
+                        leading: Icon(group.icon),
+                        title: Text(
+                          group.title,
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        children: groupLists.map((smartList) {
+                          final isLast = groupLists.last == smartList;
+                          return _SmartListTile(
+                            smartList: smartList,
+                            isLast: isLast,
+                          );
+                        }).toList(),
                       ),
-                    ),
-                  ),
-                  // Divider removed as per request
-                  const SliverToBoxAdapter(
-                    child: _CategoriesExpansionTile(),
-                  ),
+                    );
+                  }),
+                  const _CategoriesExpansionTile(),
                 ],
               ),
             ),
@@ -69,9 +97,10 @@ class SmartListsDrawer extends ConsumerWidget {
 }
 
 class _SmartListTile extends ConsumerWidget {
-  const _SmartListTile({required this.smartList});
+  const _SmartListTile({required this.smartList, this.isLast = false});
 
   final SmartList smartList;
+  final bool isLast;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -84,26 +113,43 @@ class _SmartListTile extends ConsumerWidget {
     }
 
     return ListTile(
-      leading: Icon(
-        smartList.icon,
-        color: smartList.color,
+      leading: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(width: 16),
+          Text(
+            isLast ? '└─' : '├─',
+            style: TextStyle(
+              color: theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
+              fontFamily: 'monospace',
+              fontSize: 16,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Icon(
+            smartList.icon,
+            color: smartList.color,
+            size: 20,
+          ),
+        ],
       ),
+      minLeadingWidth: 0,
       title: Text(
         smartList.title,
-        style: theme.textTheme.bodyLarge?.copyWith(
+        style: theme.textTheme.bodyMedium?.copyWith(
           fontWeight: FontWeight.w500,
         ),
       ),
       trailing: count != null
           ? Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
               decoration: BoxDecoration(
                 color: theme.colorScheme.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
                 '$count',
-                style: theme.textTheme.labelMedium?.copyWith(
+                style: theme.textTheme.labelSmall?.copyWith(
                   fontWeight: FontWeight.w600,
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
@@ -142,7 +188,9 @@ class _CategoriesExpansionTile extends ConsumerWidget {
           );
         }
 
-        return ExpansionTile(
+        return Theme(
+          data: theme.copyWith(dividerColor: Colors.transparent),
+          child: ExpansionTile(
           initiallyExpanded: true,
           title: Text(
             'Categories',
@@ -150,6 +198,7 @@ class _CategoriesExpansionTile extends ConsumerWidget {
               fontWeight: FontWeight.w600,
             ),
           ),
+          leading: const Icon(Icons.label_outline),
           children: tags.map((tag) {
               int count = 0;
               bool allCompleted = false;
@@ -162,15 +211,33 @@ class _CategoriesExpansionTile extends ConsumerWidget {
               }
 
               final Color tagColor = Color(int.parse(tag.color, radix: 16));
+              final isLast = tag == tags.last;
 
               return ListTile(
-                leading: Icon(
-                  IconData(int.tryParse(tag.icon) ?? Icons.label.codePoint, fontFamily: 'MaterialIcons'),
-                  color: tagColor,
+                leading: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(width: 16),
+                    Text(
+                      isLast ? '└─' : '├─',
+                      style: TextStyle(
+                        color: theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
+                        fontFamily: 'monospace',
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Icon(
+                      IconData(int.tryParse(tag.icon) ?? Icons.label.codePoint, fontFamily: 'MaterialIcons'),
+                      color: tagColor,
+                      size: 20,
+                    ),
+                  ],
                 ),
+                minLeadingWidth: 0,
                 title: Text(
                   tag.name,
-                  style: theme.textTheme.bodyLarge?.copyWith(
+                  style: theme.textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -207,8 +274,9 @@ class _CategoriesExpansionTile extends ConsumerWidget {
                   Navigator.pop(context);
                 },
               );
-            }).toList(),
-        );
+          }).toList(),
+        ),
+      );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (err, st) => Text('Error: $err'),

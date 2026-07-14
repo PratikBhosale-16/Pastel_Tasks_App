@@ -4,4 +4,6 @@ enum SmartDateFilter {
   upcoming,
   overdue,
   completedToday,
+  thisWeek,
+  thisMonth,
 }

@@ -325,6 +325,10 @@ class ActiveFiltersRow extends ConsumerWidget {
         return 'Overdue';
       case SmartDateFilter.completedToday:
         return 'Completed Today';
+      case SmartDateFilter.thisWeek:
+        return 'This Week';
+      case SmartDateFilter.thisMonth:
+        return 'This Month';
     }
   }
 }
