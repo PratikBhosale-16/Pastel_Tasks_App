@@ -8,7 +8,7 @@ import 'package:pastel_tasks/features/calendar/presentation/calendar_screen.dart
 import 'package:pastel_tasks/features/settings/presentation/settings_screen.dart';
 import 'package:pastel_tasks/features/settings/presentation/notification_settings_screen.dart';
 import 'package:pastel_tasks/features/settings/presentation/notification_history_screen.dart';
-import 'package:pastel_tasks/features/stats/presentation/stats_screen.dart';
+import 'package:pastel_tasks/features/stats/presentation/mine_screen.dart';
 import 'package:pastel_tasks/features/backup/presentation/screens/backup_screen.dart';
 import 'package:pastel_tasks/features/widgets/presentation/widget_settings_screen.dart';
 import 'package:pastel_tasks/shared/layout/app_shell_scaffold.dart';
@@ -50,6 +50,14 @@ final appRouter = GoRouter(
               name: RouteNames.tags,
               path: RouteNames.tagsPath,
               builder: (context, state) => const TagsScreen(),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/mine',
+              builder: (context, state) => const MineScreen(),
             ),
           ],
         ),
