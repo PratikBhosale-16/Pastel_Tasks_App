@@ -7,7 +7,7 @@ import 'package:pastel_tasks/core/providers/core_providers.dart';
 import 'package:pastel_tasks/infrastructure/database/isar/collections/task_collection.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/task_status.dart';
 import 'package:isar/isar.dart';
-import 'package:pastel_tasks/features/widgets/services/widget_sync_service.dart';
+import 'package:pastel_tasks/features/widget/providers/widget_sync_service.dart';
 
 @pragma('vm:entry-point')
 void backgroundCallback(Uri? uri) async {

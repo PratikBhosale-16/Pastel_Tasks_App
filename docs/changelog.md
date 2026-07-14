@@ -214,7 +214,7 @@
 - Restored milestone M0.3 Core Infrastructure between Application Bootstrap and Design System.
 - Confirmed the development order as M0.1 Project Foundation, M0.2 Application Bootstrap, M0.3 Core Infrastructure, then M1 Design System.
 
-## [2026-07-04] M5.6 Responsive Android Widgets
-- Re-architected Android home screen widgets into a single ResponsiveWidgetProvider
-- Rebuilt XML layouts to match premium Pastel design language
-- Handled dynamic grid resizing using Android 12 RemoteViews mappings and onAppWidgetOptionsChanged.
+## [2026-07-04] M5.6 Adaptive Responsive Android Widgets (Upgrade)
+- Upgraded Android home screen widgets to a production-quality Clean Architecture (`WidgetProvider`, `WidgetRenderer`, `WidgetUpdater`, `WidgetState`).
+- Implemented Android 12+ native responsive sizing using `RemoteViews(Map<SizeF, RemoteViews>)` for seamless dynamic reflowing across 5 sizes (Extra Small to Extra Large).
+- Restructured `features/widgets` to `features/widget` in Flutter, and unified the JSON synchronization logic in `WidgetSyncService`.
