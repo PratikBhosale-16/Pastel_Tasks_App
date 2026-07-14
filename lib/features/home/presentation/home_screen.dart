@@ -470,7 +470,7 @@ floatingActionButton: isSelectionMode
         },
         elevation: 2,
         shape: const CircleBorder(),
-        child: const Icon(Icons.add_circle_rounded, size: 32),
+        child: const Icon(Icons.add, size: 28),
       ),
 
     );
