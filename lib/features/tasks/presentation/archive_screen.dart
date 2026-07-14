@@ -132,26 +132,7 @@ class _ArchiveScreenState extends ConsumerState<ArchiveScreen> {
       return;
     }
 
-    Priority parsePriority(String p) {
-      switch (p) {
-        case 'Low': return Priority.low;
-        case 'High': return Priority.high;
-        case 'Critical': return Priority.critical;
-        case 'Medium':
-        default: return Priority.medium;
-      }
-    }
 
-    RepeatRule parseRepeatRule(String r) {
-      switch (r) {
-        case 'Daily': return RepeatRule.daily;
-        case 'Weekly': return RepeatRule.weekly;
-        case 'Monthly': return RepeatRule.monthly;
-        case 'Yearly': return RepeatRule.yearly;
-        case 'None':
-        default: return RepeatRule.none;
-      }
-    }
 
     Reminder? generateReminder(String taskId) {
       if (formData.reminder == null) return null;
@@ -170,7 +151,7 @@ class _ArchiveScreenState extends ConsumerState<ArchiveScreen> {
         id: task.reminder?.id ?? const Uuid().v4(),
         taskId: taskId,
         triggerTime: triggerTime,
-        repeatRule: parseRepeatRule(formData.repeatRule),
+        repeatRule: formData.repeatRule,
         enabled: true,
       );
     }
@@ -178,12 +159,13 @@ class _ArchiveScreenState extends ConsumerState<ArchiveScreen> {
     final updatedTask = task.copyWith(
       title: formData.title,
       description: formData.description,
-      priority: parsePriority(formData.priority),
+      priority: formData.priority,
       tags: formData.tag != null ? [formData.tag!] : [],
+      subTasks: formData.subTasks,
       dueDate: formData.dueDate,
       reminder: generateReminder(task.id),
       clearReminder: formData.reminder == null,
-      repeatRule: parseRepeatRule(formData.repeatRule),
+      repeatRule: formData.repeatRule,
       color: formData.color?.value.toRadixString(16) ?? '',
       isPinned: formData.isPinned,
       updatedAt: DateTime.now().toUtc(),

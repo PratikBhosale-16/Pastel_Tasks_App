@@ -3,6 +3,7 @@ import 'package:pastel_tasks/features/tasks/domain/enums/priority.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/repeat_rule.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/task_status.dart';
 import 'package:pastel_tasks/features/tasks/domain/models/reminder.dart';
+import 'package:pastel_tasks/features/tasks/domain/models/sub_task.dart';
 
 /// Represents a single task entity.
 class Task extends Equatable {
@@ -13,12 +14,15 @@ class Task extends Equatable {
     required this.status,
     required this.priority,
     required this.tags,
+    this.subTasks = const [],
     required this.createdAt,
     required this.updatedAt,
     this.dueDate,
     this.completedAt,
     this.reminder,
     required this.repeatRule,
+    this.repeatEndDate,
+    this.repeatCount,
     required this.position,
     required this.isPinned,
     required this.isArchived,
@@ -45,6 +49,9 @@ class Task extends Equatable {
   /// List of tag IDs associated with this task.
   final List<String> tags;
 
+  /// List of sub-tasks for this task.
+  final List<SubTask> subTasks;
+
   /// When the task was created.
   final DateTime createdAt;
 
@@ -62,6 +69,12 @@ class Task extends Equatable {
 
   /// Repetition rule.
   final RepeatRule repeatRule;
+
+  /// Optional date when the repetition ends.
+  final DateTime? repeatEndDate;
+
+  /// Optional number of repetitions before ending.
+  final int? repeatCount;
 
   /// Order index for manual sorting.
   final double position;
@@ -88,12 +101,15 @@ class Task extends Equatable {
     TaskStatus? status,
     Priority? priority,
     List<String>? tags,
+    List<SubTask>? subTasks,
     DateTime? createdAt,
     DateTime? updatedAt,
     DateTime? dueDate,
     DateTime? completedAt,
     Reminder? reminder,
     RepeatRule? repeatRule,
+    DateTime? repeatEndDate,
+    int? repeatCount,
     double? position,
     bool? isPinned,
     bool? isArchived,
@@ -111,12 +127,15 @@ class Task extends Equatable {
       status: status ?? this.status,
       priority: priority ?? this.priority,
       tags: tags ?? this.tags,
+      subTasks: subTasks ?? this.subTasks,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       dueDate: clearDueDate ? null : (dueDate ?? this.dueDate),
       completedAt: clearCompletedAt ? null : (completedAt ?? this.completedAt),
       reminder: clearReminder ? null : (reminder ?? this.reminder),
       repeatRule: repeatRule ?? this.repeatRule,
+      repeatEndDate: repeatEndDate ?? this.repeatEndDate,
+      repeatCount: repeatCount ?? this.repeatCount,
       position: position ?? this.position,
       isPinned: isPinned ?? this.isPinned,
       isArchived: isArchived ?? this.isArchived,
@@ -134,12 +153,15 @@ class Task extends Equatable {
         status,
         priority,
         tags,
+        subTasks,
         createdAt,
         updatedAt,
         dueDate,
         completedAt,
         reminder,
         repeatRule,
+        repeatEndDate,
+        repeatCount,
         position,
         isPinned,
         isArchived,

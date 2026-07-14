@@ -51,5 +51,13 @@ abstract final class AppColors {
     Color(0xFFFFF9C4), // Cream
     Color(0xFFC5E1A5), // Olive
     Color(0xFFE0E0E0), // Grey
+    Color(0xFFF8BBD0), // Soft Pink
+    Color(0xFFFFCC80), // Soft Orange
+    Color(0xFFC8E6C9), // Light Green
+    Color(0xFFB3E5FC), // Powder Blue
+    Color(0xFFE1BEE7), // Lilac
+    Color(0xFFFFE0B2), // Apricot
+    Color(0xFFB2DFDB), // Aqua
+    Color(0xFFD7CCC8), // Mocha
   ];
 }

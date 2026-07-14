@@ -22,6 +22,8 @@ class TaskCollection {
 
   String? richText;
 
+  List<SubTaskCollection> subTasks = [];
+
   @enumerated
   @Index()
   late Priority priority;
@@ -50,10 +52,22 @@ class TaskCollection {
   @Index()
   late RepeatRule repeatRule;
 
+  @Index()
+  DateTime? repeatEndDate;
+
+  int? repeatCount;
+
   late String color;
 
   int? estimatedMinutes;
 
   @Index()
   DateTime? completedAt;
+}
+
+@embedded
+class SubTaskCollection {
+  late String uuid;
+  late String title;
+  bool isCompleted = false;
 }

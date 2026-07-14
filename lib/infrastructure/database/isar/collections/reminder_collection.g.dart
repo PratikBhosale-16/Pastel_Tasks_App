@@ -185,17 +185,19 @@ P _reminderCollectionDeserializeProp<P>(
 
 const _ReminderCollectionrepeatTypeEnumValueMap = {
   'none': 0,
-  'daily': 1,
-  'weekly': 2,
-  'monthly': 3,
-  'yearly': 4,
+  'hourly': 1,
+  'daily': 2,
+  'weekly': 3,
+  'monthly': 4,
+  'yearly': 5,
 };
 const _ReminderCollectionrepeatTypeValueEnumMap = {
   0: RepeatRule.none,
-  1: RepeatRule.daily,
-  2: RepeatRule.weekly,
-  3: RepeatRule.monthly,
-  4: RepeatRule.yearly,
+  1: RepeatRule.hourly,
+  2: RepeatRule.daily,
+  3: RepeatRule.weekly,
+  4: RepeatRule.monthly,
+  5: RepeatRule.yearly,
 };
 
 Id _reminderCollectionGetId(ReminderCollection object) {

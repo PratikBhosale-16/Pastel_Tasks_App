@@ -28,33 +28,6 @@ class TaskCreationHelper {
 
     final now = DateTime.now().toUtc();
 
-    Priority parsePriority(String p) {
-      switch (p) {
-        case 'Low':
-          return Priority.low;
-        case 'High':
-          return Priority.high;
-        case 'Critical':
-          return Priority.critical;
-        case 'Medium':
-        default:
-          return Priority.medium;
-      }
-    }
-
-    RepeatRule parseRepeatRule(String r) {
-      switch (r) {
-        case 'Daily':
-          return RepeatRule.daily;
-        case 'Weekly':
-          return RepeatRule.weekly;
-        case 'Monthly':
-          return RepeatRule.monthly;
-        case 'None':
-        default:
-          return RepeatRule.none;
-      }
-    }
 
     Reminder? generateReminder(String taskId) {
       if (formData.reminder == null) return null;
@@ -73,7 +46,7 @@ class TaskCreationHelper {
         id: const Uuid().v4(),
         taskId: taskId,
         triggerTime: triggerTime,
-        repeatRule: parseRepeatRule(formData.repeatRule),
+        repeatRule: formData.repeatRule,
         enabled: true,
       );
     }
@@ -85,14 +58,15 @@ class TaskCreationHelper {
       title: formData.title,
       description: formData.description,
       status: TaskStatus.pending,
-      priority: parsePriority(formData.priority),
+      priority: formData.priority,
       tags: formData.tag != null ? [formData.tag!] : [],
+      subTasks: formData.subTasks,
       createdAt: now,
       updatedAt: now,
       dueDate: formData.dueDate,
       completedAt: null,
       reminder: generateReminder(taskId),
-      repeatRule: parseRepeatRule(formData.repeatRule),
+      repeatRule: formData.repeatRule,
       position: now.millisecondsSinceEpoch.toDouble(),
       isPinned: formData.isPinned,
       isArchived: false,

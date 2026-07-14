@@ -32,6 +32,8 @@ bool _doesTaskOccurOnDate(Task task, DateTime targetDate) {
   switch (task.repeatRule) {
     case RepeatRule.none:
       return false;
+    case RepeatRule.hourly:
+      return true;
     case RepeatRule.daily:
       return true;
     case RepeatRule.weekly:

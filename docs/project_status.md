@@ -2,11 +2,11 @@
 
 ## Current Milestone
 
-- Milestone: M5.6
-- Name: Android Home Screen Widgets
+- Milestone: UI Overhaul
+- Name: Create Task UI Overhaul
 - Status: Completed
-- Validation: Validated with flutter analyze and flutter build apk
-- Overall Progress: Phase 5 in progress. M5.6 is completed.
+- Validation: Validated with flutter analyze, flutter test, and flutter build apk
+- Overall Progress: Phase 5 in progress. UI Overhaul (Create Task) is completed.
 
 ## Completed
 
@@ -29,6 +29,7 @@
 - [x] M5.4 Backup & Restore System (Complete)
 - [x] M5.5 Personalization & Settings (Complete)
 - [x] M5.6 Android Home Screen Widgets (Complete)
+- [x] UI Overhaul (Create Task) (Complete)
 
 ## Pending
 

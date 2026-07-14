@@ -9,8 +9,8 @@
 
 # Architecture
 
-- **Current Milestone**: M5.6 — Adaptive Home Screen Widgets (Glance)
-- **Progress**: Upgraded M5.6 Android Home Screen Widgets to use an adaptive, responsive widget system built natively in Kotlin with Jetpack Glance and Compose, syncing state via home_widget and SharedPreferences.
+- **Current Milestone**: UI Overhaul (Create Task)
+- **Progress**: Redesigned AddTaskBottomSheet, added sub-tasks, expanded pastel palette. Added advanced repeat end options (Date and Count), precise minute selection in clock, auto-toggling reminders, quick tag creation, and priority selector with icons.
 - **Active Architecture**: Feature-First, Clean Architecture, MVVM, Riverpod, GoRouter, Isar. Data-driven UI for Settings module.
 
 - Feature First project organization.
@@ -38,10 +38,10 @@
 - Minimum Android API: Android 12, API 31.
 
 ## Current Milestone
-**M5.6 Android Home Screen Widgets**
+**UI Overhaul (Create Task)**
 - Status: Completed.
-- Next milestone: M5.7 Search 2.0
-- Focus: Upgraded Android widgets natively in Kotlin using Jetpack Glance. Built fully functional, responsive, adaptive sizes (1x1, 2x2, 4x1, 4x4). Mapped Flutter data to Glance using SharedPreferences. Included sections for Today and Completed tasks natively. Added refresh, add, and settings buttons using local Material vector drawables.
+- Next milestone: UI Overhaul (Calendar/Time Pickers) or M5.7 Search 2.0
+- Focus: Implemented the new minimalist Create Task UI. Added advanced repetition ends (date/count), precise time selection, auto-reminders, priority selector, and in-line tag creation.
 
 # Completed
 

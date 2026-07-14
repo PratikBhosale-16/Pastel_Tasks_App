@@ -4,6 +4,8 @@
 
 ### Completed
 
+- UI Overhaul: Redesigned `AddTaskBottomSheet` to use a minimalist, keyboard-aware floating layout. Replaced descriptions with dynamic sub-tasks. Implemented smart auto-completion where completing all sub-tasks marks the parent task as complete. Expanded pastel color palette to 20 options and added color/tag/calendar action bar.
+- Create Task Polish: Added advanced Repeat Ends At logic (by Date or Count) backed by Isar schema updates. Refined the time picker clock to allow exact minute selection. Auto-enabled reminders upon time selection and persisted last-used reminder mode. Added in-line Tag creation and a visual Priority selector.
 - M5.6: Built production-quality Adaptive Android Home Screen Widgets using Jetpack Glance and Kotlin. Designed dynamic layouts for ExtraSmall (1x1), Small (4x1), Medium (2x2), and Large (4x4). Leveraged `home_widget` to seamlessly sync task data via Android SharedPreferences into the native widget without spinning up the Flutter engine. Replaced simple text characters with native Material Drawables for Add, Refresh, and Settings buttons, utilizing circular corner radius masks for perfect ripple effects.
 
 ## 2026-07-03

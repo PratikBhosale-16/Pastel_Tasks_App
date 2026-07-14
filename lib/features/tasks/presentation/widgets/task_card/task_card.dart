@@ -50,6 +50,7 @@ class TaskCard extends ConsumerWidget {
 
   String _getRepeatLabel(RepeatRule rule) {
     switch (rule) {
+      case RepeatRule.hourly: return 'Hourly';
       case RepeatRule.daily: return 'Daily';
       case RepeatRule.weekly: return 'Weekly';
       case RepeatRule.monthly: return 'Monthly';
@@ -75,26 +76,7 @@ class TaskCard extends ConsumerWidget {
       return;
     }
 
-    Priority parsePriority(String p) {
-      switch (p) {
-        case 'Low': return Priority.low;
-        case 'High': return Priority.high;
-        case 'Critical': return Priority.critical;
-        case 'Medium':
-        default: return Priority.medium;
-      }
-    }
 
-    RepeatRule parseRepeatRule(String r) {
-      switch (r) {
-        case 'Daily': return RepeatRule.daily;
-        case 'Weekly': return RepeatRule.weekly;
-        case 'Monthly': return RepeatRule.monthly;
-        case 'Yearly': return RepeatRule.yearly;
-        case 'None':
-        default: return RepeatRule.none;
-      }
-    }
 
     Reminder? generateReminder(String taskId) {
       if (formData.reminder == null) return null;
@@ -113,7 +95,7 @@ class TaskCard extends ConsumerWidget {
         id: task.reminder?.id ?? const Uuid().v4(),
         taskId: taskId,
         triggerTime: triggerTime,
-        repeatRule: parseRepeatRule(formData.repeatRule),
+        repeatRule: formData.repeatRule,
         enabled: true,
       );
     }
@@ -121,14 +103,15 @@ class TaskCard extends ConsumerWidget {
     final updatedTask = task.copyWith(
       title: formData.title,
       description: formData.description,
-      priority: parsePriority(formData.priority),
+      priority: formData.priority,
       tags: formData.tag != null ? [formData.tag!] : [],
+      subTasks: formData.subTasks,
       updatedAt: DateTime.now().toUtc(),
       dueDate: formData.dueDate,
       clearDueDate: formData.dueDate == null,
       reminder: generateReminder(task.id),
       clearReminder: formData.reminder == null,
-      repeatRule: parseRepeatRule(formData.repeatRule),
+      repeatRule: formData.repeatRule,
       isPinned: formData.isPinned,
       color: formData.color?.value.toRadixString(16) ?? '',
     );
@@ -385,17 +368,47 @@ class TaskCard extends ConsumerWidget {
                                 ),
                               ],
                             ),
-                            if (task.description.isNotEmpty) ...[
+                            if (task.subTasks.isNotEmpty) ...[
                               const SizedBox(height: AppSpacing.xs),
-                              HighlightText(
-                                text: task.description,
-                                query: searchQuery,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: theme.textTheme.bodyMedium?.copyWith(
-                                  color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
-                                ),
-                              ),
+                              ...task.subTasks.map((subTask) {
+                                return Row(
+                                  children: [
+                                    Checkbox(
+                                      value: subTask.isCompleted,
+                                      onChanged: isSelectionMode || isArchived ? null : (bool? val) {
+                                        if (val != null) {
+                                          final updatedSubTasks = task.subTasks.map((st) {
+                                            if (st.id == subTask.id) {
+                                              return st.copyWith(isCompleted: val);
+                                            }
+                                            return st;
+                                          }).toList();
+                                          
+                                          final updatedTask = task.copyWith(
+                                            subTasks: updatedSubTasks,
+                                            updatedAt: DateTime.now().toUtc(),
+                                          );
+                                          
+                                          ref.read(taskNotifierProvider.notifier).updateTask(updatedTask);
+                                        }
+                                      },
+                                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                      visualDensity: VisualDensity.compact,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        subTask.title,
+                                        style: theme.textTheme.bodyMedium?.copyWith(
+                                          decoration: subTask.isCompleted ? TextDecoration.lineThrough : null,
+                                          color: isArchived || subTask.isCompleted 
+                                              ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) 
+                                              : colorScheme.onSurfaceVariant,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }),
                             ],
                           ],
                         ),

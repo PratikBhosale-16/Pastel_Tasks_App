@@ -1,5 +1,10 @@
 # Decision Log
 
+## UI Overhaul: Sub-Tasks & Auto-Completion
+- **Date**: 2026-07-14.
+- **Context**: The user requested a complete UI overhaul for the "Create Task" bottom sheet, including the addition of sub-tasks and the removal of the description field.
+- **Decision**: Added `SubTask` model to domain and Isar schema. Replaced the `description` UI component with a dynamic list of sub-tasks. Added business logic to `TaskNotifier.updateTask` to automatically mark the parent task as completed if all sub-tasks are marked as complete. Expanded the internal `AppColors.taskColors` palette to 20 pastel colors to match the new UI mockups.
+
 ## Documentation Separation Strategy
 
 - Date: 2026-06-26.
