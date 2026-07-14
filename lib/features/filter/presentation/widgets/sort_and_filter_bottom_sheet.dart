@@ -278,7 +278,7 @@ class SortAndFilterBottomSheet extends ConsumerWidget {
 
                 // TAGS
                 ExpansionTile(
-                  title: const Text('Tags', style: TextStyle(fontWeight: FontWeight.w600)),
+                  title: const Text('Categories', style: TextStyle(fontWeight: FontWeight.w600)),
                   childrenPadding: const EdgeInsets.all(16),
                   children: [
                     Consumer(

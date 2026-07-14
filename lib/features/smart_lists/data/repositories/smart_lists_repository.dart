@@ -93,7 +93,7 @@ class SmartListsRepository {
       ),
       const SmartList(
         id: 'untagged',
-        title: 'Untagged',
+        title: 'No Category',
         icon: Icons.label_off_outlined,
         color: Color(0xFFE0E0E0),
         filter: TaskFilter(hasTags: false),

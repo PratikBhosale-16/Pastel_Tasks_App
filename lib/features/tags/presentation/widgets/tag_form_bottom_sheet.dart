@@ -125,7 +125,7 @@ class _TagFormBottomSheetState extends State<TagFormBottomSheet> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
-                        widget.existingTag == null ? 'New Tag' : 'Edit Tag',
+                        widget.existingTag == null ? 'New Category' : 'Edit Category',
                         style: theme.textTheme.headlineSmall?.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
@@ -133,14 +133,14 @@ class _TagFormBottomSheetState extends State<TagFormBottomSheet> {
                       const SizedBox(height: 24),
                       PrimaryTextField(
                         controller: _nameController,
-                        labelText: 'Tag Name',
+                        labelText: 'Category Name',
                         hintText: 'e.g., Work, Personal',
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
-                            return 'Please enter a tag name';
+                            return 'Please enter a category name';
                           }
                           if (value.length > 30) {
-                            return 'Tag name is too long';
+                            return 'Category name is too long';
                           }
                           return null;
                         },
@@ -167,7 +167,7 @@ class _TagFormBottomSheetState extends State<TagFormBottomSheet> {
                                 ),
                               if (_selectedIcon != null) const SizedBox(width: 6),
                               Text(
-                                _nameController.text.isEmpty ? 'Tag Name' : _nameController.text,
+                                _nameController.text.isEmpty ? 'Category Name' : _nameController.text,
                                 style: theme.textTheme.labelMedium?.copyWith(
                                   color: Colors.black87,
                                   fontWeight: FontWeight.w600,

@@ -39,14 +39,14 @@ class EmptyState extends StatelessWidget {
         onSecondaryAction = null,
         icon = null;
 
-  /// Preset: Tag Empty
+  /// Preset: Category Empty
   const EmptyState.tag({
     this.onPrimaryAction,
     super.key,
-  })  : title = 'No tags created.',
-        subtitle = 'Organize your tasks by creating custom tags.',
+  })  : title = 'No categories found.',
+        subtitle = 'Create categories to organise your tasks.',
         illustration = Icons.local_offer_rounded,
-        primaryActionLabel = 'Create Tag',
+        primaryActionLabel = 'Create Category',
         secondaryActionLabel = null,
         onSecondaryAction = null,
         icon = null;

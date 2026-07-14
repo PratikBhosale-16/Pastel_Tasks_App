@@ -152,7 +152,7 @@ class _TagsScreenState extends ConsumerState<TagsScreen> with SingleTickerProvid
               ),
               const SizedBox(height: 12),
               Text(
-                'New Tag',
+                'New Category',
                 style: theme.textTheme.titleMedium?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                   fontWeight: FontWeight.w600,
@@ -183,7 +183,7 @@ class _TagsScreenState extends ConsumerState<TagsScreen> with SingleTickerProvid
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Your Tags',
+              'Your Categories',
               style: theme.textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: theme.colorScheme.onSurface,
@@ -278,7 +278,7 @@ class _TagsScreenState extends ConsumerState<TagsScreen> with SingleTickerProvid
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _showCreateTag,
         icon: const Icon(Icons.add),
-        label: const Text('New Tag'),
+        label: const Text('New Category'),
         elevation: 2,
       ),
 

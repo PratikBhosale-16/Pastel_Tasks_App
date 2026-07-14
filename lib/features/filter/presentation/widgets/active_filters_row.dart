@@ -158,7 +158,7 @@ class ActiveFiltersRow extends ConsumerWidget {
     if (filter.hasTags == false) {
       chips.add(_buildFilterChip(
         context,
-        label: 'Untagged',
+        label: 'No Category',
         onDeleted: () {
           ref.read(filterProvider.notifier).updateFilter(filter.copyWith(clearHasTags: true));
         },

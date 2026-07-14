@@ -46,7 +46,7 @@ class AppShellScaffold extends ConsumerWidget {
           AppNavigationDestination(
             icon: Icons.tag_outlined,
             selectedIcon: Icons.tag_rounded,
-            label: 'Tags',
+            label: 'Categories',
           ),
           AppNavigationDestination(
             icon: Icons.bar_chart_rounded,

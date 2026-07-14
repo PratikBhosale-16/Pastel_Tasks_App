@@ -57,18 +57,9 @@ class SmartListsDrawer extends ConsumerWidget {
                   const SliverToBoxAdapter(
                     child: Divider(),
                   ),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 16, top: 16, bottom: 8),
-                      child: Text(
-                        'Tags',
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
+                  const SliverToBoxAdapter(
+                    child: _CategoriesExpansionTile(),
                   ),
-                  const _TagsSliverList(),
                 ],
               ),
             ),
@@ -135,8 +126,8 @@ class _SmartListTile extends ConsumerWidget {
   }
 }
 
-class _TagsSliverList extends ConsumerWidget {
-  const _TagsSliverList();
+class _CategoriesExpansionTile extends ConsumerWidget {
+  const _CategoriesExpansionTile();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -147,18 +138,21 @@ class _TagsSliverList extends ConsumerWidget {
     return tagsAsync.when(
       data: (tags) {
         if (tags.isEmpty) {
-          return const SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: Text('No tags yet.'),
-            ),
+          return const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: Text('No categories yet.'),
           );
         }
 
-        return SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              final tag = tags[index];
+        return ExpansionTile(
+          initiallyExpanded: true,
+          title: Text(
+            'Categories',
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          children: tags.map((tag) {
               int count = 0;
               bool allCompleted = false;
               if (tasksAsync.hasValue && tasksAsync.value != null) {
@@ -215,13 +209,11 @@ class _TagsSliverList extends ConsumerWidget {
                   Navigator.pop(context);
                 },
               );
-            },
-            childCount: tags.length,
-          ),
+            }).toList(),
         );
       },
-      loading: () => const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator())),
-      error: (err, st) => SliverToBoxAdapter(child: Text('Error: $err')),
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (err, st) => Text('Error: $err'),
     );
   }
 }

@@ -120,7 +120,7 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
                     _buildQuickFilters(colorScheme),
                     const SizedBox(height: 24),
 
-                    _buildSectionTitle(theme, 'Tags'),
+                    _buildSectionTitle(theme, 'Categories'),
                     tagsAsync.when(
                       data: (tags) {
                         if (tags.isEmpty) {

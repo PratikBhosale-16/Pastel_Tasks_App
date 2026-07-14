@@ -235,7 +235,7 @@ class BulkActionsBottomSheet extends ConsumerWidget {
                       onSelected: (_) => Navigator.of(context).pop(''),
                     ),
                     SelectionChip(
-                      label: '+ New Tag',
+                      label: '+ New Category',
                       isSelected: false,
                       onSelected: (_) async {
                         final newTag = await TagFormBottomSheet.show(context);
