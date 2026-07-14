@@ -275,11 +275,11 @@ class _TagsScreenState extends ConsumerState<TagsScreen> with SingleTickerProvid
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, st) => Center(child: Text('Error: $err')),
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: FloatingActionButton(
         onPressed: _showCreateTag,
-        icon: const Icon(Icons.add),
-        label: const Text('New Category'),
         elevation: 2,
+        shape: const CircleBorder(),
+        child: const Icon(Icons.add_circle_rounded, size: 32),
       ),
 
     );

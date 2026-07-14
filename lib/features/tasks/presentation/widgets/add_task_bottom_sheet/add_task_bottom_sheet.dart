@@ -442,6 +442,22 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
                     ),
                     const SizedBox(width: 8),
 
+                    // Pin Toggle
+                    IconButton(
+                      icon: Icon(
+                        Icons.push_pin_rounded,
+                        size: 22,
+                        color: _isPinned ? theme.colorScheme.primary : theme.colorScheme.onSurfaceVariant,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isPinned = !_isPinned;
+                        });
+                      },
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
+                    ),
+
                     // Priority
                     PopupMenuButton<Priority>(
                       icon: Icon(

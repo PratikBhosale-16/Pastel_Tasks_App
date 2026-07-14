@@ -200,9 +200,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       body: Column(
         children: [
           if (_isSearchVisible)
-            const Padding(
-              padding: EdgeInsets.only(top: 8.0, bottom: 4.0),
-              child: TaskSearchBar(),
+            TapRegion(
+              onTapOutside: (event) {
+                FocusScope.of(context).unfocus();
+                setState(() {
+                  _isSearchVisible = false;
+                });
+              },
+              child: const Padding(
+                padding: EdgeInsets.only(top: 8.0, bottom: 4.0),
+                child: TaskSearchBar(),
+              ),
             ),
           const ActiveFiltersRow(),
           Expanded(
@@ -454,15 +462,15 @@ floatingActionButton: isSelectionMode
         backgroundColor: colorScheme.secondaryContainer,
         foregroundColor: colorScheme.onSecondaryContainer,
       )
-    : FloatingActionButton.extended(
+    : FloatingActionButton(
         onPressed: () {
           final filter = ref.read(filterProvider).valueOrNull;
           final initialTag = (filter?.tags != null && filter!.tags!.isNotEmpty) ? filter.tags!.first : null;
           TaskCreationHelper.showAddTask(context, ref, initialTagId: initialTag);
         },
-        icon: const Icon(Icons.add),
-        label: const Text('New Task'),
         elevation: 2,
+        shape: const CircleBorder(),
+        child: const Icon(Icons.add_circle_rounded, size: 32),
       ),
 
     );
