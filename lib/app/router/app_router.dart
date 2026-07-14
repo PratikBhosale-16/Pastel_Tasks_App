@@ -53,40 +53,28 @@ final appRouter = GoRouter(
             ),
           ],
         ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/stats',
-              builder: (context, state) => const StatsScreen(),
-            ),
-          ],
+      ],
+    ),
+    GoRoute(
+      name: RouteNames.settings,
+      path: RouteNames.settingsPath,
+      builder: (context, state) => const SettingsScreen(),
+      routes: [
+        GoRoute(
+          path: 'notification_settings',
+          builder: (context, state) => const NotificationSettingsScreen(),
         ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              name: RouteNames.settings,
-              path: RouteNames.settingsPath,
-              builder: (context, state) => const SettingsScreen(),
-              routes: [
-                GoRoute(
-                  path: 'notification_settings',
-                  builder: (context, state) => const NotificationSettingsScreen(),
-                ),
-                GoRoute(
-                  path: 'notification_history',
-                  builder: (context, state) => const NotificationHistoryScreen(),
-                ),
-                GoRoute(
-                  path: 'backup',
-                  builder: (context, state) => const BackupScreen(),
-                ),
-                GoRoute(
-                  path: 'widget',
-                  builder: (context, state) => const WidgetSettingsScreen(),
-                ),
-              ],
-            ),
-          ],
+        GoRoute(
+          path: 'notification_history',
+          builder: (context, state) => const NotificationHistoryScreen(),
+        ),
+        GoRoute(
+          path: 'backup',
+          builder: (context, state) => const BackupScreen(),
+        ),
+        GoRoute(
+          path: 'widget',
+          builder: (context, state) => const WidgetSettingsScreen(),
         ),
       ],
     ),

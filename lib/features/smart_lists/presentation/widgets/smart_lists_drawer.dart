@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pastel_tasks/app/router/route_names.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pastel_tasks/features/filter/presentation/providers/filter_providers.dart';
 import 'package:pastel_tasks/features/smart_lists/data/repositories/smart_lists_repository.dart';
@@ -87,6 +89,21 @@ class SmartListsDrawer extends ConsumerWidget {
                 ],
               ),
             ),
+            const Divider(height: 1),
+            ListTile(
+              leading: Icon(Icons.settings_outlined, color: theme.colorScheme.onSurfaceVariant),
+              title: Text(
+                'Settings',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              onTap: () {
+                Navigator.pop(context); // Close drawer
+                context.pushNamed(RouteNames.settings);
+              },
+            ),
+            const SizedBox(height: 8),
           ],
         ),
       ),

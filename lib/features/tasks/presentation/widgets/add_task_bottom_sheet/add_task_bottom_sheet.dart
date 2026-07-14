@@ -395,9 +395,14 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Row(
                   children: [
-                    // Tag Selector Pill
-                    InkWell(
-                      onTap: () async {
+                    Expanded(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            // Tag Selector Pill
+                            InkWell(
+                              onTap: () async {
                         final RenderBox button = context.findRenderObject() as RenderBox;
                         final offset = button.localToGlobal(Offset.zero);
                         
@@ -541,8 +546,11 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
                     ),
-                    
-                    const Spacer(),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
 
                     // Submit Button
                     Container(
