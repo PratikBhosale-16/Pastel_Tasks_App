@@ -45,9 +45,19 @@ import 'package:pastel_tasks/shared/widgets/empty_state/empty_state.dart';
 import 'package:pastel_tasks/features/tasks/presentation/utils/task_creation_helper.dart';
 
 /// Primary entry point for the task management application.
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   /// Creates the home screen.
   const HomeScreen({super.key});
+
+  @override
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  bool _isSearchVisible = false;
+  bool _isPinnedExpanded = true;
+  bool _isTasksExpanded = true;
+  bool _isCompletedExpanded = true;
 
 
 
@@ -89,7 +99,7 @@ class HomeScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final taskListAsync = ref.watch(sortedTasksProvider);
@@ -160,6 +170,15 @@ class HomeScreen extends ConsumerWidget {
         ),
         actions: [
           IconButton(
+            icon: const Icon(Icons.search_rounded),
+            tooltip: 'Search Tasks',
+            onPressed: () {
+              setState(() {
+                _isSearchVisible = !_isSearchVisible;
+              });
+            },
+          ),
+          IconButton(
             icon: const Icon(Icons.archive_outlined),
             tooltip: 'Archived Tasks',
             onPressed: () {
@@ -180,7 +199,11 @@ class HomeScreen extends ConsumerWidget {
       ),
       body: Column(
         children: [
-          const TaskSearchBar(),
+          if (_isSearchVisible)
+            const Padding(
+              padding: EdgeInsets.only(top: 8.0, bottom: 4.0),
+              child: TaskSearchBar(),
+            ),
           const ActiveFiltersRow(),
           Expanded(
             child: AnimatedSwitcher(
@@ -231,15 +254,33 @@ class HomeScreen extends ConsumerWidget {
                   SliverPadding(
                     padding: const EdgeInsets.only(left: 20, right: 20, bottom: 8),
                     sliver: SliverToBoxAdapter(
-                      child: Row(
-                        children: [
-                          Icon(Icons.push_pin_rounded, size: 18, color: colorScheme.primary),
-                          const SizedBox(width: 8),
-                          Text('Pinned', style: theme.textTheme.labelLarge?.copyWith(color: colorScheme.primary)),
-                        ],
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            _isPinnedExpanded = !_isPinnedExpanded;
+                          });
+                        },
+                        borderRadius: BorderRadius.circular(8),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Pinned (${pinnedTasks.length})', 
+                                style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                              const Spacer(),
+                              Icon(
+                                _isPinnedExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, 
+                                color: colorScheme.onSurfaceVariant,
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
+                  if (_isPinnedExpanded)
                   SliverReorderableList(
                     proxyDecorator: _proxyDecorator,
                     itemCount: pinnedTasks.length,
@@ -270,13 +311,36 @@ class HomeScreen extends ConsumerWidget {
                   ),
                 ],
                 if (pendingTasks.isNotEmpty) ...[
-                  if (pinnedTasks.isNotEmpty)
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        child: Text('Tasks', style: theme.textTheme.labelLarge?.copyWith(color: colorScheme.onSurfaceVariant)),
+                  SliverPadding(
+                    padding: const EdgeInsets.only(left: 20, right: 20, bottom: 8, top: 16),
+                    sliver: SliverToBoxAdapter(
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            _isTasksExpanded = !_isTasksExpanded;
+                          });
+                        },
+                        borderRadius: BorderRadius.circular(8),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Tasks (${pendingTasks.length})', 
+                                style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                              const Spacer(),
+                              Icon(
+                                _isTasksExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, 
+                                color: colorScheme.onSurfaceVariant,
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
+                  ),
+                  if (_isTasksExpanded)
                   SliverReorderableList(
                     proxyDecorator: _proxyDecorator,
                     itemCount: pendingTasks.length,
@@ -307,21 +371,36 @@ class HomeScreen extends ConsumerWidget {
                   ),
                 ],
                 if (completedTasks.isNotEmpty) ...[
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-                      child: Row(
-                        children: [
-                          Expanded(child: Divider(color: colorScheme.outlineVariant)),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: Text('Completed', style: theme.textTheme.labelMedium?.copyWith(color: colorScheme.onSurfaceVariant)),
+                  SliverPadding(
+                    padding: const EdgeInsets.only(left: 20, right: 20, bottom: 8, top: 16),
+                    sliver: SliverToBoxAdapter(
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            _isCompletedExpanded = !_isCompletedExpanded;
+                          });
+                        },
+                        borderRadius: BorderRadius.circular(8),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Completed (${completedTasks.length})', 
+                                style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                              const Spacer(),
+                              Icon(
+                                _isCompletedExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, 
+                                color: colorScheme.onSurfaceVariant,
+                              ),
+                            ],
                           ),
-                          Expanded(child: Divider(color: colorScheme.outlineVariant)),
-                        ],
+                        ),
                       ),
                     ),
                   ),
+                  if (_isCompletedExpanded)
                   SliverReorderableList(
                     proxyDecorator: _proxyDecorator,
                     itemCount: completedTasks.length,
