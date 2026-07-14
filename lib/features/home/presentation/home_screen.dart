@@ -38,7 +38,7 @@ import 'package:pastel_tasks/features/sorting/domain/enums/sort_option.dart';
 import 'package:pastel_tasks/features/sorting/presentation/providers/sort_providers.dart';
 import 'package:pastel_tasks/features/filter/presentation/widgets/sort_and_filter_bottom_sheet.dart';
 import 'package:pastel_tasks/features/filter/presentation/widgets/active_filters_row.dart';
-import 'package:pastel_tasks/features/smart_lists/presentation/widgets/smart_lists_drawer.dart';
+// Removed smart_lists_drawer.dart import
 import 'package:pastel_tasks/features/selection/presentation/providers/selection_providers.dart';
 import 'package:pastel_tasks/features/selection/presentation/widgets/bulk_actions_bottom_sheet.dart';
 import 'package:pastel_tasks/shared/widgets/empty_state/empty_state.dart';
@@ -102,7 +102,6 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
-      drawer: isSelectionMode ? null : const SmartListsDrawer(),
       appBar: isSelectionMode
           ? AppBar(
               leading: IconButton(
@@ -124,7 +123,18 @@ class HomeScreen extends ConsumerWidget {
               ],
             )
           : AppBar(
-        title: Column(
+              leading: Builder(
+                builder: (BuildContext context) {
+                  return IconButton(
+                    icon: const Icon(Icons.menu),
+                    tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+                    onPressed: () {
+                      context.findRootAncestorStateOfType<ScaffoldState>()?.openDrawer();
+                    },
+                  );
+                },
+              ),
+              title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [

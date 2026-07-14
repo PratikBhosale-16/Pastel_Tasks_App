@@ -54,9 +54,7 @@ class SmartListsDrawer extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  const SliverToBoxAdapter(
-                    child: Divider(),
-                  ),
+                  // Divider removed as per request
                   const SliverToBoxAdapter(
                     child: _CategoriesExpansionTile(),
                   ),

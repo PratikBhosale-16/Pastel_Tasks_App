@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pastel_tasks/shared/layout/app_bottom_navigation.dart';
+import 'package:pastel_tasks/features/smart_lists/presentation/widgets/smart_lists_drawer.dart';
 
 /// The main shell scaffold that wraps the application and provides
 /// a persistent bottom navigation bar across top-level destinations.
@@ -28,6 +29,7 @@ class AppShellScaffold extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
+      drawer: const SmartListsDrawer(),
       body: navigationShell,
       bottomNavigationBar: AppBottomNavigation(
         selectedIndex: navigationShell.currentIndex,
