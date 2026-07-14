@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-07-14
+
+### Completed
+
+- M5.6: Built production-quality Adaptive Android Home Screen Widgets using Jetpack Glance and Kotlin. Designed dynamic layouts for ExtraSmall (1x1), Small (4x1), Medium (2x2), and Large (4x4). Leveraged `home_widget` to seamlessly sync task data via Android SharedPreferences into the native widget without spinning up the Flutter engine. Replaced simple text characters with native Material Drawables for Add, Refresh, and Settings buttons, utilizing circular corner radius masks for perfect ripple effects.
+
 ## 2026-07-03
 
 ### Completed
@@ -214,7 +220,8 @@
 - Restored milestone M0.3 Core Infrastructure between Application Bootstrap and Design System.
 - Confirmed the development order as M0.1 Project Foundation, M0.2 Application Bootstrap, M0.3 Core Infrastructure, then M1 Design System.
 
-## [2026-07-04] M5.6 Adaptive Responsive Android Widgets (Upgrade)
-- Upgraded Android home screen widgets to a production-quality Clean Architecture (`WidgetProvider`, `WidgetRenderer`, `WidgetUpdater`, `WidgetState`).
-- Implemented Android 12+ native responsive sizing using `RemoteViews(Map<SizeF, RemoteViews>)` for seamless dynamic reflowing across 5 sizes (Extra Small to Extra Large).
-- Restructured `features/widgets` to `features/widget` in Flutter, and unified the JSON synchronization logic in `WidgetSyncService`.
+## [2026-07-14] M5.6 Adaptive Android Widgets
+- Re-architected Android home screen widgets into a single `AdaptiveWidgetProvider` using Jetpack Glance and Compose natively in Kotlin.
+- Ensured a single widget can adapt to multiple sizes intelligently.
+- Replaced RemoteViews with Jetpack Glance for modern Declarative UI design matching the premium Pastel Tasks aesthetic.
+- Setup `WidgetSyncService` in Flutter to persist Isar data directly to `home_widget` SharedPreferences, allowing the widget to read tasks natively without booting the Flutter Engine.

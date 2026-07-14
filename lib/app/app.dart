@@ -4,8 +4,7 @@ import 'package:pastel_tasks/app/config/app_config.dart';
 import 'package:pastel_tasks/app/router/app_router.dart';
 import 'package:pastel_tasks/app/theme/theme.dart';
 import 'package:pastel_tasks/features/settings/presentation/providers/theme_providers.dart';
-import 'package:pastel_tasks/features/widget/providers/widget_providers.dart';
-import 'package:pastel_tasks/features/widget/providers/widget_action_service.dart';
+import 'package:pastel_tasks/features/widgets/data/widget_sync_service.dart';
 
 /// Root application shell for PastelTasks.
 class App extends ConsumerWidget {
@@ -15,8 +14,7 @@ class App extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Initialize Widget Syncing
-    ref.watch(widgetInitializationProvider);
-    ref.watch(widgetActionServiceProvider);
+    ref.watch(widgetSyncServiceProvider);
     
     final appThemeMode = ref.watch(themeModeProvider);
     final appAccent = ref.watch(appAccentProvider);

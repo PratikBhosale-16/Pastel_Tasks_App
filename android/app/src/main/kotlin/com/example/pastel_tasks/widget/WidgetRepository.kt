@@ -3,83 +3,61 @@ package com.example.pastel_tasks.widget
 import android.content.Context
 import android.content.SharedPreferences
 import org.json.JSONArray
-import org.json.JSONObject
+import org.json.JSONException
 
-class WidgetRepository(private val context: Context) {
-    private val prefs: SharedPreferences by lazy {
-        context.getSharedPreferences("es.antonborri.home_widget.preferences", Context.MODE_PRIVATE)
+object WidgetRepository {
+
+    private fun getPrefs(context: Context): SharedPreferences {
+        // home_widget uses "HomeWidgetPreferences" by default
+        return context.getSharedPreferences("HomeWidgetPreferences", Context.MODE_PRIVATE)
     }
 
-    fun getWidgetState(): WidgetState {
-        return WidgetState(
-            todaysTasks = parseTasks(prefs.getString("todays_tasks", "[]")),
-            upcomingTasks = parseTasks(prefs.getString("upcoming_tasks", "[]")),
-            completedTasks = parseTasks(prefs.getString("completed_tasks", "[]")),
-            pinnedTasks = parseTasks(prefs.getString("pinned_tasks", "[]")),
-            overdueTasks = parseTasks(prefs.getString("overdue_tasks", "[]")),
-            progressCompleted = prefs.getInt("progress_completed", 0),
-            progressTotal = prefs.getInt("progress_total", 0),
-            countToday = prefs.getInt("count_today", 0),
-            countOverdue = prefs.getInt("count_overdue", 0),
-            settings = parseSettings(prefs.getString("widget_settings", "{}"))
-        )
-    }
-
-    private fun parseTasks(jsonString: String?): List<TaskItem> {
-        if (jsonString.isNullOrEmpty()) return emptyList()
-        val list = mutableListOf<TaskItem>()
+    fun getWidgetState(context: Context): WidgetState {
+        val prefs = getPrefs(context)
+        
+        val greeting = prefs.getString("widget_greeting", "Hello") ?: "Hello"
+        val date = prefs.getString("widget_date", "") ?: ""
+        val progressPercent = prefs.getInt("widget_progress_percent", 0)
+        val completedCount = prefs.getInt("widget_completed_count", 0)
+        val totalCount = prefs.getInt("widget_total_count", 0)
+        val showCompleted = prefs.getBoolean("widget_show_completed", true)
+        val accentColor = if (prefs.contains("widget_accent_color")) prefs.getLong("widget_accent_color", 0L) else null
+        
+        val tasksJson = prefs.getString("widget_tasks", "[]") ?: "[]"
+        val tasks = mutableListOf<WidgetTask>()
+        
         try {
-            val array = JSONArray(jsonString)
-            for (i in 0 until array.length()) {
-                val obj = array.getJSONObject(i)
-                val tagsArray = obj.optJSONArray("tags")
-                val tags = mutableListOf<String>()
-                if (tagsArray != null) {
-                    for (j in 0 until tagsArray.length()) {
-                        tags.add(tagsArray.getString(j))
-                    }
-                }
-                list.add(
-                    TaskItem(
-                        id = obj.getString("id"),
-                        title = obj.getString("title"),
+            val jsonArray = JSONArray(tasksJson)
+            for (i in 0 until jsonArray.length()) {
+                val obj = jsonArray.getJSONObject(i)
+                tasks.add(
+                    WidgetTask(
+                        id = obj.optString("id"),
+                        title = obj.optString("title"),
+                        isCompleted = obj.optBoolean("isCompleted", false),
+                        dueTime = if (obj.has("dueTime") && !obj.isNull("dueTime")) obj.getString("dueTime") else null,
                         priority = obj.optInt("priority", 0),
-                        dueDate = if (obj.has("dueDate") && !obj.isNull("dueDate")) obj.getLong("dueDate") else null,
+                        tag = if (obj.has("tag") && !obj.isNull("tag")) obj.getString("tag") else null,
                         hasReminder = obj.optBoolean("hasReminder", false),
-                        isRepeat = obj.optBoolean("isRepeat", false),
                         isPinned = obj.optBoolean("isPinned", false),
-                        status = obj.optInt("status", 0),
-                        tags = tags
+                        isRepeat = obj.optBoolean("isRepeat", false),
+                        group = obj.optString("group", "Tasks")
                     )
                 )
             }
-        } catch (e: Exception) {
+        } catch (e: JSONException) {
             e.printStackTrace()
         }
-        return list
-    }
-
-    private fun parseSettings(jsonString: String?): WidgetSettings {
-        if (jsonString.isNullOrEmpty()) return WidgetSettings()
-        try {
-            val obj = JSONObject(jsonString)
-            return WidgetSettings(
-                showCompleted = obj.optBoolean("showCompleted", true),
-                showUpcoming = obj.optBoolean("showUpcoming", true),
-                showOnlyToday = obj.optBoolean("showOnlyToday", false),
-                showArchived = obj.optBoolean("showArchived", false),
-                maxTaskCount = obj.optInt("maxTaskCount", 5),
-                accentColor = obj.optString("accentColor", ""),
-                transparency = obj.optDouble("transparency", 1.0),
-                cornerRadius = obj.optDouble("cornerRadius", 16.0),
-                compactMode = obj.optBoolean("compactMode", false),
-                showGreeting = obj.optBoolean("showGreeting", true),
-                showProgress = obj.optBoolean("showProgress", true),
-                autoRefreshInterval = obj.optInt("autoRefreshInterval", 15)
-            )
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return WidgetSettings()
+        
+        return WidgetState(
+            greeting = greeting,
+            date = date,
+            progressPercent = progressPercent,
+            completedCount = completedCount,
+            totalCount = totalCount,
+            tasks = tasks,
+            showCompleted = showCompleted,
+            accentColor = accentColor
+        )
     }
 }

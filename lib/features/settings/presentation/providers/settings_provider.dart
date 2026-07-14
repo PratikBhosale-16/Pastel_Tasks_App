@@ -308,35 +308,12 @@ const backupHistoryNav = SettingsItemNavigation(
 );
 
 // --- WIDGETS ---
-const enableWidgetsSwitch = SettingsItemSwitch(
-  id: 'widgets_enable',
-  title: 'Enable Widgets',
-  storageKey: 'widgets_enabled',
-  defaultValue: true,
+const widgetSettingsNav = SettingsItemNavigation(
+  id: 'widget_settings',
+  title: 'Widget Settings',
+  route: '/settings/widget',
   icon: Icons.widgets,
-  keywords: ['widgets', 'home', 'screen', 'enable'],
-);
-
-const widgetThemeDropdown = SettingsItemDropdown<String>(
-  id: 'widgets_theme',
-  title: 'Widget Theme',
-  storageKey: 'widget_theme',
-  defaultValue: 'System',
-  options: ['System', 'Light', 'Dark', 'Transparent'],
-  labelBuilder: _defaultLabelBuilder,
-  icon: Icons.color_lens,
-  keywords: ['widget', 'theme', 'color', 'transparent'],
-);
-
-const widgetRefreshDropdown = SettingsItemDropdown<String>(
-  id: 'widgets_refresh',
-  title: 'Widget Refresh Interval',
-  storageKey: 'widget_refresh',
-  defaultValue: '15 mins',
-  options: ['15 mins', '30 mins', '1 hour', '6 hours'],
-  labelBuilder: _defaultLabelBuilder,
-  icon: Icons.refresh,
-  keywords: ['widget', 'refresh', 'interval', 'update'],
+  keywords: ['widget', 'home', 'screen', 'settings'],
 );
 
 // --- ACCESSIBILITY ---
@@ -681,9 +658,7 @@ final settingsSectionsProvider = Provider<List<SettingsSection>>((ref) {
       id: 'widgets',
       title: 'Widgets',
       items: [
-        enableWidgetsSwitch,
-        widgetThemeDropdown,
-        widgetRefreshDropdown,
+        widgetSettingsNav,
       ],
     ),
     const SettingsSection(

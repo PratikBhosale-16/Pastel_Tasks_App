@@ -7,6 +7,8 @@ import 'package:pastel_tasks/core/logging/app_logger.dart';
 import 'package:pastel_tasks/infrastructure/database/isar/database_service.dart';
 import 'package:pastel_tasks/core/services/notification_service.dart';
 import 'package:pastel_tasks/core/services/workmanager_service.dart';
+import 'package:home_widget/home_widget.dart';
+import 'package:pastel_tasks/features/widgets/data/widget_background_callback.dart';
 
 /// Starts the PastelTasks application shell.
 Future<void> bootstrap() async {
@@ -26,6 +28,9 @@ Future<void> bootstrap() async {
       await NotificationService.instance.initialize();
       await NotificationService.instance.requestPermissions();
       await WorkManagerService.instance.initialize();
+      
+      // Register background callback for HomeWidget
+      await HomeWidget.registerBackgroundCallback(widgetBackgroundCallback);
 
       runApp(
         const ProviderScope(

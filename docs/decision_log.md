@@ -144,7 +144,7 @@ Handling multi-select operations by looping over individual TaskRepository.updat
 - **Decision:** Built a data-driven Settings architecture powered by `settingsSectionsProvider`.
 - **Reason:** Migrating `SettingsScreen` to map over strongly typed domain models (`SettingsItem`, `SettingsSection`) decouples presentation from logic, allowing settings (and future dynamic capabilities, like feature flags) to be added simply by defining new metadata objects.
 
-## [2026-07-04] Adaptive Responsive Android Widget (M5.6 Upgrade)
-**Context:** The previous Android widget implementation relied on a single `ResponsiveWidgetProvider` listening to `onAppWidgetOptionsChanged` which could cause lag and didn't perfectly align with Android 12's native dynamic resizing.
-**Decision:** Upgraded the widget architecture to use Android 12+ `RemoteViews(Map<SizeF, RemoteViews>)`. Created a clean Kotlin architecture with `WidgetRenderer` dynamically supplying perfectly sized UI variants based on exact Android launcher dimensions, without relying on manual `onAppWidgetOptionsChanged` calculations.
-**Consequence:** Perfect, smooth dynamic resizing directly handled by the OS. Requires `minSdkVersion 31` (Android 12) for the responsive map feature, with a fallback to the default layout for older OS versions.
+## [2026-07-04] Unified Responsive Android Widget
+**Context:** User requested 5 specific widget layouts but wanted them to dynamically respond to user resize actions on the launcher.
+**Decision:** Instead of using 5 different AppWidgetProvider classes, implemented a single ResponsiveWidgetProvider that listens to onAppWidgetOptionsChanged and dynamically swaps RemoteViews layouts depending on the active cell grid (columns/rows).
+**Consequence:** A cleaner widget picker for the user (only 1 widget to drag) and flawless responsive transitions. Required deleting old size-based providers.

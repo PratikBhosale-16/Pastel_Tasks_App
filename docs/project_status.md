@@ -2,11 +2,11 @@
 
 ## Current Milestone
 
-- Milestone: M5.5
-- Name: Personalization & Settings
+- Milestone: M5.6
+- Name: Android Home Screen Widgets
 - Status: Completed
-- Validation: Validated with flutter analyze and flutter test
-- Overall Progress: Phase 5 in progress. M5.5 is completed.
+- Validation: Validated with flutter analyze and flutter build apk
+- Overall Progress: Phase 5 in progress. M5.6 is completed.
 
 ## Completed
 

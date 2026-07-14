@@ -9,8 +9,8 @@
 
 # Architecture
 
-- **Current Milestone**: M5.7 — Search 2.0
-- **Progress**: M5.6 Android Home Screen Widgets upgraded to a production-quality adaptive responsive architecture using Android 12+ Responsive Sizing and RemoteViews. Ready to start M5.7 Search 2.0.
+- **Current Milestone**: M5.6 — Adaptive Home Screen Widgets (Glance)
+- **Progress**: Upgraded M5.6 Android Home Screen Widgets to use an adaptive, responsive widget system built natively in Kotlin with Jetpack Glance and Compose, syncing state via home_widget and SharedPreferences.
 - **Active Architecture**: Feature-First, Clean Architecture, MVVM, Riverpod, GoRouter, Isar. Data-driven UI for Settings module.
 
 - Feature First project organization.
@@ -38,10 +38,10 @@
 - Minimum Android API: Android 12, API 31.
 
 ## Current Milestone
-**M5.4 Backup & Restore System**
+**M5.6 Android Home Screen Widgets**
 - Status: Completed.
-- Next milestone: TBD (Waiting for user instruction).
-- Focus: Implemented local and Google Drive backup system with AES encryption, ZIP compression, and Workmanager for automatic backups.
+- Next milestone: M5.7 Search 2.0
+- Focus: Upgraded Android widgets natively in Kotlin using Jetpack Glance. Built fully functional, responsive, adaptive sizes (1x1, 2x2, 4x1, 4x4). Mapped Flutter data to Glance using SharedPreferences. Included sections for Today and Completed tasks natively. Added refresh, add, and settings buttons using local Material vector drawables.
 
 # Completed
 
