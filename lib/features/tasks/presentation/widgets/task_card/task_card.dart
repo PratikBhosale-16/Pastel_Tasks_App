@@ -603,31 +603,38 @@ class TaskCard extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SizedBox(
-              width: 16,
-              child: CustomPaint(
-                painter: _DottedLinePainter(
-                  color: colorScheme.outlineVariant.withValues(alpha: 0.6),
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 64,
-              child: Align(
+              width: 65,
+              child: Stack(
                 alignment: Alignment.topCenter,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: AppSpacing.md),
-                  child: Text(
-                    timeText,
-                    style: theme.textTheme.labelMedium?.copyWith(
-                      color: isArchived
-                          ? colorScheme.onSurfaceVariant.withValues(alpha: 0.5)
-                          : colorScheme.onSurfaceVariant,
-                      fontWeight: FontWeight.w600,
+                children: [
+                  Positioned.fill(
+                    child: CustomPaint(
+                      painter: _DottedLinePainter(
+                        color: colorScheme.outlineVariant.withValues(alpha: 0.6),
+                      ),
                     ),
                   ),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 28.0), // Align nicely with card text
+                    child: Container(
+                      color: theme.scaffoldBackgroundColor, // Break the dotted line
+                      padding: const EdgeInsets.symmetric(vertical: 6.0),
+                      child: Text(
+                        timeText,
+                        textAlign: TextAlign.center,
+                        style: theme.textTheme.labelMedium?.copyWith(
+                          color: isArchived
+                              ? colorScheme.onSurfaceVariant.withValues(alpha: 0.5)
+                              : colorScheme.onSurfaceVariant,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
+            const SizedBox(width: 8), // Gap before card
             Expanded(child: swipeableCard),
           ],
         ),
