@@ -153,6 +153,7 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
       }
       if (defaultRepeatStr != null && defaultRepeatStr != 'None') {
         switch (defaultRepeatStr) {
+          case 'Hourly': _repeatRule = RepeatRule.hourly; break;
           case 'Daily': _repeatRule = RepeatRule.daily; break;
           case 'Weekly': _repeatRule = RepeatRule.weekly; break;
           case 'Monthly': _repeatRule = RepeatRule.monthly; break;

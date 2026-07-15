@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pastel_tasks/features/settings/domain/models/settings_item.dart';
 import 'package:pastel_tasks/features/settings/presentation/providers/settings_provider.dart';
+import 'package:pastel_tasks/features/settings/presentation/widgets/custom_reminder_dialog.dart';
 
 class SettingsSwitchTile extends ConsumerWidget {
   final SettingsItemSwitch item;
@@ -109,17 +110,24 @@ class SettingsDropdownTile<T> extends ConsumerWidget {
     final state = ref.watch(settingDropdownProvider(item as SettingsItemDropdown<String>));
     final primaryColor = Theme.of(context).colorScheme.primary;
     
+    final List<String> currentOptions = List<String>.from(item.options as List<String>);
+    final savedVal = state.value ?? (item.defaultValue as String);
+    if (!currentOptions.contains(savedVal)) {
+      // Insert right before 'Custom...' if it exists, else at the end
+      final customIndex = currentOptions.indexOf('Custom...');
+      if (customIndex != -1) {
+        currentOptions.insert(customIndex, savedVal);
+      } else {
+        currentOptions.add(savedVal);
+      }
+    }
+
     return ListTile(
       title: Text(item.title),
       subtitle: item.subtitle != null ? Text(item.subtitle!) : null,
       leading: item.icon != null ? Icon(item.icon, color: primaryColor) : null,
       trailing: DropdownButton<String>(
-        value: () {
-          final val = state.value ?? (item.defaultValue as String);
-          return (item.options as List<String>).contains(val)
-              ? val
-              : (item.options as List<String>).first;
-        }(),
+        value: currentOptions.contains(savedVal) ? savedVal : currentOptions.first,
         underline: const SizedBox(),
         alignment: AlignmentDirectional.centerEnd,
         isDense: true,
@@ -127,15 +135,20 @@ class SettingsDropdownTile<T> extends ConsumerWidget {
           color: Theme.of(context).colorScheme.onSurfaceVariant,
         ),
         icon: const Icon(Icons.arrow_drop_down),
-        items: (item.options as List<String>).map((String value) {
+        items: currentOptions.map((String value) {
           return DropdownMenuItem<String>(
             value: value,
             alignment: AlignmentDirectional.centerEnd,
-            child: Text((item.labelBuilder as String Function(String))(value)),
+            child: Text(value == 'Custom...' ? value : (item.labelBuilder as String Function(String))(value)),
           );
         }).toList(),
-        onChanged: (newValue) {
-          if (newValue != null) {
+        onChanged: (newValue) async {
+          if (newValue == 'Custom...') {
+            final customValue = await showCustomReminderDialog(context);
+            if (customValue != null) {
+              ref.read(settingDropdownProvider(item as SettingsItemDropdown<String>).notifier).updateValue(customValue);
+            }
+          } else if (newValue != null) {
             ref.read(settingDropdownProvider(item as SettingsItemDropdown<String>).notifier).updateValue(newValue);
           }
         },

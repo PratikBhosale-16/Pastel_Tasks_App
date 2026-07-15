@@ -111,16 +111,27 @@ class _DateTimePickerBottomSheetState extends State<DateTimePickerBottomSheet> {
     int defaultVal = 5;
     final defaultReminderStr = prefs.getString('default_reminder');
     if (defaultReminderStr != null) {
-      switch (defaultReminderStr) {
-        case 'Same with due date': defaultVal = 0; break;
-        case '5 mins before':
-        case '5 minutes before': defaultVal = 5; break;
-        case '15 mins before':
-        case '15 minutes before': defaultVal = 15; break;
-        case '30 mins before':
-        case '30 minutes before': defaultVal = 30; break;
-        case '1 hour before': defaultVal = 60; break;
-        case 'None': defaultVal = -1; break;
+      if (defaultReminderStr == 'Same with due date') {
+        defaultVal = 0;
+      } else if (defaultReminderStr == 'None') {
+        defaultVal = -1;
+      } else if (defaultReminderStr.endsWith('before')) {
+        final parts = defaultReminderStr.split(' ');
+        if (parts.length >= 3) {
+          final val = int.tryParse(parts[0]);
+          if (val != null) {
+            final unit = parts[1];
+            if (unit.startsWith('min')) {
+              defaultVal = val;
+            } else if (unit.startsWith('hour')) {
+              defaultVal = val * 60;
+            } else if (unit.startsWith('day')) {
+              defaultVal = val * 60 * 24;
+            } else if (unit.startsWith('week')) {
+              defaultVal = val * 60 * 24 * 7;
+            }
+          }
+        }
       }
     } else {
       defaultVal = prefs.getInt('last_used_reminder_mode') ?? 5;
@@ -446,6 +457,18 @@ class _DateTimePickerBottomSheetState extends State<DateTimePickerBottomSheet> {
     await prefs.setInt('last_used_reminder_mode', mode);
   }
 
+  String _formatCustomReminder(int minutes) {
+    if (minutes >= 60 * 24 * 7 && minutes % (60 * 24 * 7) == 0) {
+      return '${minutes ~/ (60 * 24 * 7)} weeks before';
+    } else if (minutes >= 60 * 24 && minutes % (60 * 24) == 0) {
+      return '${minutes ~/ (60 * 24)} days before';
+    } else if (minutes >= 60 && minutes % 60 == 0) {
+      return '${minutes ~/ 60} hours before';
+    } else {
+      return '$minutes minutes before';
+    }
+  }
+
   Widget _buildReminderView(ThemeData theme) {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -515,11 +538,18 @@ class _DateTimePickerBottomSheetState extends State<DateTimePickerBottomSheet> {
             });
             _saveLastReminderMode(60);
           }),
-          _buildCheckboxTile('Customize time', _selectedRelativeReminder == -1, () {
+          _buildCheckboxTile(
+            ![-1, 0, 5, 15, 30, 60].contains(_selectedRelativeReminder) 
+                ? 'Customize time (${_formatCustomReminder(_selectedRelativeReminder)})'
+                : 'Customize time',
+            _selectedRelativeReminder == -1 || ![-1, 0, 5, 15, 30, 60].contains(_selectedRelativeReminder), 
+            () {
             setState(() {
-              _selectedRelativeReminder = -1;
+              if ([-1, 0, 5, 15, 30, 60].contains(_selectedRelativeReminder)) {
+                _selectedRelativeReminder = -1;
+              }
             });
-            _saveLastReminderMode(-1);
+            _saveLastReminderMode(_selectedRelativeReminder);
           }),
         ],
         _buildBottomActions(onDone: () => setState(() => _viewMode = _ViewMode.main)),
