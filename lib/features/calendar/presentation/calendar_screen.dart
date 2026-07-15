@@ -95,7 +95,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                         child: (searchResults.value ?? []).isEmpty
                             ? const Center(child: Text('No matching tasks'))
                             : ListView.builder(
-                                padding: const EdgeInsets.all(16.0),
+                                padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 100.0),
                                 itemCount: (searchResults.value ?? []).length,
                                 itemBuilder: (context, index) {
                                   final task = (searchResults.value ?? [])[index];
