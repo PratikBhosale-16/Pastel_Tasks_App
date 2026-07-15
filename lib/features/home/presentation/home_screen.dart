@@ -26,6 +26,7 @@ import 'package:pastel_tasks/features/tasks/presentation/providers/task_provider
 import 'package:pastel_tasks/features/tasks/presentation/widgets/add_task_bottom_sheet/add_task_bottom_sheet.dart';
 import 'package:pastel_tasks/features/tasks/presentation/widgets/task_card/task_card.dart';
 import 'package:pastel_tasks/shared/widgets/dialogs/confirmation_dialog.dart';
+import 'package:pastel_tasks/features/settings/presentation/providers/settings_provider.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/priority.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/repeat_rule.dart';
 import 'package:pastel_tasks/features/filter/domain/models/task_filter.dart';
@@ -255,6 +256,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             final pendingTasks = displayTasks.where((t) => !t.isPinned && t.status != TaskStatus.completed).toList();
             final completedTasks = displayTasks.where((t) => t.status == TaskStatus.completed).toList();
 
+            final showTimeline = ref.watch(settingSwitchProvider(showTimelineSwitch)).value ?? true;
+
             return CustomScrollView(
               key: const ValueKey('home_scroll_view'),
               slivers: [
@@ -307,8 +310,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     itemBuilder: (context, index) {
                       final task = pinnedTasks[index];
                       final child = Padding(
-                        padding: const EdgeInsets.only(left: 16, right: 16),
-                        child: TaskCard(task: task, showTimeline: true),
+                        padding: EdgeInsets.only(left: 16, right: 16, bottom: showTimeline ? 0 : 12),
+                        child: TaskCard(task: task, showTimeline: showTimeline),
                       );
                       if (isSelectionMode) {
                         return KeyedSubtree(key: ValueKey(task.id), child: child);
@@ -370,8 +373,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     itemBuilder: (context, index) {
                       final task = pendingTasks[index];
                       final child = Padding(
-                        padding: const EdgeInsets.only(left: 16, right: 16),
-                        child: TaskCard(task: task, showTimeline: true),
+                        padding: EdgeInsets.only(left: 16, right: 16, bottom: showTimeline ? 0 : 12),
+                        child: TaskCard(task: task, showTimeline: showTimeline),
                       );
                       if (isSelectionMode) {
                         return KeyedSubtree(key: ValueKey(task.id), child: child);
@@ -433,8 +436,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     itemBuilder: (context, index) {
                       final task = completedTasks[index];
                       final child = Padding(
-                        padding: const EdgeInsets.only(left: 16, right: 16),
-                        child: TaskCard(task: task, showTimeline: true),
+                        padding: EdgeInsets.only(left: 16, right: 16, bottom: showTimeline ? 0 : 12),
+                        child: TaskCard(task: task, showTimeline: showTimeline),
                       );
                       if (isSelectionMode) {
                         return KeyedSubtree(key: ValueKey(task.id), child: child);

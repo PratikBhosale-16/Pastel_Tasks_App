@@ -90,12 +90,23 @@ const reduceMotionSwitch = SettingsItemSwitch(
 );
 
 const materialYouSwitch = SettingsItemSwitch(
-  id: 'appearance_material_you',
-  title: 'Material You',
+  id: 'ui_material_you',
+  title: 'Dynamic Colors',
+  subtitle: 'Use wallpaper-based colors on supported Android devices',
+  icon: Icons.color_lens,
+  keywords: ['material', 'you', 'monet', 'dynamic', 'color', 'wallpaper'],
+  defaultValue: false,
   storageKey: 'material_you',
+);
+
+const showTimelineSwitch = SettingsItemSwitch(
+  id: 'ui_show_timeline',
+  title: 'Show Timeline',
+  subtitle: 'Display the time and dotted line on the left of tasks',
+  icon: Icons.timeline,
+  keywords: ['timeline', 'time', 'dotted', 'line', 'date'],
   defaultValue: true,
-  icon: Icons.format_paint,
-  keywords: ['material you', 'dynamic', 'color'],
+  storageKey: 'show_timeline',
 );
 
 // --- TASK PREFERENCES ---
@@ -119,6 +130,16 @@ const defaultReminderDropdown = SettingsItemDropdown<String>(
   labelBuilder: _defaultLabelBuilder,
   icon: Icons.alarm,
   keywords: ['reminder', 'default', 'notification'],
+);
+
+const taskCompletionToneSwitch = SettingsItemSwitch(
+  id: 'pref_completion_tone',
+  title: 'Task Completion Tone',
+  subtitle: 'Play a sound when a task is completed',
+  icon: Icons.music_note,
+  keywords: ['tone', 'sound', 'complete', 'finish'],
+  defaultValue: true,
+  storageKey: 'completion_tone',
 );
 
 const defaultRepeatDropdown = SettingsItemDropdown<String>(
@@ -601,6 +622,7 @@ final settingsSectionsProvider = Provider<List<SettingsSection>>((ref) {
         themeDropdown,
         appAccentPicker,
         fontSizeDropdown,
+        showTimelineSwitch,
       ],
     ),
     const SettingsSection(
@@ -611,6 +633,7 @@ final settingsSectionsProvider = Provider<List<SettingsSection>>((ref) {
         defaultReminderDropdown,
         defaultRepeatDropdown,
         completedTaskVisDropdown,
+        taskCompletionToneSwitch,
       ],
     ),
     SettingsSection(

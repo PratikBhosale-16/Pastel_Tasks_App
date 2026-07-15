@@ -1,8 +1,10 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:pastel_tasks/features/settings/presentation/providers/settings_provider.dart';
 import 'package:pastel_tasks/app/theme/radius.dart';
 import 'package:pastel_tasks/app/theme/spacing.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/priority.dart';
@@ -232,6 +234,11 @@ class TaskCard extends ConsumerWidget {
 
     if (newStatus == TaskStatus.completed) {
       SemanticsService.announce('Task completed', ui.TextDirection.ltr);
+      
+      final playTone = ref.read(settingSwitchProvider(taskCompletionToneSwitch)).value ?? true;
+      if (playTone) {
+        SystemSound.play(SystemSoundType.click);
+      }
     } else {
       SemanticsService.announce('Task restored', ui.TextDirection.ltr);
     }
