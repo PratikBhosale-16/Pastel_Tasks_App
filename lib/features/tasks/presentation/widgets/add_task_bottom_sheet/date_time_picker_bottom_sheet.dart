@@ -247,12 +247,13 @@ class _DateTimePickerBottomSheetState extends State<DateTimePickerBottomSheet> {
             _isPickingMinutes = false;
           }),
         ),
-        ListTile(
-          leading: const Icon(Icons.notifications_none),
-          title: const Text('Reminder'),
-          trailing: Text(_reminderTime?.format(context) ?? 'No'),
-          onTap: () => setState(() => _viewMode = _ViewMode.reminder),
-        ),
+        if (_time != null)
+          ListTile(
+            leading: const Icon(Icons.notifications_none),
+            title: const Text('Reminder'),
+            trailing: Text(_reminderTime?.format(context) ?? 'No'),
+            onTap: () => setState(() => _viewMode = _ViewMode.reminder),
+          ),
         ListTile(
           leading: const Icon(Icons.repeat),
           title: const Text('Repeat'),
