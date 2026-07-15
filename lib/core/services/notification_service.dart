@@ -101,6 +101,8 @@ final class NotificationService {
     required String body,
     required DateTime scheduledDate,
     required String payload,
+    bool playSound = true,
+    bool enableVibration = true,
   }) async {
     final tz.TZDateTime tzScheduledDate = tz.TZDateTime.from(scheduledDate, tz.local);
     
@@ -109,7 +111,7 @@ final class NotificationService {
       title: title,
       body: body,
       scheduledDate: tzScheduledDate,
-      notificationDetails: const NotificationDetails(
+      notificationDetails: NotificationDetails(
         android: AndroidNotificationDetails(
           'pastel_tasks_reminders',
           'Reminders',
@@ -117,7 +119,9 @@ final class NotificationService {
           importance: Importance.max,
           priority: Priority.high,
           groupKey: 'pastel_tasks_group',
-          actions: <AndroidNotificationAction>[
+          playSound: playSound,
+          enableVibration: enableVibration,
+          actions: const <AndroidNotificationAction>[
             AndroidNotificationAction(
               'action_complete',
               'Complete',

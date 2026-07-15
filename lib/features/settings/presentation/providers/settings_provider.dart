@@ -115,7 +115,7 @@ const defaultPriorityDropdown = SettingsItemDropdown<String>(
   title: 'Default Priority',
   storageKey: 'default_priority',
   defaultValue: 'Low',
-  options: ['Low', 'Medium', 'High', 'Critical'],
+  options: ['Low', 'Medium', 'High'],
   labelBuilder: _defaultLabelBuilder,
   icon: Icons.flag,
   keywords: ['priority', 'default', 'task'],
@@ -126,20 +126,21 @@ const defaultReminderDropdown = SettingsItemDropdown<String>(
   title: 'Default Reminder',
   storageKey: 'default_reminder',
   defaultValue: 'None',
-  options: ['None', '5 mins before', '10 mins before', '30 mins before', '1 hour before'],
+  options: ['None', 'Same with due date', '5 minutes before', '15 minutes before', '30 minutes before', '1 hour before'],
   labelBuilder: _defaultLabelBuilder,
   icon: Icons.alarm,
   keywords: ['reminder', 'default', 'notification'],
 );
 
-const taskCompletionToneSwitch = SettingsItemSwitch(
+const taskCompletionToneDropdown = SettingsItemDropdown<String>(
   id: 'pref_completion_tone',
   title: 'Task Completion Tone',
-  subtitle: 'Play a sound when a task is completed',
+  storageKey: 'completion_tone_selection',
+  defaultValue: 'None',
+  options: ['None', 'Correct Answer', 'Long Pop'],
+  labelBuilder: _defaultLabelBuilder,
   icon: Icons.music_note,
   keywords: ['tone', 'sound', 'complete', 'finish'],
-  defaultValue: true,
-  storageKey: 'completion_tone',
 );
 
 const defaultRepeatDropdown = SettingsItemDropdown<String>(
@@ -633,7 +634,7 @@ final settingsSectionsProvider = Provider<List<SettingsSection>>((ref) {
         defaultReminderDropdown,
         defaultRepeatDropdown,
         completedTaskVisDropdown,
-        taskCompletionToneSwitch,
+        taskCompletionToneDropdown,
       ],
     ),
     const SettingsSection(

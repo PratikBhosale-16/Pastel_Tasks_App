@@ -9,6 +9,7 @@ environment:
 dependencies:
   animations: any
   archive: ^4.0.9
+  audioplayers: ^6.8.1
   collection: any
   connectivity_plus: any
   device_info_plus: any
@@ -66,6 +67,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/sounds/
   fonts:
     - family: Outfit
       fonts:

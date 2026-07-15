@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-07-15
+
+### Fixed
+- Replaced the task completion tone toggle with a dropdown allowing users to select between "None", "Correct Answer", or "Long Pop".
+- Fixed the task completion tone playback issue by transitioning from a local AudioPlayer instance to a static AudioPlayer, preventing the player from being prematurely destroyed by Dart garbage collection before the sound finishes playing.
+- Updated audio file extensions from `.mp3` to `.wav` for custom tones.
+
 ## 2026-07-14
 
 ### Completed

@@ -114,7 +114,12 @@ class SettingsDropdownTile<T> extends ConsumerWidget {
       subtitle: item.subtitle != null ? Text(item.subtitle!) : null,
       leading: item.icon != null ? Icon(item.icon, color: primaryColor) : null,
       trailing: DropdownButton<String>(
-        value: state.value ?? (item.defaultValue as String),
+        value: () {
+          final val = state.value ?? (item.defaultValue as String);
+          return (item.options as List<String>).contains(val)
+              ? val
+              : (item.options as List<String>).first;
+        }(),
         underline: const SizedBox(),
         alignment: AlignmentDirectional.centerEnd,
         isDense: true,

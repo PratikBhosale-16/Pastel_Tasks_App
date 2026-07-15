@@ -2,11 +2,11 @@
 
 ## Current Milestone
 
-- Milestone: UI Overhaul
-- Name: Create Task UI Overhaul
+- Milestone: Post-M5.5 Settings & Notifications Polish
+- Name: Settings UI & Audio Player Garbage Collection Fix
 - Status: Completed
 - Validation: Validated with flutter analyze, flutter test, and flutter build apk
-- Overall Progress: Phase 5 in progress. UI Overhaul (Create Task) is completed.
+- Overall Progress: Phase 5 in progress. Settings UI and notifications polish is completed.
 
 ## Completed
 

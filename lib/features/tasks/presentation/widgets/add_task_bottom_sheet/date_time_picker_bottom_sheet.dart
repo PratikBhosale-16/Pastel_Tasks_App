@@ -108,8 +108,26 @@ class _DateTimePickerBottomSheetState extends State<DateTimePickerBottomSheet> {
 
   Future<void> _loadLastReminderMode() async {
     final prefs = await SharedPreferences.getInstance();
+    int defaultVal = 5;
+    final defaultReminderStr = prefs.getString('default_reminder');
+    if (defaultReminderStr != null) {
+      switch (defaultReminderStr) {
+        case 'Same with due date': defaultVal = 0; break;
+        case '5 mins before':
+        case '5 minutes before': defaultVal = 5; break;
+        case '15 mins before':
+        case '15 minutes before': defaultVal = 15; break;
+        case '30 mins before':
+        case '30 minutes before': defaultVal = 30; break;
+        case '1 hour before': defaultVal = 60; break;
+        case 'None': defaultVal = -1; break;
+      }
+    } else {
+      defaultVal = prefs.getInt('last_used_reminder_mode') ?? 5;
+    }
+    
     setState(() {
-      _selectedRelativeReminder = prefs.getInt('last_used_reminder_mode') ?? 5;
+      _selectedRelativeReminder = defaultVal;
     });
   }
 

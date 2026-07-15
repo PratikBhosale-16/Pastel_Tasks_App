@@ -13,6 +13,7 @@ import 'package:pastel_tasks/features/tasks/domain/enums/task_status.dart';
 import 'package:pastel_tasks/features/tasks/domain/models/task.dart';
 import 'package:pastel_tasks/features/tasks/domain/models/reminder.dart';
 import 'package:uuid/uuid.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:pastel_tasks/features/tasks/presentation/providers/task_notifier.dart';
 import 'package:pastel_tasks/features/tasks/presentation/widgets/add_task_bottom_sheet/add_task_bottom_sheet.dart';
 import 'package:pastel_tasks/features/search/presentation/providers/search_providers.dart';
@@ -21,6 +22,8 @@ import 'package:pastel_tasks/features/selection/presentation/providers/selection
 import 'package:pastel_tasks/features/tags/presentation/providers/tag_notifier.dart';
 import 'package:pastel_tasks/shared/widgets/dialogs/confirmation_dialog.dart';
 import 'package:pastel_tasks/shared/widgets/swipeable/swipeable_card.dart';
+
+final _audioPlayer = AudioPlayer();
 
 /// Reusable Task Card component for the application.
 class TaskCard extends ConsumerWidget {
@@ -216,7 +219,7 @@ class TaskCard extends ConsumerWidget {
     );
   }
 
-  void _toggleStatus(BuildContext context, WidgetRef ref) {
+  void _toggleStatus(BuildContext context, WidgetRef ref) async {
     final newStatus = task.status == TaskStatus.completed 
         ? TaskStatus.pending 
         : TaskStatus.completed;
@@ -235,9 +238,17 @@ class TaskCard extends ConsumerWidget {
     if (newStatus == TaskStatus.completed) {
       SemanticsService.announce('Task completed', ui.TextDirection.ltr);
       
-      final playTone = ref.read(settingSwitchProvider(taskCompletionToneSwitch)).value ?? true;
-      if (playTone) {
-        SystemSound.play(SystemSoundType.click);
+      final toneSelection = ref.read(settingDropdownProvider(taskCompletionToneDropdown)).value ?? 'None';
+      if (toneSelection != 'None') {
+        try {
+          if (toneSelection == 'Correct Answer') {
+            await _audioPlayer.play(AssetSource('sounds/correct_answer_tone.wav'));
+          } else if (toneSelection == 'Long Pop') {
+            await _audioPlayer.play(AssetSource('sounds/long_pop.wav'));
+          }
+        } catch (e) {
+          debugPrint('Failed to play completion tone: $e');
+        }
       }
     } else {
       SemanticsService.announce('Task restored', ui.TextDirection.ltr);

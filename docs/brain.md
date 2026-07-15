@@ -9,8 +9,8 @@
 
 # Architecture
 
-- **Current Milestone**: UI Overhaul (Create Task)
-- **Progress**: Redesigned AddTaskBottomSheet, added sub-tasks, expanded pastel palette. Added advanced repeat end options (Date and Count), precise minute selection in clock, auto-toggling reminders, quick tag creation, and priority selector with icons.
+- **Current Milestone**: Post-M5.5 Settings & Notifications Polish
+- **Progress**: Replaced task completion tone toggle with a dropdown ("Correct Answer", "Long Pop"). Fixed the AudioPlayer garbage collection issue ensuring completion tones play to the end. Replaced `.mp3` extension with `.wav` in code.
 - **Active Architecture**: Feature-First, Clean Architecture, MVVM, Riverpod, GoRouter, Isar. Data-driven UI for Settings module.
 
 - Feature First project organization.

@@ -9,6 +9,7 @@ import 'package:pastel_tasks/features/tasks/domain/enums/repeat_rule.dart';
 import 'package:pastel_tasks/core/result/result.dart';
 import 'package:pastel_tasks/core/services/notification_service.dart';
 import 'package:uuid/uuid.dart';
+import 'package:pastel_tasks/features/settings/presentation/providers/settings_provider.dart';
 
 /// Notifier handling task state mutations.
 class TaskNotifier extends AsyncNotifier<void> {
@@ -240,12 +241,25 @@ class TaskNotifier extends AsyncNotifier<void> {
     
     if (task.status == TaskStatus.pending && task.reminder != null && task.reminder!.enabled) {
       if (task.reminder!.triggerTime.isAfter(DateTime.now())) {
+        
+        // Read notification settings
+        final masterSwitch = ref.read(settingSwitchProvider(masterNotificationToggle)).value ?? true;
+        
+        if (!masterSwitch) {
+          return; // Notifications are disabled
+        }
+
+        final soundSetting = ref.read(settingDropdownProvider(notificationSoundDropdown)).value ?? 'Default';
+        final vibrationSetting = ref.read(settingSwitchProvider(vibrationSwitch)).value ?? true;
+
         await NotificationService.instance.scheduleNotification(
           id: notificationId,
           title: task.title,
           body: task.description.isNotEmpty ? task.description : 'You have a reminder for this task.',
           scheduledDate: task.reminder!.triggerTime,
           payload: task.id,
+          playSound: soundSetting != 'None',
+          enableVibration: vibrationSetting,
         );
       }
     }
