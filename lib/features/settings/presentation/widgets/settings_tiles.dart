@@ -19,12 +19,16 @@ class SettingsSwitchTile extends ConsumerWidget {
       title: Text(item.title),
       subtitle: item.subtitle != null ? Text(item.subtitle!) : null,
       leading: item.icon != null ? Icon(item.icon, color: primaryColor) : null,
-      trailing: CupertinoSwitch(
-        value: state.value ?? item.defaultValue,
-        activeColor: primaryColor,
-        onChanged: (val) {
-          ref.read(settingSwitchProvider(item).notifier).toggle();
-        },
+      trailing: Theme(
+        data: Theme.of(context).copyWith(useMaterial3: false),
+        child: Switch(
+          value: state.value ?? item.defaultValue,
+          activeColor: primaryColor,
+          activeTrackColor: primaryColor.withOpacity(0.5),
+          onChanged: (val) {
+            ref.read(settingSwitchProvider(item).notifier).toggle();
+          },
+        ),
       ),
       onTap: () {
         ref.read(settingSwitchProvider(item).notifier).toggle();

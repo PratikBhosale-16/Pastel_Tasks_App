@@ -70,7 +70,7 @@ class SettingsScreen extends ConsumerWidget {
         return ListTile(
           title: Text(item.title),
           subtitle: Text(currentAccent.label),
-          leading: item.icon != null ? Icon(item.icon) : null,
+          leading: item.icon != null ? Icon(item.icon, color: Theme.of(context).colorScheme.primary) : null,
           trailing: _buildColorIndicator(currentAccent.color),
           onTap: () => _showAppAccentColorPicker(context, ref, currentAccent),
         );
@@ -79,7 +79,7 @@ class SettingsScreen extends ConsumerWidget {
         return ListTile(
           title: Text(item.title),
           subtitle: Text(currentAccent.label),
-          leading: item.icon != null ? Icon(item.icon) : null,
+          leading: item.icon != null ? Icon(item.icon, color: Theme.of(context).colorScheme.primary) : null,
           trailing: _buildColorIndicator(currentAccent.color),
           onTap: () => _showCalendarAccentColorPicker(context, ref, currentAccent),
         );
