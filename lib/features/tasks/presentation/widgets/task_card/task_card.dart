@@ -293,7 +293,7 @@ class TaskCard extends ConsumerWidget {
           onLongPress: null, // Let native drag handle long press
           borderRadius: BorderRadius.circular(AppRadius.xl),
           child: Container(
-            constraints: const BoxConstraints(minHeight: 68),
+            constraints: const BoxConstraints(minHeight: 80),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(AppRadius.xl),
               border: !isArchived
@@ -305,7 +305,7 @@ class TaskCard extends ConsumerWidget {
                     )
                   : null,
             ),
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.sm),
+            padding: const EdgeInsets.all(AppSpacing.md),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -678,10 +678,24 @@ class _SubtasksSectionState extends ConsumerState<_SubtasksSection> {
                           return st;
                         }).toList();
                         
-                        final updatedTask = task.copyWith(
+                        var updatedTask = task.copyWith(
                           subTasks: updatedSubTasks,
                           updatedAt: DateTime.now().toUtc(),
                         );
+                        
+                        // Auto-sync parent task status based on subtasks
+                        final allCompleted = updatedSubTasks.every((st) => st.isCompleted);
+                        if (allCompleted && updatedTask.status != TaskStatus.completed) {
+                          updatedTask = updatedTask.copyWith(
+                            status: TaskStatus.completed,
+                            completedAt: DateTime.now().toUtc(),
+                          );
+                        } else if (!allCompleted && updatedTask.status == TaskStatus.completed) {
+                          updatedTask = updatedTask.copyWith(
+                            status: TaskStatus.pending,
+                            clearCompletedAt: true,
+                          );
+                        }
                         
                         ref.read(taskNotifierProvider.notifier).updateTask(updatedTask);
                       }
