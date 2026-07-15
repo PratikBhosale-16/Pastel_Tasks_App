@@ -33,21 +33,7 @@ class TaskNotifier extends AsyncNotifier<void> {
     state = const AsyncLoading();
     final repo = ref.read(taskRepositoryProvider);
 
-    if (task.subTasks.isNotEmpty) {
-      final allSubTasksCompleted = task.subTasks.every((st) => st.isCompleted);
-      if (allSubTasksCompleted && task.status != TaskStatus.completed) {
-        task = task.copyWith(
-          status: TaskStatus.completed,
-          completedAt: DateTime.now().toUtc(),
-        );
-      } else if (!allSubTasksCompleted && task.status == TaskStatus.completed) {
-        task = task.copyWith(
-          status: TaskStatus.pending,
-          completedAt: null,
-          clearCompletedAt: true,
-        );
-      }
-    }
+
 
     if (task.status == TaskStatus.completed && task.repeatRule != RepeatRule.none) {
       final oldTaskResult = await repo.getById(task.id);

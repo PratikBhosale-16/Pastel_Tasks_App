@@ -293,6 +293,7 @@ class TaskCard extends ConsumerWidget {
           onLongPress: null, // Let native drag handle long press
           borderRadius: BorderRadius.circular(AppRadius.xl),
           child: Container(
+            constraints: const BoxConstraints(minHeight: 68),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(AppRadius.xl),
               border: !isArchived
