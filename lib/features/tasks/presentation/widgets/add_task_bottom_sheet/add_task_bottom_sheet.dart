@@ -10,6 +10,7 @@ import 'package:uuid/uuid.dart';
 import 'package:pastel_tasks/features/tags/presentation/widgets/tag_form_bottom_sheet.dart';
 import 'package:pastel_tasks/features/tasks/presentation/widgets/add_task_bottom_sheet/tag_selector_dropdown.dart';
 import 'package:pastel_tasks/features/tasks/presentation/widgets/add_task_bottom_sheet/date_time_picker_bottom_sheet.dart';
+import 'package:pastel_tasks/core/providers/core_providers.dart';
 
 class AddTaskFormData {
   const AddTaskFormData({
@@ -130,7 +131,35 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
     } else {
       _dueDate = widget.initialDate;
       _tagId = widget.initialTagId;
+      _loadDefaults();
     }
+  }
+
+  Future<void> _loadDefaults() async {
+    final prefs = ref.read(preferencesProvider);
+    final defaultPriorityStr = await prefs.read('default_priority') as String?;
+    final defaultRepeatStr = await prefs.read('default_repeat') as String?;
+    
+    if (!mounted) return;
+
+    setState(() {
+      if (defaultPriorityStr != null) {
+        switch (defaultPriorityStr) {
+          case 'Low': _priority = Priority.low; break;
+          case 'Medium': _priority = Priority.medium; break;
+          case 'High':
+          case 'Critical': _priority = Priority.high; break;
+        }
+      }
+      if (defaultRepeatStr != null && defaultRepeatStr != 'None') {
+        switch (defaultRepeatStr) {
+          case 'Daily': _repeatRule = RepeatRule.daily; break;
+          case 'Weekly': _repeatRule = RepeatRule.weekly; break;
+          case 'Monthly': _repeatRule = RepeatRule.monthly; break;
+          case 'Yearly': _repeatRule = RepeatRule.yearly; break;
+        }
+      }
+    });
   }
 
   @override

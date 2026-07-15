@@ -6,6 +6,7 @@ import 'package:pastel_tasks/features/tasks/domain/models/task.dart';
 import 'package:pastel_tasks/features/tasks/presentation/providers/task_providers.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/task_status.dart';
 import 'package:pastel_tasks/features/filter/domain/enums/smart_date_filter.dart';
+import 'package:pastel_tasks/features/settings/presentation/providers/settings_provider.dart';
 
 /// Provider for the FilterRepository.
 final filterRepositoryProvider = Provider<FilterRepository>((ref) {
@@ -51,9 +52,31 @@ final filteredTasksProvider = Provider<AsyncValue<List<Task>>>((ref) {
   }
 
   final filter = filterAsync.value ?? TaskFilter.empty;
+  
+  final visSetting = ref.watch(settingDropdownProvider(completedTaskVisDropdown)).value ?? '7 Days';
+  Duration? visibilityDuration;
+  switch (visSetting) {
+    case '1 Day': visibilityDuration = const Duration(days: 1); break;
+    case '3 Days': visibilityDuration = const Duration(days: 3); break;
+    case '7 Days': visibilityDuration = const Duration(days: 7); break;
+    case 'Forever': visibilityDuration = null; break;
+  }
 
   return tasksAsync.whenData((tasks) {
     return tasks.where((task) {
+      // Completed Task Visibility global setting
+      if (task.status == TaskStatus.completed && visibilityDuration != null && task.completedAt != null) {
+        final now = DateTime.now();
+        if (now.difference(task.completedAt!) > visibilityDuration!) {
+          // Hide it unless explicitly filtering by completed status
+          final explicitlyRequested = filter.isCompleted == true || 
+                                      (filter.statuses?.contains(TaskStatus.completed) ?? false) ||
+                                      filter.smartDateFilter == SmartDateFilter.completedToday;
+          if (!explicitlyRequested) {
+            return false;
+          }
+        }
+      }
       // Tags
       if (filter.tags != null && filter.tags!.isNotEmpty) {
         final hasAnyTag = filter.tags!.any((t) => task.tags.contains(t));

@@ -636,27 +636,19 @@ final settingsSectionsProvider = Provider<List<SettingsSection>>((ref) {
         taskCompletionToneSwitch,
       ],
     ),
-    SettingsSection(
+    const SettingsSection(
       id: 'notifications',
       title: 'Notifications',
       items: [
         masterNotificationToggle,
         notificationSoundDropdown,
-        vibrationSwitch,
-        quietHoursAction,
-        reminderPreviewSwitch,
-        notificationGroupingSwitch,
       ],
     ),
-    SettingsSection(
+    const SettingsSection(
       id: 'backup_restore',
       title: 'Backup & Restore',
       items: [
         backupModuleNav,
-        autoBackupFreqDropdown,
-        manualBackupAction,
-        restoreBackupAction,
-        backupHistoryNav,
       ],
     ),
     const SettingsSection(

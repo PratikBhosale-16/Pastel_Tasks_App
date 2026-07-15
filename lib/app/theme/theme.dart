@@ -12,7 +12,7 @@ abstract final class AppTheme {
   const AppTheme._();
 
   /// The light theme.
-  static ThemeData light({Color seedColor = AppColors.primary}) {
+  static ThemeData light({Color seedColor = AppColors.primary, double fontScale = 1.0}) {
     final colorScheme = ColorScheme.fromSeed(
       seedColor: seedColor,
       primary: seedColor,
@@ -26,11 +26,12 @@ abstract final class AppTheme {
       colorScheme,
       AppTypography.lightTextTheme,
       AppColors.backgroundLight,
+      fontScale,
     );
   }
 
   /// The dark theme.
-  static ThemeData dark({Color seedColor = AppColors.primary}) {
+  static ThemeData dark({Color seedColor = AppColors.primary, double fontScale = 1.0}) {
     final colorScheme = ColorScheme.fromSeed(
       seedColor: seedColor,
       primary: seedColor,
@@ -45,6 +46,7 @@ abstract final class AppTheme {
       colorScheme,
       AppTypography.darkTextTheme,
       AppColors.backgroundDark,
+      fontScale,
     );
   }
 
@@ -53,11 +55,12 @@ abstract final class AppTheme {
     ColorScheme colorScheme,
     TextTheme textTheme,
     Color scaffoldBackground,
+    double fontScale,
   ) {
     return ThemeData(
       colorScheme: colorScheme,
       scaffoldBackgroundColor: scaffoldBackground,
-      textTheme: textTheme,
+      textTheme: textTheme.apply(fontSizeFactor: fontScale),
       extensions: const [PastelThemeExtension()],
       
       // AppBar
