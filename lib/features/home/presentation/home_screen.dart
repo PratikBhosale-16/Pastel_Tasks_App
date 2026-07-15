@@ -308,7 +308,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       final task = pinnedTasks[index];
                       final child = Padding(
                         padding: const EdgeInsets.only(bottom: 12, left: 16, right: 16),
-                        child: TaskCard(task: task),
+                        child: TaskCard(task: task, showTimeline: true),
                       );
                       if (isSelectionMode) {
                         return KeyedSubtree(key: ValueKey(task.id), child: child);
@@ -371,7 +371,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       final task = pendingTasks[index];
                       final child = Padding(
                         padding: const EdgeInsets.only(bottom: 12, left: 16, right: 16),
-                        child: TaskCard(task: task),
+                        child: TaskCard(task: task, showTimeline: true),
                       );
                       if (isSelectionMode) {
                         return KeyedSubtree(key: ValueKey(task.id), child: child);
@@ -434,7 +434,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       final task = completedTasks[index];
                       final child = Padding(
                         padding: const EdgeInsets.only(bottom: 12, left: 16, right: 16),
-                        child: TaskCard(task: task),
+                        child: TaskCard(task: task, showTimeline: true),
                       );
                       if (isSelectionMode) {
                         return KeyedSubtree(key: ValueKey(task.id), child: child);

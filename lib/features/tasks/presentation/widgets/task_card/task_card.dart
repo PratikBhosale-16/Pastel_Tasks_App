@@ -24,11 +24,19 @@ import 'package:pastel_tasks/shared/widgets/swipeable/swipeable_card.dart';
 class TaskCard extends ConsumerWidget {
   const TaskCard({
     required this.task,
+    this.showProject = true,
+    this.showTimeline = false,
     super.key,
   });
 
   /// The task domain model to display.
   final Task task;
+
+  /// Whether to show the project tag.
+  final bool showProject;
+  
+  /// Whether to show a timeline indicator on the left side with the creation date/time.
+  final bool showTimeline;
 
   String _formatRelativeDate(DateTime date) {
     final now = DateTime.now();
@@ -454,7 +462,7 @@ class TaskCard extends ConsumerWidget {
                           ),
                         )
                       else
-                        const SizedBox(width: 20), // Spacer if no repeat, though we don't necessarily need perfect center if nothing is there
+                        const SizedBox(width: 20),
                       
                       // RIGHT: Due Date / Time
                       Expanded(
@@ -512,7 +520,7 @@ class TaskCard extends ConsumerWidget {
       ),
     );
 
-    return SwipeableCard(
+    final swipeableCard = SwipeableCard(
       onSwipeRight: () {
         if (isArchived) {
           ref.read(taskNotifierProvider.notifier).restore(task.id);
@@ -580,6 +588,53 @@ class TaskCard extends ConsumerWidget {
       },
       child: cardContent,
     );
+
+    if (showTimeline) {
+      final now = DateTime.now();
+      final isToday = task.createdAt.year == now.year &&
+                      task.createdAt.month == now.month &&
+                      task.createdAt.day == now.day;
+      final timeText = isToday
+          ? DateFormat.jm().format(task.createdAt)
+          : DateFormat('MMM d').format(task.createdAt);
+
+      return IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizedBox(
+              width: 50,
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: AppSpacing.md),
+                  child: Text(
+                    timeText,
+                    style: theme.textTheme.labelMedium?.copyWith(
+                      color: isArchived
+                          ? colorScheme.onSurfaceVariant.withValues(alpha: 0.5)
+                          : colorScheme.onSurfaceVariant,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 24,
+              child: CustomPaint(
+                painter: _DottedLinePainter(
+                  color: colorScheme.outlineVariant.withValues(alpha: 0.6),
+                ),
+              ),
+            ),
+            Expanded(child: swipeableCard),
+          ],
+        ),
+      );
+    }
+
+    return swipeableCard;
   }
 
   Color _getPriorityColor(Priority priority, ColorScheme colorScheme) {
@@ -722,4 +777,34 @@ class _SubtasksSectionState extends ConsumerState<_SubtasksSection> {
       ],
     );
   }
+}
+
+class _DottedLinePainter extends CustomPainter {
+  final Color color;
+
+  _DottedLinePainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 2.0
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.stroke;
+
+    const dashHeight = 4.0;
+    const dashSpace = 4.0;
+    double startY = 0;
+    while (startY < size.height) {
+      canvas.drawLine(
+        Offset(size.width / 2, startY),
+        Offset(size.width / 2, startY + dashHeight),
+        paint,
+      );
+      startY += dashHeight + dashSpace;
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _DottedLinePainter oldDelegate) => oldDelegate.color != color;
 }
