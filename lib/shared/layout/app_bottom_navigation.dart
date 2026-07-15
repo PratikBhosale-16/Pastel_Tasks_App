@@ -49,63 +49,72 @@ class AppBottomNavigation extends StatelessWidget {
 
   /// The callback when a destination is selected.
   final ValueChanged<int> onDestinationSelected;
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(40),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.12),
-                  blurRadius: 24,
-                  offset: const Offset(0, 8),
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        // Solid background for the bottom half to hide scrolling content below the pill
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: 40,
+          child: Container(color: Theme.of(context).scaffoldBackgroundColor),
+        ),
+        SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: BorderRadius.circular(40),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.12),
+                    blurRadius: 24,
+                    offset: const Offset(0, 8),
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(40),
+                child: NavigationBar(
+                  selectedIndex: selectedIndex,
+                  onDestinationSelected: onDestinationSelected,
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  height: 65, // slightly compact height for pill shape
+                  destinations: destinations.map((dest) {
+                    Widget iconWidget = Icon(dest.icon);
+                    Widget selectedIconWidget = Icon(dest.selectedIcon ?? dest.icon);
+            
+                    if (dest.badgeText != null) {
+                      iconWidget = Badge(
+                        label: Text(dest.badgeText!),
+                        child: iconWidget,
+                      );
+                      selectedIconWidget = Badge(
+                        label: Text(dest.badgeText!),
+                        child: selectedIconWidget,
+                      );
+                    } else if (dest.showBadge) {
+                      iconWidget = Badge(child: iconWidget);
+                      selectedIconWidget = Badge(child: selectedIconWidget);
+                    }
+            
+                    return NavigationDestination(
+                      icon: iconWidget,
+                      selectedIcon: selectedIconWidget,
+                      label: dest.label,
+                    );
+                  }).toList(),
                 ),
-              ],
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(40),
-            child: NavigationBar(
-              selectedIndex: selectedIndex,
-              onDestinationSelected: onDestinationSelected,
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              height: 65, // slightly compact height for pill shape
-              destinations: destinations.map((dest) {
-                Widget iconWidget = Icon(dest.icon);
-                Widget selectedIconWidget = Icon(dest.selectedIcon ?? dest.icon);
-        
-                if (dest.badgeText != null) {
-                  iconWidget = Badge(
-                    label: Text(dest.badgeText!),
-                    child: iconWidget,
-                  );
-                  selectedIconWidget = Badge(
-                    label: Text(dest.badgeText!),
-                    child: selectedIconWidget,
-                  );
-                } else if (dest.showBadge) {
-                  iconWidget = Badge(child: iconWidget);
-                  selectedIconWidget = Badge(child: selectedIconWidget);
-                }
-        
-                return NavigationDestination(
-                  icon: iconWidget,
-                  selectedIcon: selectedIconWidget,
-                  label: dest.label,
-                );
-              }).toList(),
+              ),
             ),
           ),
-          ),
         ),
-      ),
+      ],
     );
   }
 }

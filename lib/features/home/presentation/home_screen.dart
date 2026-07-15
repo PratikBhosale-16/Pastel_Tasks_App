@@ -458,29 +458,32 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     ),
   ],
 ),
-floatingActionButton: isSelectionMode 
-    ? FloatingActionButton.extended(
-        onPressed: () {
-          final tasks = ref.read(sortedTasksProvider).valueOrNull ?? [];
-          final selectedTasks = tasks.where((t) => ref.read(selectionProvider).contains(t.id)).toList();
-          BulkActionsBottomSheet.show(context, selectedTasks);
-        },
-        icon: const Icon(Icons.bolt_rounded),
-        label: const Text('Actions'),
-        elevation: 2,
-        backgroundColor: colorScheme.secondaryContainer,
-        foregroundColor: colorScheme.onSecondaryContainer,
-      )
-    : FloatingActionButton(
-        onPressed: () {
-          final filter = ref.read(filterProvider).valueOrNull;
-          final initialTag = (filter?.tags != null && filter!.tags!.isNotEmpty) ? filter.tags!.first : null;
-          TaskCreationHelper.showAddTask(context, ref, initialTagId: initialTag);
-        },
-        elevation: 2,
-        shape: const CircleBorder(),
-        child: const Icon(Icons.add, size: 28),
-      ),
+floatingActionButton: Padding(
+  padding: const EdgeInsets.only(bottom: 90.0),
+  child: isSelectionMode 
+      ? FloatingActionButton.extended(
+          onPressed: () {
+            final tasks = ref.read(sortedTasksProvider).valueOrNull ?? [];
+            final selectedTasks = tasks.where((t) => ref.read(selectionProvider).contains(t.id)).toList();
+            BulkActionsBottomSheet.show(context, selectedTasks);
+          },
+          icon: const Icon(Icons.bolt_rounded),
+          label: const Text('Actions'),
+          elevation: 2,
+          backgroundColor: colorScheme.secondaryContainer,
+          foregroundColor: colorScheme.onSecondaryContainer,
+        )
+      : FloatingActionButton(
+          onPressed: () {
+            final filter = ref.read(filterProvider).valueOrNull;
+            final initialTag = (filter?.tags != null && filter!.tags!.isNotEmpty) ? filter.tags!.first : null;
+            TaskCreationHelper.showAddTask(context, ref, initialTagId: initialTag);
+          },
+          elevation: 2,
+          shape: const CircleBorder(),
+          child: const Icon(Icons.add, size: 28),
+        ),
+),
 
     );
   }

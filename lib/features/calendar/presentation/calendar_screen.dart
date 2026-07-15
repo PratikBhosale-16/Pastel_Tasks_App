@@ -131,19 +131,22 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          final selectedDate = ref.read(selectedDateProvider);
-          TaskCreationHelper.showAddTask(
-            context,
-            ref,
-            initialDate: selectedDate,
-            useRootNavigator: true,
-          );
-        },
-        elevation: 2,
-        shape: const CircleBorder(),
-        child: const Icon(Icons.add, size: 28),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 90.0),
+        child: FloatingActionButton(
+          onPressed: () {
+            final selectedDate = ref.read(selectedDateProvider);
+            TaskCreationHelper.showAddTask(
+              context,
+              ref,
+              initialDate: selectedDate,
+              useRootNavigator: true,
+            );
+          },
+          elevation: 2,
+          shape: const CircleBorder(),
+          child: const Icon(Icons.add, size: 28),
+        ),
       ),
     );
   }

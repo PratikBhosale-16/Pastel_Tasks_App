@@ -29,6 +29,7 @@ class AppShellScaffold extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
+      extendBody: true,
       drawer: const SmartListsDrawer(),
       body: navigationShell,
       bottomNavigationBar: AppBottomNavigation(
