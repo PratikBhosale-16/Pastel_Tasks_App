@@ -600,12 +600,7 @@ final settingsSectionsProvider = Provider<List<SettingsSection>>((ref) {
       items: [
         themeDropdown,
         appAccentPicker,
-        calendarAccentPicker,
-        taskCardStyleDropdown,
         fontSizeDropdown,
-        animationSpeedDropdown,
-        reduceMotionSwitch,
-        materialYouSwitch,
       ],
     ),
     const SettingsSection(
@@ -615,20 +610,7 @@ final settingsSectionsProvider = Provider<List<SettingsSection>>((ref) {
         defaultPriorityDropdown,
         defaultReminderDropdown,
         defaultRepeatDropdown,
-        defaultTagDropdown,
-        autoArchiveSwitch,
         completedTaskVisDropdown,
-      ],
-    ),
-    const SettingsSection(
-      id: 'calendar',
-      title: 'Calendar',
-      items: [
-        weekStartsDropdown,
-        defaultViewDropdown,
-        calendarDensityDropdown,
-        calendarShowCompletedSwitch,
-        calendarAccentPicker,
       ],
     ),
     SettingsSection(
@@ -659,67 +641,6 @@ final settingsSectionsProvider = Provider<List<SettingsSection>>((ref) {
       title: 'Widgets',
       items: [
         widgetSettingsNav,
-      ],
-    ),
-    const SettingsSection(
-      id: 'accessibility',
-      title: 'Accessibility',
-      items: [
-        largeTextSwitch,
-        highContrastSwitch,
-        reduceMotionSwitch,
-        hapticFeedbackSwitch,
-        touchTargetDropdown,
-      ],
-    ),
-    SettingsSection(
-      id: 'data_storage',
-      title: 'Data & Storage',
-      items: [
-        dynamicDatabaseSizeInfo,
-        dynamicTaskCountInfo,
-        dynamicCompletedTaskCountInfo,
-        dynamicArchivedTaskCountInfo,
-        dynamicTagCountInfo,
-        backupSizeInfo,
-        lastBackupInfo,
-        clearCacheAction,
-        optimizeDbAction,
-      ],
-    ),
-    SettingsSection(
-      id: 'developer',
-      title: 'Developer',
-      items: [
-        debugLogsSwitch,
-        performanceOverlaySwitch,
-        resetTutorialAction,
-        enableLabsSwitch,
-      ],
-    ),
-    const SettingsSection(
-      id: 'labs',
-      title: 'Labs (Experimental)',
-      items: [
-        labsAiAssistant,
-        labsVoiceTask,
-      ],
-    ),
-    SettingsSection(
-      id: 'about',
-      title: 'About',
-      items: [
-        appVersionInfo,
-        buildNumberInfo,
-        osLicensesAction,
-      ],
-    ),
-    SettingsSection(
-      id: 'reset',
-      title: 'Reset',
-      items: [
-        resetAppearanceAction,
-        factoryResetAction,
       ],
     ),
   ];
