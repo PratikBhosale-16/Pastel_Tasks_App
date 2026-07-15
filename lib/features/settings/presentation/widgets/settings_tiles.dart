@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pastel_tasks/features/settings/domain/models/settings_item.dart';
@@ -12,13 +13,20 @@ class SettingsSwitchTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(settingSwitchProvider(item));
+    final primaryColor = Theme.of(context).colorScheme.primary;
 
-    return SwitchListTile(
+    return ListTile(
       title: Text(item.title),
       subtitle: item.subtitle != null ? Text(item.subtitle!) : null,
-      secondary: item.icon != null ? Icon(item.icon) : null,
-      value: state.value ?? item.defaultValue,
-      onChanged: (val) {
+      leading: item.icon != null ? Icon(item.icon, color: primaryColor) : null,
+      trailing: CupertinoSwitch(
+        value: state.value ?? item.defaultValue,
+        activeColor: primaryColor,
+        onChanged: (val) {
+          ref.read(settingSwitchProvider(item).notifier).toggle();
+        },
+      ),
+      onTap: () {
         ref.read(settingSwitchProvider(item).notifier).toggle();
       },
     );
@@ -32,10 +40,11 @@ class SettingsNavigationTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).colorScheme.primary;
     return ListTile(
       title: Text(item.title),
       subtitle: item.subtitle != null ? Text(item.subtitle!) : null,
-      leading: item.icon != null ? Icon(item.icon) : null,
+      leading: item.icon != null ? Icon(item.icon, color: primaryColor) : null,
       trailing: const Icon(Icons.chevron_right),
       onTap: () {
         context.push(item.route);
@@ -51,11 +60,14 @@ class SettingsActionTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final color = item.isDestructive ? Theme.of(context).colorScheme.error : null;
+    final theme = Theme.of(context);
+    final color = item.isDestructive ? theme.colorScheme.error : null;
+    final iconColor = color ?? theme.colorScheme.primary;
+    
     return ListTile(
       title: Text(item.title, style: TextStyle(color: color)),
       subtitle: item.subtitle != null ? Text(item.subtitle!) : null,
-      leading: item.icon != null ? Icon(item.icon, color: color) : null,
+      leading: item.icon != null ? Icon(item.icon, color: iconColor) : null,
       onTap: () => item.onAction(context, ref),
     );
   }
@@ -68,10 +80,11 @@ class SettingsColorPickerTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final primaryColor = Theme.of(context).colorScheme.primary;
     return ListTile(
       title: Text(item.title),
       subtitle: item.subtitle != null ? Text(item.subtitle!) : null,
-      leading: item.icon != null ? Icon(item.icon) : null,
+      leading: item.icon != null ? Icon(item.icon, color: primaryColor) : null,
       trailing: const Icon(Icons.color_lens),
       onTap: () {
         // Fallback action, should ideally be injected or handled via provider
@@ -90,11 +103,12 @@ class SettingsDropdownTile<T> extends ConsumerWidget {
     // We only have String implementation in the provider currently, so we cast it.
     // If we need other types, we could make the provider generic.
     final state = ref.watch(settingDropdownProvider(item as SettingsItemDropdown<String>));
+    final primaryColor = Theme.of(context).colorScheme.primary;
     
     return ListTile(
       title: Text(item.title),
       subtitle: item.subtitle != null ? Text(item.subtitle!) : null,
-      leading: item.icon != null ? Icon(item.icon) : null,
+      leading: item.icon != null ? Icon(item.icon, color: primaryColor) : null,
       trailing: DropdownButton<String>(
         value: state.value ?? (item.defaultValue as String),
         underline: const SizedBox(),
@@ -128,10 +142,11 @@ class SettingsInfoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).colorScheme.primary;
     return ListTile(
       title: Text(item.title),
       subtitle: item.subtitle != null ? Text(item.subtitle!) : null,
-      leading: item.icon != null ? Icon(item.icon) : null,
+      leading: item.icon != null ? Icon(item.icon, color: primaryColor) : null,
       trailing: Text(
         item.valueLabel,
         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
