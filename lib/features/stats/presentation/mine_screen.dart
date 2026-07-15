@@ -15,12 +15,14 @@ class MineScreen extends ConsumerWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
+      extendBody: true,
       backgroundColor: theme.colorScheme.surface,
       body: SafeArea(
+        bottom: false,
         child: CustomScrollView(
           slivers: [
             SliverPadding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
+              padding: const EdgeInsets.all(16),
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
                   // Profile Header
@@ -45,6 +47,7 @@ class MineScreen extends ConsumerWidget {
 
                   // Focus Line Chart
                   const FocusChartCard(),
+                  const SizedBox(height: 100),
                 ]),
               ),
             ),

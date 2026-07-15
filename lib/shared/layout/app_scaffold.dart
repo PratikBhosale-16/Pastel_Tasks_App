@@ -16,6 +16,7 @@ class AppScaffold extends StatelessWidget {
     this.keyboardSafe = true,
     this.onRefresh,
     this.backgroundColor,
+    this.extendBody = false,
   });
 
   /// The primary content of the scaffold.
@@ -39,6 +40,9 @@ class AppScaffold extends StatelessWidget {
   /// Whether the body should be wrapped in a scroll view.
   /// Not needed if the body is already a scrollable view.
   final bool scrollableBody;
+
+  /// Whether the body should extend behind the bottom navigation bar.
+  final bool extendBody;
 
   /// Whether the scaffold should automatically resize to avoid the keyboard.
   final bool keyboardSafe;
@@ -75,6 +79,7 @@ class AppScaffold extends StatelessWidget {
     }
 
     return Scaffold(
+      extendBody: extendBody,
       backgroundColor: backgroundColor ?? Theme.of(context).colorScheme.surface,
       resizeToAvoidBottomInset: keyboardSafe,
       appBar: appBar,

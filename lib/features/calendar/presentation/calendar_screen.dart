@@ -65,7 +65,9 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
+      extendBody: true,
       body: SafeArea(
+        bottom: false,
         child: Column(
           children: [
             Expanded(

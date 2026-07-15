@@ -111,6 +111,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final selectionCount = ref.watch(selectionCountProvider);
 
     return Scaffold(
+      extendBody: true,
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: isSelectionMode
           ? AppBar(
@@ -447,7 +448,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     },
                   ),
                 ],
-                const SliverPadding(padding: EdgeInsets.only(bottom: 80)),
+                const SliverPadding(padding: EdgeInsets.only(bottom: 100)),
               ],
             );
           },

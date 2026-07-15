@@ -178,6 +178,7 @@ class _TagsScreenState extends ConsumerState<TagsScreen> with SingleTickerProvid
     if (screenWidth > 900) crossAxisCount = 4;
 
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
