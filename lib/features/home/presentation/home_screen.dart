@@ -307,7 +307,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     itemBuilder: (context, index) {
                       final task = pinnedTasks[index];
                       final child = Padding(
-                        padding: const EdgeInsets.only(bottom: 12, left: 16, right: 16),
+                        padding: const EdgeInsets.only(left: 16, right: 16),
                         child: TaskCard(task: task, showTimeline: true),
                       );
                       if (isSelectionMode) {
@@ -370,7 +370,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     itemBuilder: (context, index) {
                       final task = pendingTasks[index];
                       final child = Padding(
-                        padding: const EdgeInsets.only(bottom: 12, left: 16, right: 16),
+                        padding: const EdgeInsets.only(left: 16, right: 16),
                         child: TaskCard(task: task, showTimeline: true),
                       );
                       if (isSelectionMode) {
@@ -433,7 +433,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     itemBuilder: (context, index) {
                       final task = completedTasks[index];
                       final child = Padding(
-                        padding: const EdgeInsets.only(bottom: 12, left: 16, right: 16),
+                        padding: const EdgeInsets.only(left: 16, right: 16),
                         child: TaskCard(task: task, showTimeline: true),
                       );
                       if (isSelectionMode) {

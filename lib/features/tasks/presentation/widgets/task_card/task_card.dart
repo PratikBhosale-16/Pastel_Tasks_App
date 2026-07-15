@@ -635,7 +635,12 @@ class TaskCard extends ConsumerWidget {
               ),
             ),
             const SizedBox(width: 8), // Gap before card
-            Expanded(child: swipeableCard),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 12.0),
+                child: swipeableCard,
+              ),
+            ),
           ],
         ),
       );
