@@ -643,6 +643,15 @@ final settingsSectionsProvider = Provider<List<SettingsSection>>((ref) {
         widgetSettingsNav,
       ],
     ),
+    SettingsSection(
+      id: 'about',
+      title: 'About',
+      items: [
+        appVersionInfo,
+        buildNumberInfo,
+        osLicensesAction,
+      ],
+    ),
   ];
 });
 

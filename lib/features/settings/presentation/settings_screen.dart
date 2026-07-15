@@ -20,31 +20,9 @@ class SettingsScreen extends ConsumerWidget {
         title: const Text('Settings'),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(60),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: 'Search settings...',
-                prefixIcon: const Icon(Icons.search),
-                filled: true,
-                fillColor: Theme.of(context).colorScheme.surfaceContainerHighest,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-              onChanged: (value) {
-                ref.read(settingsSearchQueryProvider.notifier).state = value;
-              },
-            ),
-          ),
-        ),
       ),
       body: ListView(
         children: [
-          const ProfileCard(),
           if (sections.isEmpty)
             const Padding(
               padding: EdgeInsets.all(32.0),
@@ -57,17 +35,11 @@ class SettingsScreen extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SettingsSectionHeader(title: section.title),
-                Card(
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    children: [
-                      for (int i = 0; i < section.items.length; i++) ...[
-                        _buildSettingsTile(context, ref, section.items[i]),
-                        if (i < section.items.length - 1)
-                          const Divider(height: 1),
-                      ]
-                    ],
-                  ),
+                Column(
+                  children: [
+                    for (int i = 0; i < section.items.length; i++)
+                      _buildSettingsTile(context, ref, section.items[i]),
+                  ],
                 ),
               ],
             );
