@@ -439,9 +439,11 @@ class TaskCard extends ConsumerWidget {
                           child: Wrap(
                             spacing: AppSpacing.xs,
                             runSpacing: AppSpacing.xs,
-                            children: task.tags.map((tagId) {
-                              final tagModel = tagsList.where((t) => t.id == tagId).firstOrNull;
-                              final displayName = tagModel?.name ?? tagId;
+                            children: task.tags.where((tagId) {
+                              return tagsList.any((t) => t.id == tagId);
+                            }).map((tagId) {
+                              final tagModel = tagsList.firstWhere((t) => t.id == tagId);
+                              final displayName = tagModel.name;
                               return Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                                 decoration: BoxDecoration(
