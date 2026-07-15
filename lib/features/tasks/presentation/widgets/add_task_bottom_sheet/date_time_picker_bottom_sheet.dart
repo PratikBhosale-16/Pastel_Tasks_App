@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/repeat_rule.dart';
+import 'package:pastel_tasks/features/settings/presentation/widgets/custom_reminder_dialog.dart';
 
 class DateTimePickerResult {
   final DateTime? dueDate;
@@ -106,33 +107,38 @@ class _DateTimePickerBottomSheetState extends State<DateTimePickerBottomSheet> {
     _loadLastReminderMode();
   }
 
+  int? _parseCustomReminderString(String defaultReminderStr) {
+    if (defaultReminderStr == 'Same with due date') {
+      return 0;
+    } else if (defaultReminderStr == 'None') {
+      return -1;
+    } else if (defaultReminderStr.endsWith('before')) {
+      final parts = defaultReminderStr.split(' ');
+      if (parts.length >= 3) {
+        final val = int.tryParse(parts[0]);
+        if (val != null) {
+          final unit = parts[1];
+          if (unit.startsWith('min')) {
+            return val;
+          } else if (unit.startsWith('hour')) {
+            return val * 60;
+          } else if (unit.startsWith('day')) {
+            return val * 60 * 24;
+          } else if (unit.startsWith('week')) {
+            return val * 60 * 24 * 7;
+          }
+        }
+      }
+    }
+    return null;
+  }
+
   Future<void> _loadLastReminderMode() async {
     final prefs = await SharedPreferences.getInstance();
     int defaultVal = 5;
     final defaultReminderStr = prefs.getString('default_reminder');
     if (defaultReminderStr != null) {
-      if (defaultReminderStr == 'Same with due date') {
-        defaultVal = 0;
-      } else if (defaultReminderStr == 'None') {
-        defaultVal = -1;
-      } else if (defaultReminderStr.endsWith('before')) {
-        final parts = defaultReminderStr.split(' ');
-        if (parts.length >= 3) {
-          final val = int.tryParse(parts[0]);
-          if (val != null) {
-            final unit = parts[1];
-            if (unit.startsWith('min')) {
-              defaultVal = val;
-            } else if (unit.startsWith('hour')) {
-              defaultVal = val * 60;
-            } else if (unit.startsWith('day')) {
-              defaultVal = val * 60 * 24;
-            } else if (unit.startsWith('week')) {
-              defaultVal = val * 60 * 24 * 7;
-            }
-          }
-        }
-      }
+      defaultVal = _parseCustomReminderString(defaultReminderStr) ?? 5;
     } else {
       defaultVal = prefs.getInt('last_used_reminder_mode') ?? 5;
     }
@@ -544,13 +550,25 @@ class _DateTimePickerBottomSheetState extends State<DateTimePickerBottomSheet> {
                 ? 'Customize time (${_formatCustomReminder(_selectedRelativeReminder)})'
                 : 'Customize time',
             _selectedRelativeReminder == -1 || ![-1, 0, 5, 15, 30, 60].contains(_selectedRelativeReminder), 
-            () {
-            setState(() {
-              if ([-1, 0, 5, 15, 30, 60].contains(_selectedRelativeReminder)) {
-                _selectedRelativeReminder = -1;
+            () async {
+              final result = await showCustomReminderDialog(context);
+              if (result != null) {
+                final val = _parseCustomReminderString(result);
+                if (val != null) {
+                  setState(() {
+                    _selectedRelativeReminder = val;
+                    _updateReminderToMatchTime();
+                  });
+                  _saveLastReminderMode(val);
+                }
+              } else {
+                setState(() {
+                  if ([-1, 0, 5, 15, 30, 60].contains(_selectedRelativeReminder)) {
+                    _selectedRelativeReminder = -1;
+                  }
+                });
+                _saveLastReminderMode(_selectedRelativeReminder);
               }
-            });
-            _saveLastReminderMode(_selectedRelativeReminder);
           }),
         ],
         _buildBottomActions(onDone: () => setState(() => _viewMode = _ViewMode.main)),
