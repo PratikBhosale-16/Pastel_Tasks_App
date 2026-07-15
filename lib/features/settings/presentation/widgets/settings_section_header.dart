@@ -13,7 +13,7 @@ class SettingsSectionHeader extends StatelessWidget {
       child: Text(
         title,
         style: theme.textTheme.titleSmall?.copyWith(
-          color: Colors.grey[600],
+          color: Colors.grey,
           fontWeight: FontWeight.bold,
         ),
       ),
