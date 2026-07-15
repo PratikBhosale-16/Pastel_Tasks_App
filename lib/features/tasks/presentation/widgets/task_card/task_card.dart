@@ -304,7 +304,7 @@ class TaskCard extends ConsumerWidget {
                     )
                   : null,
             ),
-            padding: const EdgeInsets.all(AppSpacing.lg),
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.sm),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -316,8 +316,8 @@ class TaskCard extends ConsumerWidget {
                       label: isCompleted ? 'Mark incomplete' : 'Mark complete',
                       button: true,
                       child: SizedBox(
-                        width: 48,
-                        height: 48,
+                        width: 36,
+                        height: 36,
                         child: isSelectionMode 
                           ? Icon(
                               isSelected ? Icons.check_circle_rounded : Icons.circle_outlined,
@@ -368,48 +368,14 @@ class TaskCard extends ConsumerWidget {
                                 ),
                               ],
                             ),
-                            if (task.subTasks.isNotEmpty) ...[
-                              const SizedBox(height: AppSpacing.xs),
-                              ...task.subTasks.map((subTask) {
-                                return Row(
-                                  children: [
-                                    Checkbox(
-                                      value: subTask.isCompleted,
-                                      onChanged: isSelectionMode || isArchived ? null : (bool? val) {
-                                        if (val != null) {
-                                          final updatedSubTasks = task.subTasks.map((st) {
-                                            if (st.id == subTask.id) {
-                                              return st.copyWith(isCompleted: val);
-                                            }
-                                            return st;
-                                          }).toList();
-                                          
-                                          final updatedTask = task.copyWith(
-                                            subTasks: updatedSubTasks,
-                                            updatedAt: DateTime.now().toUtc(),
-                                          );
-                                          
-                                          ref.read(taskNotifierProvider.notifier).updateTask(updatedTask);
-                                        }
-                                      },
-                                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                      visualDensity: VisualDensity.compact,
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        subTask.title,
-                                        style: theme.textTheme.bodyMedium?.copyWith(
-                                          decoration: subTask.isCompleted ? TextDecoration.lineThrough : null,
-                                          color: isArchived || subTask.isCompleted 
-                                              ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) 
-                                              : colorScheme.onSurfaceVariant,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              }),
-                            ],
+                            if (task.subTasks.isNotEmpty)
+                              _SubtasksSection(
+                                task: task,
+                                isSelectionMode: isSelectionMode,
+                                isArchived: isArchived,
+                                colorScheme: colorScheme,
+                                theme: theme,
+                              ),
                           ],
                         ),
                       ),
@@ -624,5 +590,121 @@ class TaskCard extends ConsumerWidget {
       case Priority.low:
         return Colors.green;
     }
+  }
+}
+
+class _SubtasksSection extends ConsumerStatefulWidget {
+  final Task task;
+  final bool isSelectionMode;
+  final bool isArchived;
+  final ColorScheme colorScheme;
+  final ThemeData theme;
+
+  const _SubtasksSection({
+    required this.task,
+    required this.isSelectionMode,
+    required this.isArchived,
+    required this.colorScheme,
+    required this.theme,
+  });
+
+  @override
+  ConsumerState<_SubtasksSection> createState() => _SubtasksSectionState();
+}
+
+class _SubtasksSectionState extends ConsumerState<_SubtasksSection> {
+  bool _isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final task = widget.task;
+    final colorScheme = widget.colorScheme;
+    final theme = widget.theme;
+    final isSelectionMode = widget.isSelectionMode;
+    final isArchived = widget.isArchived;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const SizedBox(height: AppSpacing.xs),
+        InkWell(
+          onTap: () => setState(() => _isExpanded = !_isExpanded),
+          borderRadius: BorderRadius.circular(4),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.account_tree_outlined,
+                  size: 16,
+                  color: colorScheme.primary,
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  '${task.subTasks.where((s) => s.isCompleted).length}/${task.subTasks.length} Subtasks',
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    color: colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Icon(
+                  _isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                  size: 16,
+                  color: colorScheme.primary,
+                ),
+              ],
+            ),
+          ),
+        ),
+        if (_isExpanded) ...[
+          const SizedBox(height: AppSpacing.xs),
+          ...task.subTasks.map((subTask) {
+            return Row(
+              children: [
+                SizedBox(
+                  width: 32,
+                  height: 32,
+                  child: Checkbox(
+                    value: subTask.isCompleted,
+                    onChanged: isSelectionMode || isArchived ? null : (bool? val) {
+                      if (val != null) {
+                        final updatedSubTasks = task.subTasks.map((st) {
+                          if (st.id == subTask.id) {
+                            return st.copyWith(isCompleted: val);
+                          }
+                          return st;
+                        }).toList();
+                        
+                        final updatedTask = task.copyWith(
+                          subTasks: updatedSubTasks,
+                          updatedAt: DateTime.now().toUtc(),
+                        );
+                        
+                        ref.read(taskNotifierProvider.notifier).updateTask(updatedTask);
+                      }
+                    },
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    visualDensity: VisualDensity.compact,
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    subTask.title,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      decoration: subTask.isCompleted ? TextDecoration.lineThrough : null,
+                      color: isArchived || subTask.isCompleted 
+                          ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) 
+                          : colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }),
+        ],
+      ],
+    );
   }
 }

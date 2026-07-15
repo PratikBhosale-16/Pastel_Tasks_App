@@ -273,10 +273,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
                           child: Row(
                             children: [
-                              Text(
-                                'Pinned (${pinnedTasks.length})', 
-                                style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-                              ),
+                                Text(
+                                  'Pinned (${pinnedTasks.length})', 
+                                  style: theme.textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: colorScheme.primary,
+                                  ),
+                                ),
                               const Spacer(),
                               Icon(
                                 _isPinnedExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, 
@@ -333,10 +336,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
                           child: Row(
                             children: [
-                              Text(
-                                'Tasks (${pendingTasks.length})', 
-                                style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-                              ),
+                                Text(
+                                  'Tasks (${pendingTasks.length})', 
+                                  style: theme.textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: colorScheme.primary,
+                                  ),
+                                ),
                               const Spacer(),
                               Icon(
                                 _isTasksExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, 
@@ -393,10 +399,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
                           child: Row(
                             children: [
-                              Text(
-                                'Completed (${completedTasks.length})', 
-                                style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-                              ),
+                                Text(
+                                  'Completed (${completedTasks.length})', 
+                                  style: theme.textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: colorScheme.primary,
+                                  ),
+                                ),
                               const Spacer(),
                               Icon(
                                 _isCompletedExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, 
