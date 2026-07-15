@@ -86,8 +86,10 @@ class AddTaskBottomSheet extends ConsumerStatefulWidget {
 
 class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
   final _titleController = TextEditingController();
+  final _descriptionController = TextEditingController();
   final List<TextEditingController> _subTaskControllers = [];
   
+  bool _showDescription = false;
   Priority _priority = Priority.medium;
   String? _tagId;
   DateTime? _dueDate;
@@ -106,6 +108,8 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
     final task = widget.existingTask;
     if (task != null) {
       _titleController.text = task.title;
+      _descriptionController.text = task.description;
+      _showDescription = task.description.isNotEmpty;
       _priority = task.priority;
       _tagId = task.tags.isNotEmpty ? task.tags.first : null;
       _dueDate = task.dueDate;
@@ -132,6 +136,7 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
   @override
   void dispose() {
     _titleController.dispose();
+    _descriptionController.dispose();
     for (var c in _subTaskControllers) {
       c.dispose();
     }
@@ -176,7 +181,7 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
     final now = DateTime.now();
     final formData = AddTaskFormData(
       title: _titleController.text.trim(),
-      description: '', 
+      description: _descriptionController.text.trim(), 
       priority: _priority,
       subTasks: finalSubTasks,
       tag: _tagId,
@@ -299,6 +304,25 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
                   ],
                 ),
               ),
+
+              // Description
+              if (_showDescription)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+                  child: TextField(
+                    controller: _descriptionController,
+                    style: theme.textTheme.bodyMedium,
+                    maxLines: null,
+                    decoration: InputDecoration(
+                      hintText: 'Add details...',
+                      border: InputBorder.none,
+                      isDense: true,
+                      hintStyle: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
+                      ),
+                    ),
+                  ),
+                ),
 
               // Subtasks List
               if (_subTaskControllers.isNotEmpty)
@@ -519,13 +543,34 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
                       constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
                     ),
                     
-                    // Subtask
-                    IconButton(
-                      icon: Icon(Icons.subdirectory_arrow_right, size: 22),
-                      color: theme.colorScheme.onSurfaceVariant,
-                      onPressed: _addSubTask,
+                    // Subtask / Description
+                    PopupMenuButton<String>(
+                      icon: Icon(
+                        Icons.subdirectory_arrow_right,
+                        size: 22,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
+                      onSelected: (String value) {
+                        if (value == 'subtask') {
+                          _addSubTask();
+                        } else if (value == 'description') {
+                          setState(() {
+                            _showDescription = true;
+                          });
+                        }
+                      },
+                      itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                        const PopupMenuItem<String>(
+                          value: 'subtask',
+                          child: Text('Add Subtask'),
+                        ),
+                        const PopupMenuItem<String>(
+                          value: 'description',
+                          child: Text('Add Description'),
+                        ),
+                      ],
                     ),
 
                     // Color
