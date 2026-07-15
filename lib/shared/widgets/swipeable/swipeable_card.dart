@@ -85,41 +85,37 @@ class SwipeableCardState extends State<SwipeableCard> with SingleTickerProviderS
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Stack(
-          children: [
-            // Right action background (shown when swiping right)
-            if (widget.rightActionBackground != null && _controller.value > 0)
-              Positioned.fill(
-                child: widget.rightActionBackground!,
-              ),
-              
-            // Left action pane (shown when swiping left)
-            if (widget.leftActionPaneBuilder != null && _controller.value < 0)
-              Positioned.fill(
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: SizedBox(
-                    width: widget.leftPaneWidth,
-                    child: widget.leftActionPaneBuilder!(context, close),
-                  ),
-                ),
-              ),
-
-            // The main card
-            Transform.translate(
-              offset: Offset(_controller.value, 0),
-              child: GestureDetector(
-                onHorizontalDragUpdate: _onHorizontalDragUpdate,
-                onHorizontalDragEnd: _onHorizontalDragEnd,
-                behavior: HitTestBehavior.opaque,
-                child: widget.child,
+    return Stack(
+      children: [
+        // Right action background (shown when swiping right)
+        if (widget.rightActionBackground != null && _controller.value > 0)
+          Positioned.fill(
+            child: widget.rightActionBackground!,
+          ),
+          
+        // Left action pane (shown when swiping left)
+        if (widget.leftActionPaneBuilder != null && _controller.value < 0)
+          Positioned.fill(
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: SizedBox(
+                width: widget.leftPaneWidth,
+                child: widget.leftActionPaneBuilder!(context, close),
               ),
             ),
-          ],
-        );
-      },
+          ),
+
+        // The main card
+        Transform.translate(
+          offset: Offset(_controller.value, 0),
+          child: GestureDetector(
+            onHorizontalDragUpdate: _onHorizontalDragUpdate,
+            onHorizontalDragEnd: _onHorizontalDragEnd,
+            behavior: HitTestBehavior.opaque,
+            child: widget.child,
+          ),
+        ),
+      ],
     );
   }
 }

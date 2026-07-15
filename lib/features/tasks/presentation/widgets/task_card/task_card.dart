@@ -603,9 +603,17 @@ class TaskCard extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SizedBox(
-              width: 50,
+              width: 16,
+              child: CustomPaint(
+                painter: _DottedLinePainter(
+                  color: colorScheme.outlineVariant.withValues(alpha: 0.6),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 64,
               child: Align(
-                alignment: Alignment.topRight,
+                alignment: Alignment.topCenter,
                 child: Padding(
                   padding: const EdgeInsets.only(top: AppSpacing.md),
                   child: Text(
@@ -617,14 +625,6 @@ class TaskCard extends ConsumerWidget {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 24,
-              child: CustomPaint(
-                painter: _DottedLinePainter(
-                  color: colorScheme.outlineVariant.withValues(alpha: 0.6),
                 ),
               ),
             ),
