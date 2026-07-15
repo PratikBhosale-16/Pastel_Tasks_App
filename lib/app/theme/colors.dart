@@ -26,7 +26,7 @@ abstract final class AppColors {
   static const Color info = Color(0xFF81D4FA);
 
   /// Light theme background.
-  static const Color backgroundLight = Color(0xFFFAFAF8);
+  static const Color backgroundLight = Color(0xFFFFFFFF);
 
   /// Light theme surface.
   static const Color surfaceLight = Color(0xFFFFFFFF);

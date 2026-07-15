@@ -52,33 +52,57 @@ class AppBottomNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return NavigationBar(
-      selectedIndex: selectedIndex,
-      onDestinationSelected: onDestinationSelected,
-      destinations: destinations.map((dest) {
-        Widget iconWidget = Icon(dest.icon);
-        Widget selectedIconWidget = Icon(dest.selectedIcon ?? dest.icon);
-
-        if (dest.badgeText != null) {
-          iconWidget = Badge(
-            label: Text(dest.badgeText!),
-            child: iconWidget,
-          );
-          selectedIconWidget = Badge(
-            label: Text(dest.badgeText!),
-            child: selectedIconWidget,
-          );
-        } else if (dest.showBadge) {
-          iconWidget = Badge(child: iconWidget);
-          selectedIconWidget = Badge(child: selectedIconWidget);
-        }
-
-        return NavigationDestination(
-          icon: iconWidget,
-          selectedIcon: selectedIconWidget,
-          label: dest.label,
-        );
-      }).toList(),
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: BorderRadius.circular(40),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.08),
+                blurRadius: 20,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(40),
+            child: NavigationBar(
+              selectedIndex: selectedIndex,
+              onDestinationSelected: onDestinationSelected,
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              height: 65, // slightly compact height for pill shape
+              destinations: destinations.map((dest) {
+                Widget iconWidget = Icon(dest.icon);
+                Widget selectedIconWidget = Icon(dest.selectedIcon ?? dest.icon);
+        
+                if (dest.badgeText != null) {
+                  iconWidget = Badge(
+                    label: Text(dest.badgeText!),
+                    child: iconWidget,
+                  );
+                  selectedIconWidget = Badge(
+                    label: Text(dest.badgeText!),
+                    child: selectedIconWidget,
+                  );
+                } else if (dest.showBadge) {
+                  iconWidget = Badge(child: iconWidget);
+                  selectedIconWidget = Badge(child: selectedIconWidget);
+                }
+        
+                return NavigationDestination(
+                  icon: iconWidget,
+                  selectedIcon: selectedIconWidget,
+                  label: dest.label,
+                );
+              }).toList(),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
