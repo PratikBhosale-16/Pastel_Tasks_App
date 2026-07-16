@@ -3,6 +3,9 @@
 ## 2026-07-16
 
 ### Fixed
+- Fixed background and lock screen notifications failing to trigger by enforcing `NotificationVisibility.public` and utilizing exact background alarm schedules.
+- Fixed custom notification tones not working by dynamically creating unique Android Notification Channels (`channelId`) corresponding to each sound selection.
+- Added 2 new notification sounds ("Chime" and "Bell") to the assets and correctly registered them in the Android native `res/raw` directory for local notification playback.
 - Fixed the Repeat section in `AddTaskBottomSheet` calendar view showing "No" when the user had saved "Hourly" as their default repeat setting.
 - Fixed the "Custom Time..." reminder setting not updating dynamically when setting the time manually via quick pills or the keyboard icon.
 - Fixed the default reminder fallback for custom time by replacing the duration picker with an absolute TimePicker, matching the user's intent to set a specific time of day for reminders when creating tasks.

@@ -101,6 +101,9 @@ final class NotificationService {
     required String body,
     required DateTime scheduledDate,
     required String payload,
+    String channelId = 'pastel_tasks_reminders',
+    String channelName = 'Reminders',
+    String? soundName,
     bool playSound = true,
     bool enableVibration = true,
   }) async {
@@ -113,13 +116,15 @@ final class NotificationService {
       scheduledDate: tzScheduledDate,
       notificationDetails: NotificationDetails(
         android: AndroidNotificationDetails(
-          'pastel_tasks_reminders',
-          'Reminders',
+          channelId,
+          channelName,
           channelDescription: 'Notifications for task reminders',
           importance: Importance.max,
           priority: Priority.high,
+          visibility: NotificationVisibility.public,
           groupKey: 'pastel_tasks_group',
           playSound: playSound,
+          sound: soundName != null ? RawResourceAndroidNotificationSound(soundName) : null,
           enableVibration: enableVibration,
           actions: const <AndroidNotificationAction>[
             AndroidNotificationAction(

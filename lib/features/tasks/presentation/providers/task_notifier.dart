@@ -252,13 +252,50 @@ class TaskNotifier extends AsyncNotifier<void> {
         final soundSetting = ref.read(settingDropdownProvider(notificationSoundDropdown)).value ?? 'Default';
         final vibrationSetting = ref.read(settingSwitchProvider(vibrationSwitch)).value ?? true;
 
+        String channelId = 'pastel_tasks_reminders';
+        String channelName = 'Reminders';
+        String? soundName;
+        bool playSound = true;
+
+        switch (soundSetting) {
+          case 'Correct Answer':
+            channelId = 'pastel_tasks_correct_answer';
+            channelName = 'Reminders (Correct Answer)';
+            soundName = 'correct_answer_tone';
+            break;
+          case 'Long Pop':
+            channelId = 'pastel_tasks_long_pop';
+            channelName = 'Reminders (Long Pop)';
+            soundName = 'long_pop';
+            break;
+          case 'Chime':
+            channelId = 'pastel_tasks_chime';
+            channelName = 'Reminders (Chime)';
+            soundName = 'chime';
+            break;
+          case 'Bell':
+            channelId = 'pastel_tasks_bell';
+            channelName = 'Reminders (Bell)';
+            soundName = 'bell';
+            break;
+          case 'None':
+            playSound = false;
+            break;
+          default:
+            // Default sound
+            break;
+        }
+
         await NotificationService.instance.scheduleNotification(
           id: notificationId,
           title: task.title,
           body: task.description.isNotEmpty ? task.description : 'You have a reminder for this task.',
           scheduledDate: task.reminder!.triggerTime,
           payload: task.id,
-          playSound: soundSetting != 'None',
+          channelId: channelId,
+          channelName: channelName,
+          soundName: soundName,
+          playSound: playSound,
           enableVibration: vibrationSetting,
         );
       }

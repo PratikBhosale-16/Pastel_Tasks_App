@@ -275,7 +275,7 @@ const notificationSoundDropdown = SettingsItemDropdown<String>(
   title: 'Notification Sound',
   storageKey: 'notification_sound',
   defaultValue: 'Default',
-  options: ['Default', 'Chime', 'Bell', 'None'],
+  options: ['Default', 'Correct Answer', 'Long Pop', 'Chime', 'Bell', 'None'],
   labelBuilder: _defaultLabelBuilder,
   icon: Icons.audiotrack,
   keywords: ['sound', 'notification', 'audio'],
