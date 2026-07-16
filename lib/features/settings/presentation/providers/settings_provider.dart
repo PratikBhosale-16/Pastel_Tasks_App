@@ -158,7 +158,7 @@ const defaultReminderDropdown = SettingsItemDropdown<String>(
   title: 'Default Reminder',
   storageKey: 'default_reminder',
   defaultValue: 'None',
-  options: ['None', 'Same with due date', '5 minutes before', '15 minutes before', '30 minutes before', '1 hour before', 'Custom...'],
+  options: ['None', 'Same with due date', '5 minutes before', '15 minutes before', '30 minutes before', '1 hour before', 'Custom Time...'],
   labelBuilder: _defaultLabelBuilder,
   icon: Icons.alarm,
   keywords: ['reminder', 'default', 'notification'],

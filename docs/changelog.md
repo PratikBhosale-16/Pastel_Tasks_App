@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-07-16
+
+### Fixed
+- Fixed the Repeat section in `AddTaskBottomSheet` calendar view showing "No" when the user had saved "Hourly" as their default repeat setting.
+- Fixed the "Custom Time..." reminder setting not updating dynamically when setting the time manually via quick pills or the keyboard icon.
+- Fixed the default reminder fallback for custom time by replacing the duration picker with an absolute TimePicker, matching the user's intent to set a specific time of day for reminders when creating tasks.
+- Improved the state management of `DateTimePickerBottomSheet` to ensure `_reminderTime` is appropriately populated according to the user's settings when a task time is selected.
+
 ## 2026-07-15
 
 ### Fixed

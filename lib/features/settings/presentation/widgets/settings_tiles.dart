@@ -113,8 +113,8 @@ class SettingsDropdownTile<T> extends ConsumerWidget {
     final List<String> currentOptions = List<String>.from(item.options as List<String>);
     final savedVal = state.value ?? (item.defaultValue as String);
     if (!currentOptions.contains(savedVal)) {
-      // Insert right before 'Custom...' if it exists, else at the end
-      final customIndex = currentOptions.indexOf('Custom...');
+      // Insert right before 'Custom Time...' if it exists, else at the end
+      final customIndex = currentOptions.indexOf('Custom Time...');
       if (customIndex != -1) {
         currentOptions.insert(customIndex, savedVal);
       } else {
@@ -139,14 +139,18 @@ class SettingsDropdownTile<T> extends ConsumerWidget {
           return DropdownMenuItem<String>(
             value: value,
             alignment: AlignmentDirectional.centerEnd,
-            child: Text(value == 'Custom...' ? value : (item.labelBuilder as String Function(String))(value)),
+            child: Text(value == 'Custom Time...' ? value : (item.labelBuilder as String Function(String))(value)),
           );
         }).toList(),
         onChanged: (newValue) async {
-          if (newValue == 'Custom...') {
-            final customValue = await showCustomReminderDialog(context);
-            if (customValue != null) {
-              ref.read(settingDropdownProvider(item as SettingsItemDropdown<String>).notifier).updateValue(customValue);
+          if (newValue == 'Custom Time...') {
+            final picked = await showTimePicker(
+              context: context,
+              initialTime: TimeOfDay.now(),
+            );
+            if (picked != null) {
+              final formatted = 'At ${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
+              ref.read(settingDropdownProvider(item as SettingsItemDropdown<String>).notifier).updateValue(formatted);
             }
           } else if (newValue != null) {
             ref.read(settingDropdownProvider(item as SettingsItemDropdown<String>).notifier).updateValue(newValue);

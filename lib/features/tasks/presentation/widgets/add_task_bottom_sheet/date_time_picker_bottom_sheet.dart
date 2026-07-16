@@ -84,7 +84,8 @@ class _DateTimePickerBottomSheetState extends State<DateTimePickerBottomSheet> {
   int _repeatEndOption = 0; // 0 = Endlessly, 1 = A date, 2 = Repeat counts
 
   // For time view specifically
-  int _selectedRelativeReminder = 5; // e.g. 5 for 5 mins default
+  int _selectedRelativeReminder = 5; // e.g. 5 for 5 mins default. -1 for None, -2 for Absolute Custom Time
+  TimeOfDay? _customAbsoluteReminderTime;
   bool _isPickingMinutes = false;
 
   @override
@@ -138,13 +139,23 @@ class _DateTimePickerBottomSheetState extends State<DateTimePickerBottomSheet> {
     int defaultVal = 5;
     final defaultReminderStr = prefs.getString('default_reminder');
     if (defaultReminderStr != null) {
-      defaultVal = _parseCustomReminderString(defaultReminderStr) ?? 5;
-    } else {
-      defaultVal = prefs.getInt('last_used_reminder_mode') ?? 5;
+      if (defaultReminderStr.startsWith('At ')) {
+        final parts = defaultReminderStr.substring(3).split(':');
+        if (parts.length == 2) {
+          final hour = int.tryParse(parts[0]);
+          final min = int.tryParse(parts[1]);
+          if (hour != null && min != null) {
+             _customAbsoluteReminderTime = TimeOfDay(hour: hour, minute: min);
+             defaultVal = -2;
+          }
+        }
+      } else {
+        defaultVal = _parseCustomReminderString(defaultReminderStr) ?? 5;
+      }
     }
-    
     setState(() {
       _selectedRelativeReminder = defaultVal;
+      _updateReminderToMatchTime();
     });
   }
 
@@ -263,7 +274,7 @@ class _DateTimePickerBottomSheetState extends State<DateTimePickerBottomSheet> {
         ListTile(
           leading: const Icon(Icons.repeat),
           title: const Text('Repeat'),
-          trailing: Text(_repeatRule == RepeatRule.none ? 'No' : _repeatRule.name),
+          trailing: Text(_repeatRule == RepeatRule.none ? 'No' : _repeatRule.name[0].toUpperCase() + _repeatRule.name.substring(1)),
           onTap: () => setState(() => _viewMode = _ViewMode.repeat),
         ),
         _buildBottomActions(),
@@ -305,7 +316,10 @@ class _DateTimePickerBottomSheetState extends State<DateTimePickerBottomSheet> {
                     initialEntryMode: TimePickerEntryMode.input,
                   );
                   if (picked != null) {
-                    setState(() => _time = picked);
+                    setState(() {
+                      _time = picked;
+                      _updateReminderToMatchTime();
+                    });
                   }
                 },
               ),
@@ -431,14 +445,14 @@ class _DateTimePickerBottomSheetState extends State<DateTimePickerBottomSheet> {
             spacing: 8,
             runSpacing: 8,
             children: [
-              _buildQuickPill('No Time', () => setState(() => _time = null), _time == null),
-              _buildQuickPill(const TimeOfDay(hour: 7, minute: 0).format(context), () => setState(() => _time = const TimeOfDay(hour: 7, minute: 0)), _time?.hour == 7),
-              _buildQuickPill(const TimeOfDay(hour: 9, minute: 0).format(context), () => setState(() => _time = const TimeOfDay(hour: 9, minute: 0)), _time?.hour == 9),
-              _buildQuickPill(const TimeOfDay(hour: 10, minute: 0).format(context), () => setState(() => _time = const TimeOfDay(hour: 10, minute: 0)), _time?.hour == 10),
-              _buildQuickPill(const TimeOfDay(hour: 12, minute: 0).format(context), () => setState(() => _time = const TimeOfDay(hour: 12, minute: 0)), _time?.hour == 12),
-              _buildQuickPill(const TimeOfDay(hour: 14, minute: 0).format(context), () => setState(() => _time = const TimeOfDay(hour: 14, minute: 0)), _time?.hour == 14),
-              _buildQuickPill(const TimeOfDay(hour: 16, minute: 0).format(context), () => setState(() => _time = const TimeOfDay(hour: 16, minute: 0)), _time?.hour == 16),
-              _buildQuickPill(const TimeOfDay(hour: 18, minute: 0).format(context), () => setState(() => _time = const TimeOfDay(hour: 18, minute: 0)), _time?.hour == 18),
+              _buildQuickPill('No Time', () { setState(() { _time = null; _updateReminderToMatchTime(); }); }, _time == null),
+              _buildQuickPill(const TimeOfDay(hour: 7, minute: 0).format(context), () { setState(() { _time = const TimeOfDay(hour: 7, minute: 0); _updateReminderToMatchTime(); }); }, _time?.hour == 7),
+              _buildQuickPill(const TimeOfDay(hour: 9, minute: 0).format(context), () { setState(() { _time = const TimeOfDay(hour: 9, minute: 0); _updateReminderToMatchTime(); }); }, _time?.hour == 9),
+              _buildQuickPill(const TimeOfDay(hour: 10, minute: 0).format(context), () { setState(() { _time = const TimeOfDay(hour: 10, minute: 0); _updateReminderToMatchTime(); }); }, _time?.hour == 10),
+              _buildQuickPill(const TimeOfDay(hour: 12, minute: 0).format(context), () { setState(() { _time = const TimeOfDay(hour: 12, minute: 0); _updateReminderToMatchTime(); }); }, _time?.hour == 12),
+              _buildQuickPill(const TimeOfDay(hour: 14, minute: 0).format(context), () { setState(() { _time = const TimeOfDay(hour: 14, minute: 0); _updateReminderToMatchTime(); }); }, _time?.hour == 14),
+              _buildQuickPill(const TimeOfDay(hour: 16, minute: 0).format(context), () { setState(() { _time = const TimeOfDay(hour: 16, minute: 0); _updateReminderToMatchTime(); }); }, _time?.hour == 16),
+              _buildQuickPill(const TimeOfDay(hour: 18, minute: 0).format(context), () { setState(() { _time = const TimeOfDay(hour: 18, minute: 0); _updateReminderToMatchTime(); }); }, _time?.hour == 18),
             ],
           ),
         ),
@@ -495,7 +509,9 @@ class _DateTimePickerBottomSheetState extends State<DateTimePickerBottomSheet> {
   }
 
   void _updateReminderToMatchTime() {
-    if (_selectedRelativeReminder != -1 && _time != null) {
+    if (_selectedRelativeReminder == -2 && _customAbsoluteReminderTime != null) {
+      _reminderTime = _customAbsoluteReminderTime;
+    } else if (_selectedRelativeReminder != -1 && _time != null) {
       final now = DateTime.now();
       final target = DateTime(now.year, now.month, now.day, _time!.hour, _time!.minute);
       final adjusted = target.subtract(Duration(minutes: _selectedRelativeReminder));
@@ -505,7 +521,19 @@ class _DateTimePickerBottomSheetState extends State<DateTimePickerBottomSheet> {
 
   Future<void> _saveLastReminderMode(int mode) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('last_used_reminder_mode', mode);
+    if (mode == 0) {
+      prefs.setString('default_reminder', 'Same with due date');
+    } else if (mode == -1) {
+      prefs.setString('default_reminder', 'None');
+    } else if (mode == -2 && _customAbsoluteReminderTime != null) {
+      prefs.setString('default_reminder', 'At ${_customAbsoluteReminderTime!.hour.toString().padLeft(2, '0')}:${_customAbsoluteReminderTime!.minute.toString().padLeft(2, '0')}');
+    } else if (mode > 0) {
+      if (mode == 60) {
+        prefs.setString('default_reminder', '1 hour before');
+      } else {
+        prefs.setString('default_reminder', '$mode minutes before');
+      }
+    }
   }
 
   String _formatCustomReminder(int minutes) {
@@ -590,28 +618,22 @@ class _DateTimePickerBottomSheetState extends State<DateTimePickerBottomSheet> {
             _saveLastReminderMode(60);
           }),
           _buildCheckboxTile(
-            ![-1, 0, 5, 15, 30, 60].contains(_selectedRelativeReminder) 
-                ? 'Customize time (${_formatCustomReminder(_selectedRelativeReminder)})'
-                : 'Customize time',
-            _selectedRelativeReminder == -1 || ![-1, 0, 5, 15, 30, 60].contains(_selectedRelativeReminder), 
+            _selectedRelativeReminder == -2 
+                ? 'Custom Time (${_customAbsoluteReminderTime?.format(context) ?? ''})'
+                : 'Custom Time...',
+            _selectedRelativeReminder == -2, 
             () async {
-              final result = await showCustomReminderDialog(context);
-              if (result != null) {
-                final val = _parseCustomReminderString(result);
-                if (val != null) {
-                  setState(() {
-                    _selectedRelativeReminder = val;
-                    _updateReminderToMatchTime();
-                  });
-                  _saveLastReminderMode(val);
-                }
-              } else {
+              final picked = await showTimePicker(
+                context: context,
+                initialTime: _customAbsoluteReminderTime ?? _reminderTime ?? TimeOfDay.now(),
+              );
+              if (picked != null) {
                 setState(() {
-                  if ([-1, 0, 5, 15, 30, 60].contains(_selectedRelativeReminder)) {
-                    _selectedRelativeReminder = -1;
-                  }
+                  _selectedRelativeReminder = -2;
+                  _customAbsoluteReminderTime = picked;
+                  _updateReminderToMatchTime();
                 });
-                _saveLastReminderMode(_selectedRelativeReminder);
+                _saveLastReminderMode(-2);
               }
           }),
         ],
