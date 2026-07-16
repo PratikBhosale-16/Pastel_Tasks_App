@@ -116,7 +116,7 @@ const dateFormatDropdown = SettingsItemDropdown<String>(
   storageKey: 'date_format',
   defaultValue: 'System Default',
   options: ['System Default', 'MM/DD/YYYY', 'DD/MM/YYYY', 'YYYY-MM-DD'],
-  labelBuilder: _defaultLabelBuilder,
+  labelBuilder: _dateFormatLabelBuilder,
   icon: Icons.calendar_today,
   keywords: ['date', 'format', 'calendar'],
 );
@@ -131,6 +131,15 @@ const timeFormatDropdown = SettingsItemDropdown<String>(
   icon: Icons.access_time,
   keywords: ['time', 'format', 'clock', '12', '24'],
 );
+
+String _dateFormatLabelBuilder(String val) {
+  switch (val) {
+    case 'MM/DD/YYYY': return 'MMM DD, YYYY';
+    case 'DD/MM/YYYY': return 'DD MMM YYYY';
+    case 'YYYY-MM-DD': return 'YYYY MMM DD';
+    default: return val;
+  }
+}
 
 // --- TASK PREFERENCES ---
 const defaultPriorityDropdown = SettingsItemDropdown<String>(

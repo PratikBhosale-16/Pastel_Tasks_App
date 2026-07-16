@@ -13,11 +13,11 @@ class DateTimeFormatter {
   String _getDateFormatPattern() {
     switch (dateFormatSetting) {
       case 'MM/DD/YYYY':
-        return 'MM/dd/yyyy';
+        return 'MMM dd, yyyy';
       case 'DD/MM/YYYY':
-        return 'dd/MM/yyyy';
+        return 'dd MMM yyyy';
       case 'YYYY-MM-DD':
-        return 'yyyy-MM-dd';
+        return 'yyyy MMM dd';
       case 'System Default':
       default:
         // By default, fallback to yMMMd or whatever the original was
@@ -28,11 +28,11 @@ class DateTimeFormatter {
   String _getShortDateFormatPattern() {
     switch (dateFormatSetting) {
       case 'MM/DD/YYYY':
-        return 'MM/dd';
+        return 'MMM dd';
       case 'DD/MM/YYYY':
-        return 'dd/MM';
+        return 'dd MMM';
       case 'YYYY-MM-DD':
-        return 'MM-dd';
+        return 'yyyy MMM dd';
       case 'System Default':
       default:
         return 'MMM d';
@@ -42,9 +42,9 @@ class DateTimeFormatter {
   String _getTimeFormatPattern() {
     switch (timeFormatSetting) {
       case '12-Hour':
-        return 'jm'; // e.g. 5:08 PM
+        return 'h:mm a'; // e.g. 5:08 PM
       case '24-Hour':
-        return 'Hm'; // e.g. 17:08
+        return 'HH:mm'; // e.g. 17:08
       case 'System Default':
       default:
         return 'jm'; 
