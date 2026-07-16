@@ -272,8 +272,18 @@ class _DateTimePickerBottomSheetState extends State<DateTimePickerBottomSheet> {
   }
 
   Widget _buildTimeView(ThemeData theme) {
+    final bool is24Hour = MediaQuery.of(context).alwaysUse24HourFormat;
+    int displayHour = _time?.hour ?? 9;
+    bool isPM = displayHour >= 12;
+    if (!is24Hour) {
+      if (displayHour == 0) {
+        displayHour = 12;
+      } else if (displayHour > 12) {
+        displayHour -= 12;
+      }
+    }
     // Format hours and minutes for dual tone
-    String hours = _time != null ? _time!.hour.toString().padLeft(2, '0') : '--';
+    String hours = _time != null ? displayHour.toString().padLeft(is24Hour ? 2 : 1, '0') : '--';
     String minutes = _time != null ? _time!.minute.toString().padLeft(2, '0') : '--';
     
     return Column(
@@ -346,6 +356,33 @@ class _DateTimePickerBottomSheetState extends State<DateTimePickerBottomSheet> {
                     )
                   ),
                 ),
+                if (!is24Hour && _time != null) ...[
+                  const SizedBox(width: 12),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          if (isPM) setState(() => _time = TimeOfDay(hour: _time!.hour - 12, minute: _time!.minute));
+                        },
+                        child: Text('AM', style: theme.textTheme.titleLarge?.copyWith(
+                          color: !isPM ? theme.colorScheme.primary : theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
+                          fontWeight: !isPM ? FontWeight.bold : FontWeight.normal,
+                        )),
+                      ),
+                      const SizedBox(height: 4),
+                      GestureDetector(
+                        onTap: () {
+                          if (!isPM) setState(() => _time = TimeOfDay(hour: _time!.hour + 12, minute: _time!.minute));
+                        },
+                        child: Text('PM', style: theme.textTheme.titleLarge?.copyWith(
+                          color: isPM ? theme.colorScheme.primary : theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
+                          fontWeight: isPM ? FontWeight.bold : FontWeight.normal,
+                        )),
+                      ),
+                    ],
+                  ),
+                ],
               ],
         ),
         const SizedBox(height: 24),
@@ -355,7 +392,7 @@ class _DateTimePickerBottomSheetState extends State<DateTimePickerBottomSheet> {
           height: 240, // Increased size
           child: GestureDetector(
             onPanUpdate: (details) {
-              _updateTimeFromOffset(details.localPosition, 240, theme);
+              _updateTimeFromOffset(details.localPosition, 240, theme, is24Hour: is24Hour);
             },
             onPanEnd: (details) {
               if (!_isPickingMinutes) {
@@ -363,7 +400,7 @@ class _DateTimePickerBottomSheetState extends State<DateTimePickerBottomSheet> {
               }
             },
             onTapDown: (details) {
-              _updateTimeFromOffset(details.localPosition, 240, theme);
+              _updateTimeFromOffset(details.localPosition, 240, theme, is24Hour: is24Hour);
             },
             onTapUp: (details) {
               if (!_isPickingMinutes) {
@@ -373,12 +410,13 @@ class _DateTimePickerBottomSheetState extends State<DateTimePickerBottomSheet> {
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 300),
               child: CustomPaint(
-                key: ValueKey(_isPickingMinutes),
+                key: ValueKey('$_isPickingMinutes-$is24Hour'),
                 size: const Size(240, 240),
                 painter: _AnalogClockPainter(
                   time: _time ?? TimeOfDay.now(),
                   theme: theme,
                   isPickingMinutes: _isPickingMinutes,
+                  is24Hour: is24Hour,
                 ),
               ),
             ),
@@ -394,13 +432,13 @@ class _DateTimePickerBottomSheetState extends State<DateTimePickerBottomSheet> {
             runSpacing: 8,
             children: [
               _buildQuickPill('No Time', () => setState(() => _time = null), _time == null),
-              _buildQuickPill('07:00', () => setState(() => _time = const TimeOfDay(hour: 7, minute: 0)), _time?.hour == 7),
-              _buildQuickPill('09:00', () => setState(() => _time = const TimeOfDay(hour: 9, minute: 0)), _time?.hour == 9),
-              _buildQuickPill('10:00', () => setState(() => _time = const TimeOfDay(hour: 10, minute: 0)), _time?.hour == 10),
-              _buildQuickPill('12:00', () => setState(() => _time = const TimeOfDay(hour: 12, minute: 0)), _time?.hour == 12),
-              _buildQuickPill('14:00', () => setState(() => _time = const TimeOfDay(hour: 14, minute: 0)), _time?.hour == 14),
-              _buildQuickPill('16:00', () => setState(() => _time = const TimeOfDay(hour: 16, minute: 0)), _time?.hour == 16),
-              _buildQuickPill('18:00', () => setState(() => _time = const TimeOfDay(hour: 18, minute: 0)), _time?.hour == 18),
+              _buildQuickPill(const TimeOfDay(hour: 7, minute: 0).format(context), () => setState(() => _time = const TimeOfDay(hour: 7, minute: 0)), _time?.hour == 7),
+              _buildQuickPill(const TimeOfDay(hour: 9, minute: 0).format(context), () => setState(() => _time = const TimeOfDay(hour: 9, minute: 0)), _time?.hour == 9),
+              _buildQuickPill(const TimeOfDay(hour: 10, minute: 0).format(context), () => setState(() => _time = const TimeOfDay(hour: 10, minute: 0)), _time?.hour == 10),
+              _buildQuickPill(const TimeOfDay(hour: 12, minute: 0).format(context), () => setState(() => _time = const TimeOfDay(hour: 12, minute: 0)), _time?.hour == 12),
+              _buildQuickPill(const TimeOfDay(hour: 14, minute: 0).format(context), () => setState(() => _time = const TimeOfDay(hour: 14, minute: 0)), _time?.hour == 14),
+              _buildQuickPill(const TimeOfDay(hour: 16, minute: 0).format(context), () => setState(() => _time = const TimeOfDay(hour: 16, minute: 0)), _time?.hour == 16),
+              _buildQuickPill(const TimeOfDay(hour: 18, minute: 0).format(context), () => setState(() => _time = const TimeOfDay(hour: 18, minute: 0)), _time?.hour == 18),
             ],
           ),
         ),
@@ -410,7 +448,7 @@ class _DateTimePickerBottomSheetState extends State<DateTimePickerBottomSheet> {
     );
   }
 
-  void _updateTimeFromOffset(Offset localPosition, double size, ThemeData theme) {
+  void _updateTimeFromOffset(Offset localPosition, double size, ThemeData theme, {required bool is24Hour}) {
     final center = Offset(size / 2, size / 2);
     final dx = localPosition.dx - center.dx;
     final dy = localPosition.dy - center.dy;
@@ -433,14 +471,20 @@ class _DateTimePickerBottomSheetState extends State<DateTimePickerBottomSheet> {
       // Set hours
       int hour = (angle / (math.pi / 6)).round() % 12;
       
-      // inner circle logic
-      final radius = size / 2;
-      final distance = math.sqrt(dx * dx + dy * dy);
-      final isInnerCircle = distance < radius * 0.6;
-      if (isInnerCircle) {
-        hour = (hour == 0) ? 0 : hour + 12; // 00 or 13-23
+      if (is24Hour) {
+        final radius = size / 2;
+        final distance = math.sqrt(dx * dx + dy * dy);
+        final isInnerCircle = distance < radius * 0.6;
+        if (isInnerCircle) {
+          hour = (hour == 0) ? 0 : hour + 12; // 00 or 13-23
+        } else {
+          hour = (hour == 0) ? 12 : hour; // 1-12
+        }
       } else {
-        hour = (hour == 0) ? 12 : hour; // 1-12
+        hour = (hour == 0) ? 12 : hour;
+        bool isPM = (_time?.hour ?? 9) >= 12;
+        if (isPM && hour < 12) hour += 12;
+        if (!isPM && hour == 12) hour = 0;
       }
       
       setState(() {
@@ -1045,8 +1089,9 @@ class _AnalogClockPainter extends CustomPainter {
   final TimeOfDay time;
   final ThemeData theme;
   final bool isPickingMinutes;
+  final bool is24Hour;
 
-  _AnalogClockPainter({required this.time, required this.theme, this.isPickingMinutes = false});
+  _AnalogClockPainter({required this.time, required this.theme, this.isPickingMinutes = false, this.is24Hour = true});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -1069,7 +1114,7 @@ class _AnalogClockPainter extends CustomPainter {
     final circlePaint = Paint()..color = theme.colorScheme.primary;
 
     if (!isPickingMinutes) {
-      final isInnerSelected = time.hour == 0 || time.hour > 12;
+      final isInnerSelected = is24Hour && (time.hour == 0 || time.hour > 12);
       
       // Draw hand
       final hourAngle = ((time.hour % 12) * 30) * math.pi / 180;
@@ -1089,7 +1134,13 @@ class _AnalogClockPainter extends CustomPainter {
         final x = center.dx + outerRadius * math.sin(angle);
         final y = center.dy - outerRadius * math.cos(angle);
         
-        final isSelected = !isInnerSelected && (time.hour == i || (time.hour == 0 && i == 12 && !isInnerSelected));
+        bool isSelected = false;
+        if (is24Hour) {
+          isSelected = !isInnerSelected && (time.hour == i || (time.hour == 0 && i == 12 && !isInnerSelected));
+        } else {
+          isSelected = (time.hour % 12 == i % 12);
+        }
+
         if (isSelected) {
           canvas.drawCircle(Offset(x, y), 16, circlePaint);
         }
@@ -1100,23 +1151,25 @@ class _AnalogClockPainter extends CustomPainter {
       }
 
       // Draw inner ring (13 to 24/00)
-      for (int i = 13; i <= 24; i++) {
-        final angle = (i * 30) * math.pi / 180;
-        final innerRadius = radius * 0.45;
-        final x = center.dx + innerRadius * math.sin(angle);
-        final y = center.dy - innerRadius * math.cos(angle);
-        
-        final isSelected = isInnerSelected && (time.hour == (i == 24 ? 0 : i));
-        if (isSelected) {
-          canvas.drawCircle(Offset(x, y), 14, circlePaint);
-        }
+      if (is24Hour) {
+        for (int i = 13; i <= 24; i++) {
+          final angle = (i * 30) * math.pi / 180;
+          final innerRadius = radius * 0.45;
+          final x = center.dx + innerRadius * math.sin(angle);
+          final y = center.dy - innerRadius * math.cos(angle);
+          
+          final isSelected = isInnerSelected && (time.hour == (i == 24 ? 0 : i));
+          if (isSelected) {
+            canvas.drawCircle(Offset(x, y), 14, circlePaint);
+          }
 
-        textPainter.text = TextSpan(
-          text: i == 24 ? '00' : '$i', 
-          style: textStyle?.copyWith(fontSize: 12, color: isSelected ? theme.colorScheme.onPrimary : theme.colorScheme.onSurface),
-        );
-        textPainter.layout();
-        textPainter.paint(canvas, Offset(x - textPainter.width / 2, y - textPainter.height / 2));
+          textPainter.text = TextSpan(
+            text: i == 24 ? '00' : '$i', 
+            style: textStyle?.copyWith(fontSize: 12, color: isSelected ? theme.colorScheme.onPrimary : theme.colorScheme.onSurface),
+          );
+          textPainter.layout();
+          textPainter.paint(canvas, Offset(x - textPainter.width / 2, y - textPainter.height / 2));
+        }
       }
     } else {
       // Draw hand
@@ -1160,7 +1213,7 @@ class _AnalogClockPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_AnalogClockPainter oldDelegate) {
-    return oldDelegate.time != time || oldDelegate.theme != theme || oldDelegate.isPickingMinutes != isPickingMinutes;
+    return oldDelegate.time != time || oldDelegate.theme != theme || oldDelegate.isPickingMinutes != isPickingMinutes || oldDelegate.is24Hour != is24Hour;
   }
 }
 
