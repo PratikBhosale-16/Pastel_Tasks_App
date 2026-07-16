@@ -109,6 +109,29 @@ const showTimelineSwitch = SettingsItemSwitch(
   storageKey: 'show_timeline',
 );
 
+// --- DATE & TIME ---
+const dateFormatDropdown = SettingsItemDropdown<String>(
+  id: 'date_format_pref',
+  title: 'Date Format',
+  storageKey: 'date_format',
+  defaultValue: 'System Default',
+  options: ['System Default', 'MM/DD/YYYY', 'DD/MM/YYYY', 'YYYY-MM-DD'],
+  labelBuilder: _defaultLabelBuilder,
+  icon: Icons.calendar_today,
+  keywords: ['date', 'format', 'calendar'],
+);
+
+const timeFormatDropdown = SettingsItemDropdown<String>(
+  id: 'time_format_pref',
+  title: 'Time Format',
+  storageKey: 'time_format',
+  defaultValue: 'System Default',
+  options: ['System Default', '12-Hour', '24-Hour'],
+  labelBuilder: _defaultLabelBuilder,
+  icon: Icons.access_time,
+  keywords: ['time', 'format', 'clock', '12', '24'],
+);
+
 // --- TASK PREFERENCES ---
 const defaultPriorityDropdown = SettingsItemDropdown<String>(
   id: 'task_default_priority',
@@ -624,6 +647,14 @@ final settingsSectionsProvider = Provider<List<SettingsSection>>((ref) {
         appAccentPicker,
         fontSizeDropdown,
         showTimelineSwitch,
+      ],
+    ),
+    const SettingsSection(
+      id: 'date_and_time',
+      title: 'Date & Time',
+      items: [
+        dateFormatDropdown,
+        timeFormatDropdown,
       ],
     ),
     const SettingsSection(

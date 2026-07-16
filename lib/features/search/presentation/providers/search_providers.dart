@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:pastel_tasks/app/providers/date_time_format_provider.dart';
 import 'package:pastel_tasks/features/filter/presentation/providers/filter_providers.dart';
 import 'package:pastel_tasks/features/tasks/domain/models/task.dart';
 
@@ -45,6 +46,7 @@ final searchQueryProvider = NotifierProvider<SearchQueryNotifier, String>(() {
 final searchedTasksProvider = Provider<AsyncValue<List<Task>>>((ref) {
   final filteredTasksAsync = ref.watch(filteredTasksProvider);
   final searchQuery = ref.watch(debouncedSearchQueryProvider).trim().toLowerCase();
+  final formatter = ref.watch(dateTimeFormatterProvider);
 
   if (searchQuery.isEmpty) {
     return filteredTasksAsync;
@@ -66,13 +68,13 @@ final searchedTasksProvider = Provider<AsyncValue<List<Task>>>((ref) {
       
       // 5. Reminder Text
       if (task.reminder != null) {
-        final reminderStr = DateFormat.yMMMd().add_jm().format(task.reminder!.triggerTime).toLowerCase();
+        final reminderStr = formatter.formatDateTime(task.reminder!.triggerTime).toLowerCase();
         if (reminderStr.contains(searchQuery)) return true;
       }
       
       // 6. Due Date Text
       if (task.dueDate != null) {
-        final dueStr = DateFormat.yMMMd().format(task.dueDate!).toLowerCase();
+        final dueStr = formatter.formatDate(task.dueDate!).toLowerCase();
         if (dueStr.contains(searchQuery)) return true;
       }
       

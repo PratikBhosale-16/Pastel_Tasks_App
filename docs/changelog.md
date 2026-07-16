@@ -7,6 +7,9 @@
 - Fixed the task completion tone playback issue by transitioning from a local AudioPlayer instance to a static AudioPlayer, preventing the player from being prematurely destroyed by Dart garbage collection before the sound finishes playing.
 - Updated audio file extensions from `.mp3` to `.wav` for custom tones.
 
+### Added
+- Added date and time format settings in the application settings. Allows overriding system date/time formatting globally (12/24 hour time, date formats). Moved formatting logic into a unified `DateTimeFormatter` provider injected into the app layer.
+
 ## 2026-07-14
 
 ### Completed

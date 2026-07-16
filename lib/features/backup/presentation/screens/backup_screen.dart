@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:pastel_tasks/app/providers/date_time_format_provider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:pastel_tasks/features/backup/domain/enums/backup_type.dart';
@@ -25,6 +26,7 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
     final theme = Theme.of(context);
     final backupState = ref.watch(backupServiceStateProvider);
     final backups = ref.watch(availableBackupsProvider(_selectedType));
+    final formatter = ref.watch(dateTimeFormatterProvider);
 
     ref.listen<AsyncValue<void>>(backupServiceStateProvider, (previous, next) {
       next.whenOrNull(
@@ -130,7 +132,7 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
                     final backup = list[index];
-                    final date = DateFormat('MMM d, y, h:mm a').format(backup['date'] as DateTime);
+                    final date = formatter.formatDateTime(backup['date'] as DateTime);
                     final size = (backup['size'] as int) / 1024;
                     final isEncrypted = backup['isEncrypted'] as bool;
                     

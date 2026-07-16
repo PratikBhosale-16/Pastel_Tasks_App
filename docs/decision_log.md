@@ -1,5 +1,10 @@
 # Decision Log
 
+## Global Date & Time Formatting
+- **Date**: 2026-07-16
+- **Context**: The user requested a global option to format dates and times across the app (with a system default fallback).
+- **Decision**: Created `DateTimeFormatter` and `dateTimeFormatterProvider` in `lib/app/providers/date_time_format_provider.dart`. Updated all UI components to consume this provider for formatting instead of doing it locally or using static helpers. We also injected a custom `MediaQuery` at the `app.dart` level to enforce `alwaysUse24HourFormat` based on the user's setting, so standard Flutter widgets (like TimePicker) obey the setting.
+
 ## UI Overhaul: Sub-Tasks & Auto-Completion
 - **Date**: 2026-07-14.
 - **Context**: The user requested a complete UI overhaul for the "Create Task" bottom sheet, including the addition of sub-tasks and the removal of the description field.

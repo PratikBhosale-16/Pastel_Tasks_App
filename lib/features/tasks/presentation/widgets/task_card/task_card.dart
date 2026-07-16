@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:pastel_tasks/app/providers/date_time_format_provider.dart';
 import 'package:pastel_tasks/features/settings/presentation/providers/settings_provider.dart';
 import 'package:pastel_tasks/app/theme/radius.dart';
 import 'package:pastel_tasks/app/theme/spacing.dart';
@@ -43,7 +44,7 @@ class TaskCard extends ConsumerWidget {
   /// Whether to show a timeline indicator on the left side with the creation date/time.
   final bool showTimeline;
 
-  String _formatRelativeDate(DateTime date) {
+  String _formatRelativeDate(DateTime date, DateTimeFormatter formatter) {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final targetDate = DateTime(date.year, date.month, date.day);
@@ -55,9 +56,9 @@ class TaskCard extends ConsumerWidget {
     } else if (targetDate == today.subtract(const Duration(days: 1))) {
       return 'Yesterday';
     } else if (date.year == now.year) {
-      return DateFormat.MMMd().format(date);
+      return formatter.formatShortDate(date);
     } else {
-      return DateFormat.yMMMd().format(date);
+      return formatter.formatDate(date);
     }
   }
 
@@ -259,6 +260,7 @@ class TaskCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final formatter = ref.watch(dateTimeFormatterProvider);
     
     final isCompleted = task.status == TaskStatus.completed;
     final isArchived = task.isArchived;
@@ -494,7 +496,7 @@ class TaskCard extends ConsumerWidget {
                             children: [
                               if (task.dueDate != null)
                                 Text(
-                                  '${_formatRelativeDate(task.dueDate!)}${task.reminder != null ? ',' : ''}',
+                                  '${_formatRelativeDate(task.dueDate!, formatter)}${task.reminder != null ? ',' : ''}',
                                   style: theme.textTheme.labelMedium?.copyWith(
                                     color: isArchived 
                                         ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) 
@@ -508,8 +510,8 @@ class TaskCard extends ConsumerWidget {
                                   children: [
                                     Text(
                                       task.dueDate != null
-                                          ? DateFormat.jm().format(task.reminder!.triggerTime)
-                                          : '${_formatRelativeDate(task.reminder!.triggerTime)} • ${DateFormat.jm().format(task.reminder!.triggerTime)}',
+                                          ? formatter.formatTime(task.reminder!.triggerTime)
+                                          : '${_formatRelativeDate(task.reminder!.triggerTime, formatter)} • ${formatter.formatTime(task.reminder!.triggerTime)}',
                                       style: theme.textTheme.labelMedium?.copyWith(
                                         color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
                                       ),
@@ -613,8 +615,8 @@ class TaskCard extends ConsumerWidget {
                       task.createdAt.month == now.month &&
                       task.createdAt.day == now.day;
       final timeText = isToday
-          ? DateFormat.jm().format(task.createdAt)
-          : DateFormat('MMM d').format(task.createdAt);
+          ? formatter.formatTime(task.createdAt)
+          : formatter.formatShortDate(task.createdAt);
 
       return IntrinsicHeight(
         child: Row(

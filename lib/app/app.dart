@@ -52,12 +52,29 @@ class App extends ConsumerWidget {
         break;
     }
 
+    final timeFormatStr = ref.watch(settingDropdownProvider(timeFormatDropdown)).value ?? 'System Default';
+    bool? alwaysUse24HourFormat;
+    if (timeFormatStr == '24-Hour') {
+      alwaysUse24HourFormat = true;
+    } else if (timeFormatStr == '12-Hour') {
+      alwaysUse24HourFormat = false;
+    }
+
     return MaterialApp.router(
       title: appConfig.applicationName,
       theme: AppTheme.light(seedColor: appAccent.color, fontScale: fontScale),
       darkTheme: AppTheme.dark(seedColor: appAccent.color, fontScale: fontScale),
       themeMode: themeMode,
       routerConfig: appRouter,
+      builder: (context, child) {
+        final mediaQuery = MediaQuery.of(context);
+        return MediaQuery(
+          data: mediaQuery.copyWith(
+            alwaysUse24HourFormat: alwaysUse24HourFormat ?? mediaQuery.alwaysUse24HourFormat,
+          ),
+          child: child ?? const SizedBox.shrink(),
+        );
+      },
     );
   }
 }

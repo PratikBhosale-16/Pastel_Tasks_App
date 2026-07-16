@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:pastel_tasks/app/providers/date_time_format_provider.dart';
 import 'package:pastel_tasks/features/calendar/presentation/providers/calendar_providers.dart';
 import 'package:pastel_tasks/features/tasks/presentation/widgets/task_card/task_card.dart';
 import 'package:pastel_tasks/features/calendar/presentation/widgets/calendar_empty_state.dart';
@@ -13,7 +14,7 @@ class AgendaList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedDate = ref.watch(selectedDateProvider);
     final tasks = ref.watch(agendaTasksProvider);
-    final dateFormat = DateFormat('MMMM d');
+    final formatter = ref.watch(dateTimeFormatterProvider);
     final theme = Theme.of(context);
 
     final uncompletedTasks = tasks.where((t) => t.status != TaskStatus.completed).toList();
@@ -26,7 +27,7 @@ class AgendaList extends ConsumerWidget {
         children: [
           const SizedBox(height: 12.0),
           Text(
-            'Agenda ${dateFormat.format(selectedDate)}',
+            'Agenda - ${formatter.formatDate(selectedDate)}',
             style: theme.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.bold,
               color: theme.colorScheme.onSurface,

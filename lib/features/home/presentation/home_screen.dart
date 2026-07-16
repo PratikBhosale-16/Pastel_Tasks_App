@@ -15,6 +15,7 @@ import 'package:pastel_tasks/features/tasks/presentation/providers/task_provider
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:pastel_tasks/app/providers/date_time_format_provider.dart';
 
 import 'package:pastel_tasks/app/router/route_names.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/priority.dart';
@@ -106,7 +107,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final taskListAsync = ref.watch(sortedTasksProvider);
     final sortPrefs = ref.watch(sortPreferencesProvider);
     final isManualSort = sortPrefs.option == TaskSortOption.manual;
-    final todayStr = DateFormat.yMMMMd().format(DateTime.now());
+    final formatter = ref.watch(dateTimeFormatterProvider);
+    final todayStr = formatter.formatDate(DateTime.now());
     
     final isSelectionMode = ref.watch(isSelectionModeProvider);
     final selectionCount = ref.watch(selectionCountProvider);

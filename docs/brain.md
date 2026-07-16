@@ -10,7 +10,7 @@
 # Architecture
 
 - **Current Milestone**: Post-M5.5 Settings & Notifications Polish
-- **Progress**: Replaced task completion tone toggle with a dropdown ("Correct Answer", "Long Pop"). Fixed the AudioPlayer garbage collection issue ensuring completion tones play to the end. Replaced `.mp3` extension with `.wav` in code.
+- **Progress**: Replaced task completion tone toggle with a dropdown. Fixed AudioPlayer garbage collection. Added Date & Time format settings allowing app-wide format customisation with system default fallback. Extracted formatting logic to a global DateTimeFormatter provider.
 - **Active Architecture**: Feature-First, Clean Architecture, MVVM, Riverpod, GoRouter, Isar. Data-driven UI for Settings module.
 
 - Feature First project organization.
