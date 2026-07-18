@@ -2,11 +2,11 @@
 
 ## Current Milestone
 
-- Milestone: UI Overhaul & Fixes (Task Details & Input)
-- Name: Task Details Inline Editing, Attachments & Voice Input
+- Milestone: UI Overhaul & Fixes (Calendar & Completed Tasks)
+- Name: Calendar Grid View, Clear Completed Tasks, Voice Input
 - Status: Completed
 - Validation: Validated with flutter analyze, flutter test, and flutter build apk
-- Overall Progress: Phase 5 in progress. Task details inline editing, category UI changes, and speech-to-text are completed.
+- Overall Progress: Phase 5 in progress. Task details inline editing, category UI changes, speech-to-text, calendar expanded view, and clear completed tasks are completed.
 
 ## Completed
 
@@ -31,6 +31,7 @@
 - [x] M5.6 Android Home Screen Widgets (Complete)
 - [x] UI Overhaul (Create Task) (Complete)
 - [x] UI Overhaul & Fixes (Task Details & Input) (Complete)
+- [x] UI Overhaul & Fixes (Calendar & Completed Tasks) (Complete)
 
 ## Pending
 

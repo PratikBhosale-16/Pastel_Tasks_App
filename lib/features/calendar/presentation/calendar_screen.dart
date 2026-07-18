@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:pastel_tasks/features/calendar/presentation/providers/calendar_providers.dart';
+import 'package:pastel_tasks/features/settings/presentation/providers/settings_providers.dart';
+import 'package:pastel_tasks/features/calendar/presentation/widgets/calendar_looks_bottom_sheet.dart';
+import 'package:pastel_tasks/features/calendar/presentation/widgets/expanded_month_calendar.dart';
 import 'package:pastel_tasks/features/calendar/presentation/widgets/agenda_list.dart';
 import 'package:pastel_tasks/features/calendar/presentation/widgets/calendar_header.dart';
 import 'package:pastel_tasks/features/calendar/presentation/widgets/month_calendar.dart';
@@ -30,11 +33,11 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
   Widget build(BuildContext context) {
     final query = ref.watch(searchQueryProvider);
     final searchResults = ref.watch(searchedTasksProvider);
+    final viewStyle = ref.watch(calendarViewStyleProvider);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
     return AppScaffold(
-      drawer: const SmartListsDrawer(),
       appBar: AppBar(
         title: _isSearching
             ? const TaskSearchBar()
@@ -60,6 +63,21 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
               });
             },
           ),
+          if (!_isSearching)
+            IconButton(
+              icon: Icon(
+                Icons.dashboard_customize_outlined,
+                color: colorScheme.onSurfaceVariant,
+              ),
+              onPressed: () {
+                showModalBottomSheet<void>(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (context) => const CalendarLooksBottomSheet(),
+                );
+              },
+            ),
           const SizedBox(width: 8),
         ],
         elevation: 0,
@@ -78,11 +96,15 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                     slivers: [
                       SliverToBoxAdapter(
                         child: Column(
-                          children: const [
-                            CalendarHeader(),
-                            MonthCalendar(),
-                            AgendaList(),
-                            SizedBox(height: 100), // padding for FAB
+                          children: [
+                            const CalendarHeader(),
+                            if (viewStyle == CalendarViewStyle.list) ...[
+                              const MonthCalendar(),
+                              const AgendaList(),
+                            ] else ...[
+                              const ExpandedMonthCalendar(),
+                            ],
+                            const SizedBox(height: 100), // padding for FAB
                           ],
                         ),
                       ),

@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pastel_tasks/core/providers/core_providers.dart';
 
+enum CalendarViewStyle {
+  list,
+  expanded,
+}
+
 enum CalendarAccent {
   lavender('Lavender', Colors.deepPurple),
   skyBlue('Sky Blue', Colors.lightBlue),
@@ -74,4 +79,35 @@ class CalendarShowCompletedNotifier extends StateNotifier<bool> {
 final calendarShowCompletedProvider =
     StateNotifierProvider<CalendarShowCompletedNotifier, bool>((ref) {
   return CalendarShowCompletedNotifier(ref);
+});
+
+class CalendarViewStyleNotifier extends StateNotifier<CalendarViewStyle> {
+  CalendarViewStyleNotifier(this.ref) : super(CalendarViewStyle.list) {
+    _loadPreference();
+  }
+
+  final Ref ref;
+  static const _key = 'calendar_view_style';
+
+  Future<void> _loadPreference() async {
+    final prefs = ref.read(preferencesProvider);
+    final value = await prefs.read(_key);
+    if (value != null) {
+      final index = int.tryParse(value.toString());
+      if (index != null && index >= 0 && index < CalendarViewStyle.values.length) {
+        state = CalendarViewStyle.values[index];
+      }
+    }
+  }
+
+  Future<void> updateStyle(CalendarViewStyle style) async {
+    state = style;
+    final prefs = ref.read(preferencesProvider);
+    await prefs.write(_key, style.index.toString());
+  }
+}
+
+final calendarViewStyleProvider =
+    StateNotifierProvider<CalendarViewStyleNotifier, CalendarViewStyle>((ref) {
+  return CalendarViewStyleNotifier(ref);
 });

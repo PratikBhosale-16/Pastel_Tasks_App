@@ -9,6 +9,9 @@
   - Implemented Attachment picking leveraging `file_picker` and `path_provider`, saving attachments locally to the app's document directory and visually rendering them on the task detail view.
   - Replaced all user-facing instances of "Tag" with "Category" across the codebase without migrating the underlying domain/database schema, preventing costly data migrations.
   - Built a new `CategorySelectionBottomSheet` tailored for assigning existing or creating new categories from within `TaskDetailsScreen`.
+  - Added a "Delete All" functionality in `CompletedTasksScreen` to easily clear out all completed tasks.
+  - Revamped `CalendarScreen` to include an expanded grid view displaying horizontally scrollable inline tasks.
+  - Removed the side drawer from the calendar and introduced an "Edit Calendar Looks" settings sheet to toggle between List and Expand views.
 
 ## 2026-07-16
 

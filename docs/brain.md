@@ -9,8 +9,8 @@
 
 # Architecture
 
-- **Current Milestone**: UI Overhaul & Fixes (Task Details & Input)
-- **Progress**: Implemented speech-to-text in the Add Task bottom sheet and fixed time clearing logic. Redesigned TaskDetailsScreen to support inline editing for title and notes, direct bottom sheet interactions for Date/Time/Repeat, integrated attachment picking and storage, and renamed UI references from "Tag" to "Category" using a new CategorySelectionBottomSheet.
+- **Current Milestone**: UI Overhaul & Fixes (Calendar & Completed Tasks)
+- **Progress**: Implemented speech-to-text in the Add Task bottom sheet and fixed time clearing logic. Redesigned TaskDetailsScreen for inline editing, attachment picking, and Category selection. Added a delete all button to CompletedTasksScreen. Enhanced CalendarScreen with a customizable expanded view containing horizontally scrollable tasks, and removed the side drawer.
 - **Active Architecture**: Feature-First, Clean Architecture, MVVM, Riverpod, GoRouter, Isar. Data-driven UI for Settings module.
 
 - Feature First project organization.
@@ -41,7 +41,7 @@
 **UI Overhaul & Fixes**
 - Status: Completed.
 - Next milestone: TBD
-- Focus: Implemented inline title/note editing, inline bottom sheets for category, date, time and repetition, added an attachment picker, integrated speech-to-text for task titles, and fixed reminder clear logic.
+- Focus: Implemented inline title/note editing, inline bottom sheets for category, date, time and repetition, added an attachment picker, integrated speech-to-text for task titles, fixed reminder clear logic. Added delete all completed tasks feature and revamped the Calendar screen with an expanded tasks grid view.
 
 # Completed
 
