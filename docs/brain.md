@@ -9,8 +9,8 @@
 
 # Architecture
 
-- **Current Milestone**: Post-M5.5 Settings & Notifications Polish
-- **Progress**: Replaced task completion tone toggle with a dropdown. Fixed AudioPlayer garbage collection. Added Date & Time format settings allowing app-wide format customisation with system default fallback. Extracted formatting logic to a global DateTimeFormatter provider. Fixed Add Task calendar repeating rule and custom absolute reminder time setting sync logic.
+- **Current Milestone**: UI Overhaul (Task Details)
+- **Progress**: Redesigned TaskDetailsScreen to support inline editing for title and notes, direct bottom sheet interactions for Date/Time/Repeat, integrated attachment picking and storage, and renamed UI references from "Tag" to "Category" using a new CategorySelectionBottomSheet.
 - **Active Architecture**: Feature-First, Clean Architecture, MVVM, Riverpod, GoRouter, Isar. Data-driven UI for Settings module.
 
 - Feature First project organization.
@@ -38,10 +38,10 @@
 - Minimum Android API: Android 12, API 31.
 
 ## Current Milestone
-**UI Overhaul (Create Task)**
+**UI Overhaul (Task Details)**
 - Status: Completed.
-- Next milestone: UI Overhaul (Calendar/Time Pickers) or M5.7 Search 2.0
-- Focus: Implemented the new minimalist Create Task UI. Added advanced repetition ends (date/count), precise time selection, auto-reminders, priority selector, and in-line tag creation.
+- Next milestone: TBD
+- Focus: Implemented inline title/note editing, inline bottom sheets for category, date, time and repetition, and added an attachment picker.
 
 # Completed
 

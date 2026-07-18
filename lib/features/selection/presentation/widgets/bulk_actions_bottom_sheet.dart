@@ -219,7 +219,7 @@ class BulkActionsBottomSheet extends ConsumerWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Assign Tag'),
+          title: const Text('Assign Category'),
           content: Consumer(
             builder: (context, ref, _) {
               final tagsAsync = ref.watch(tagNotifierProvider);
@@ -229,7 +229,7 @@ class BulkActionsBottomSheet extends ConsumerWidget {
                   runSpacing: 8,
                   children: [
                     SelectionChip(
-                      label: 'Clear Tag',
+                      label: 'Clear Category',
                       isSelected: false,
                       onSelected: (_) => Navigator.of(context).pop(''),
                     ),
@@ -399,7 +399,7 @@ class BulkActionsBottomSheet extends ConsumerWidget {
                 ),
                 ListTile(
                   leading: const Icon(Icons.label_outline),
-                  title: const Text('Assign Tag'),
+                  title: const Text('Assign Category'),
                   onTap: () => _bulkChangeTag(context, ref),
                 ),
                 ListTile(

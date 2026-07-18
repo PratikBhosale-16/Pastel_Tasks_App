@@ -37,14 +37,17 @@ dependencies:
   isar_flutter_libs: any
   logger: any
   lottie: any
+  open_filex: ^4.7.0
   package_info_plus: any
   path: any
   path_provider: any
+  permission_handler: ^12.0.3
   reorderable_grid_view: ^2.2.8
   reorderables: ^0.6.0
   riverpod_annotation: any
   share_plus: any
   shared_preferences: any
+  speech_to_text: ^7.4.0
   timezone: ^0.11.1
   url_launcher: any
   uuid: any

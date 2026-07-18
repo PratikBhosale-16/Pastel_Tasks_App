@@ -240,7 +240,16 @@ class TaskNotifier extends AsyncNotifier<void> {
     await NotificationService.instance.cancelNotification(notificationId);
     
     if (task.status == TaskStatus.pending && task.reminder != null && task.reminder!.enabled) {
-      if (task.reminder!.triggerTime.isAfter(DateTime.now())) {
+      var triggerTime = task.reminder!.triggerTime;
+      final now = DateTime.now();
+      
+      // If the trigger time is in the past (e.g. missed while app was closed, or created in the past),
+      // we bump it to 2 seconds from now so it fires immediately instead of being skipped.
+      if (triggerTime.isBefore(now)) {
+        triggerTime = now.add(const Duration(seconds: 2));
+      }
+
+      if (triggerTime.isAfter(now)) {
         
         // Read notification settings
         final masterSwitch = ref.read(settingSwitchProvider(masterNotificationToggle)).value ?? true;
@@ -289,7 +298,7 @@ class TaskNotifier extends AsyncNotifier<void> {
         await NotificationService.instance.scheduleNotification(
           id: notificationId,
           title: task.title,
-          body: task.description.isNotEmpty ? task.description : 'You have a reminder for this task.',
+          body: task.note.isNotEmpty ? task.note : 'You have a reminder for this task.',
           scheduledDate: task.reminder!.triggerTime,
           payload: task.id,
           channelId: channelId,

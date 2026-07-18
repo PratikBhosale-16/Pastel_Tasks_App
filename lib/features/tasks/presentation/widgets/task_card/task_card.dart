@@ -23,6 +23,8 @@ import 'package:pastel_tasks/features/selection/presentation/providers/selection
 import 'package:pastel_tasks/features/tags/presentation/providers/tag_notifier.dart';
 import 'package:pastel_tasks/shared/widgets/dialogs/confirmation_dialog.dart';
 import 'package:pastel_tasks/shared/widgets/swipeable/swipeable_card.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pastel_tasks/app/router/route_names.dart';
 
 final _audioPlayer = AudioPlayer();
 
@@ -116,7 +118,7 @@ class TaskCard extends ConsumerWidget {
 
     final updatedTask = task.copyWith(
       title: formData.title,
-      description: formData.description,
+      note: formData.note,
       priority: formData.priority,
       tags: formData.tag != null ? [formData.tag!] : [],
       subTasks: formData.subTasks,
@@ -314,7 +316,7 @@ class TaskCard extends ConsumerWidget {
         child: InkWell(
           onTap: isSelectionMode 
             ? () => ref.read(selectionProvider.notifier).toggle(task.id)
-            : () => _editTask(context, ref),
+            : () => context.pushNamed(RouteNames.taskDetails, pathParameters: {'id': task.id}),
           onDoubleTap: isSelectionMode 
             ? null 
             : () => ref.read(selectionProvider.notifier).toggle(task.id),
@@ -379,6 +381,24 @@ class TaskCard extends ConsumerWidget {
                                       Icons.push_pin_rounded,
                                       size: 16,
                                       color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.primary,
+                                    ),
+                                  ),
+                                if (task.note.isNotEmpty)
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 6.0),
+                                    child: Icon(
+                                      Icons.chat_bubble_outline,
+                                      size: 14,
+                                      color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
+                                    ),
+                                  ),
+                                if (task.attachments.isNotEmpty)
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 6.0),
+                                    child: Icon(
+                                      Icons.attach_file,
+                                      size: 14,
+                                      color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,
                                     ),
                                   ),
                                 Expanded(
@@ -496,7 +516,7 @@ class TaskCard extends ConsumerWidget {
                             children: [
                               if (task.dueDate != null)
                                 Text(
-                                  '${_formatRelativeDate(task.dueDate!, formatter)}${task.reminder != null ? ',' : ''}',
+                                  '${_formatRelativeDate(task.dueDate!, formatter)}${(task.reminder != null || (task.dueDate != null && (task.dueDate!.hour != 0 || task.dueDate!.minute != 0))) ? ',' : ''}',
                                   style: theme.textTheme.labelMedium?.copyWith(
                                     color: isArchived 
                                         ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) 
@@ -504,13 +524,13 @@ class TaskCard extends ConsumerWidget {
                                     fontWeight: isOverdue ? FontWeight.bold : FontWeight.normal,
                                   ),
                                 ),
-                              if (task.reminder != null)
+                              if (task.reminder != null || (task.dueDate != null && (task.dueDate!.hour != 0 || task.dueDate!.minute != 0)))
                                 Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Text(
                                       task.dueDate != null
-                                          ? formatter.formatTime(task.reminder!.triggerTime)
+                                          ? formatter.formatTime((task.dueDate!.hour != 0 || task.dueDate!.minute != 0) ? task.dueDate! : task.reminder!.triggerTime)
                                           : '${_formatRelativeDate(task.reminder!.triggerTime, formatter)} • ${formatter.formatTime(task.reminder!.triggerTime)}',
                                       style: theme.textTheme.labelMedium?.copyWith(
                                         color: isArchived ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.onSurfaceVariant,

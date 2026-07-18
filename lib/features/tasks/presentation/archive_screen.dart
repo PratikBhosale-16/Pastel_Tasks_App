@@ -158,7 +158,7 @@ class _ArchiveScreenState extends ConsumerState<ArchiveScreen> {
 
     final updatedTask = task.copyWith(
       title: formData.title,
-      description: formData.description,
+      note: formData.note,
       priority: formData.priority,
       tags: formData.tag != null ? [formData.tag!] : [],
       subTasks: formData.subTasks,

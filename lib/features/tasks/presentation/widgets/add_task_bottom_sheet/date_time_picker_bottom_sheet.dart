@@ -1,9 +1,11 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pastel_tasks/features/tasks/domain/enums/repeat_rule.dart';
 import 'package:pastel_tasks/features/settings/presentation/widgets/custom_reminder_dialog.dart';
+import 'package:pastel_tasks/app/providers/date_time_format_provider.dart';
 
 class DateTimePickerResult {
   final DateTime? dueDate;
@@ -23,7 +25,7 @@ class DateTimePickerResult {
   });
 }
 
-class DateTimePickerBottomSheet extends StatefulWidget {
+class DateTimePickerBottomSheet extends ConsumerStatefulWidget {
   final DateTime? initialDueDate;
   final TimeOfDay? initialTime;
   final TimeOfDay? initialReminderTime;
@@ -66,12 +68,12 @@ class DateTimePickerBottomSheet extends StatefulWidget {
   }
 
   @override
-  State<DateTimePickerBottomSheet> createState() => _DateTimePickerBottomSheetState();
+  ConsumerState<DateTimePickerBottomSheet> createState() => _DateTimePickerBottomSheetState();
 }
 
 enum _ViewMode { main, time, reminder, repeat }
 
-class _DateTimePickerBottomSheetState extends State<DateTimePickerBottomSheet> {
+class _DateTimePickerBottomSheetState extends ConsumerState<DateTimePickerBottomSheet> {
   _ViewMode _viewMode = _ViewMode.main;
   
   late DateTime? _dueDate;
@@ -149,6 +151,9 @@ class _DateTimePickerBottomSheetState extends State<DateTimePickerBottomSheet> {
              defaultVal = -2;
           }
         }
+      } else if (defaultReminderStr == 'Custom Time...') {
+        defaultVal = -2;
+        _customAbsoluteReminderTime = widget.initialReminderTime ?? const TimeOfDay(hour: 9, minute: 0);
       } else {
         defaultVal = _parseCustomReminderString(defaultReminderStr) ?? 5;
       }
@@ -283,7 +288,13 @@ class _DateTimePickerBottomSheetState extends State<DateTimePickerBottomSheet> {
   }
 
   Widget _buildTimeView(ThemeData theme) {
-    final bool is24Hour = MediaQuery.of(context).alwaysUse24HourFormat;
+    final formatter = ref.watch(dateTimeFormatterProvider);
+    bool is24Hour = MediaQuery.of(context).alwaysUse24HourFormat;
+    if (formatter.timeFormatSetting == '24-Hour') {
+      is24Hour = true;
+    } else if (formatter.timeFormatSetting == '12-Hour') {
+      is24Hour = false;
+    }
     int displayHour = _time?.hour ?? 9;
     bool isPM = displayHour >= 12;
     if (!is24Hour) {
@@ -516,6 +527,8 @@ class _DateTimePickerBottomSheetState extends State<DateTimePickerBottomSheet> {
       final target = DateTime(now.year, now.month, now.day, _time!.hour, _time!.minute);
       final adjusted = target.subtract(Duration(minutes: _selectedRelativeReminder));
       _reminderTime = TimeOfDay(hour: adjusted.hour, minute: adjusted.minute);
+    } else if (_time == null && _selectedRelativeReminder != -2) {
+      _reminderTime = null;
     }
   }
 

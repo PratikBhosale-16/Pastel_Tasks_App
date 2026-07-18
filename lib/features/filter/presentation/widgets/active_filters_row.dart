@@ -172,7 +172,7 @@ class ActiveFiltersRow extends ConsumerWidget {
           final tag = allTags.firstWhere((t) => t.id == tagId, orElse: () => throw Exception('Tag not found'));
           chips.add(_buildFilterChip(
             context,
-            label: 'Tag: ${tag.name}',
+            label: 'Category: ${tag.name}',
             onDeleted: () {
               final updated = List.of(filter.tags!)..remove(tagId);
               ref.read(filterProvider.notifier).updateFilter(
@@ -307,7 +307,7 @@ class ActiveFiltersRow extends ConsumerWidget {
       case TaskSortOption.color:
         return 'Color';
       case TaskSortOption.tag:
-        return 'Tag';
+        return 'Category';
       case TaskSortOption.repeat:
         return 'Repeat';
     }

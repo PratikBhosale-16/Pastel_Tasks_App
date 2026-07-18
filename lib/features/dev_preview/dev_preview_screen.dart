@@ -85,7 +85,7 @@ class _DevPreviewScreenState extends State<DevPreviewScreen> {
           ),
           AppNavigationDestination(
             icon: AppIcons.tag,
-            label: 'Tags',
+            label: 'Categories',
             showBadge: true,
           ),
         ],

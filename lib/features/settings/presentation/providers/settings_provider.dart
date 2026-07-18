@@ -9,6 +9,8 @@ import 'package:pastel_tasks/features/settings/presentation/providers/stats_prov
 import 'package:pastel_tasks/features/backup/presentation/providers/backup_providers.dart';
 import 'package:pastel_tasks/features/backup/domain/enums/backup_type.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pastel_tasks/core/services/notification_service.dart';
+
 // --- APPEARANCE ---
 const themeDropdown = SettingsItemDropdown<String>(
   id: 'appearance_theme',
@@ -188,7 +190,7 @@ const defaultRepeatDropdown = SettingsItemDropdown<String>(
 
 const defaultTagDropdown = SettingsItemDropdown<String>(
   id: 'task_default_tag',
-  title: 'Default Tag',
+  title: 'Default Category',
   storageKey: 'default_tag',
   defaultValue: 'None',
   options: ['None', 'Work', 'Personal', 'Home'], // Mocked for now
@@ -279,6 +281,30 @@ const notificationSoundDropdown = SettingsItemDropdown<String>(
   labelBuilder: _defaultLabelBuilder,
   icon: Icons.audiotrack,
   keywords: ['sound', 'notification', 'audio'],
+);
+
+final testNotificationAction = SettingsItemAction(
+  id: 'test_notification',
+  title: 'Test Notification',
+  icon: Icons.notifications_active,
+  onAction: (context, ref) async {
+    try {
+      await NotificationService.instance.showNotification(
+        id: 99999,
+        title: 'Test Notification',
+        body: 'This is a test notification to verify sounds and visibility.',
+        payload: 'test',
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Test notification sent!')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed: $e')),
+      );
+    }
+  },
+  keywords: ['test', 'notification', 'sound', 'verify'],
 );
 
 const vibrationSwitch = SettingsItemSwitch(
@@ -444,7 +470,7 @@ const archivedTaskCountInfo = SettingsItemInfo(
 
 const tagCountInfo = SettingsItemInfo(
   id: 'data_tag_count',
-  title: 'Tag Count',
+  title: 'Category Count',
   valueLabel: '8',
   icon: Icons.label,
   keywords: ['tag', 'count', 'labels'],
@@ -641,7 +667,7 @@ final settingsSectionsProvider = Provider<List<SettingsSection>>((ref) {
 
   final dynamicTagCountInfo = SettingsItemInfo(
     id: 'data_tag_count',
-    title: 'Tag Count',
+    title: 'Category Count',
     valueLabel: stats != null ? '' : '...',
     icon: Icons.label,
     keywords: ['tag', 'count', 'labels'],
@@ -677,12 +703,13 @@ final settingsSectionsProvider = Provider<List<SettingsSection>>((ref) {
         taskCompletionToneDropdown,
       ],
     ),
-    const SettingsSection(
+    SettingsSection(
       id: 'notifications',
       title: 'Notifications',
       items: [
         masterNotificationToggle,
         notificationSoundDropdown,
+        testNotificationAction,
       ],
     ),
     const SettingsSection(

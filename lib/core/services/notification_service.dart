@@ -109,41 +109,105 @@ final class NotificationService {
   }) async {
     final tz.TZDateTime tzScheduledDate = tz.TZDateTime.from(scheduledDate, tz.local);
     
-    await _flutterLocalNotificationsPlugin.zonedSchedule(
+    try {
+      await _flutterLocalNotificationsPlugin.zonedSchedule(
+        id: id,
+        title: title,
+        body: body,
+        scheduledDate: tzScheduledDate,
+        notificationDetails: NotificationDetails(
+          android: AndroidNotificationDetails(
+            channelId,
+            channelName,
+            channelDescription: 'Notifications for task reminders',
+            importance: Importance.max,
+            priority: Priority.high,
+            visibility: NotificationVisibility.public,
+            groupKey: 'pastel_tasks_group',
+            playSound: playSound,
+            sound: soundName != null ? RawResourceAndroidNotificationSound(soundName) : null,
+            enableVibration: enableVibration,
+            actions: const <AndroidNotificationAction>[
+              AndroidNotificationAction(
+                'action_complete',
+                'Complete',
+                showsUserInterface: false,
+              ),
+              AndroidNotificationAction(
+                'action_snooze',
+                'Snooze',
+                showsUserInterface: true,
+              ),
+            ],
+          ),
+        ),
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        payload: payload,
+      );
+      appLogger.info('Scheduled exact notification $id for $tzScheduledDate');
+    } catch (e) {
+      appLogger.warning('Failed to schedule exact notification, falling back to inexact: $e');
+      // Fallback to inexact alarms for Android 14+ if permission is not granted
+      await _flutterLocalNotificationsPlugin.zonedSchedule(
+        id: id,
+        title: title,
+        body: body,
+        scheduledDate: tzScheduledDate,
+        notificationDetails: NotificationDetails(
+          android: AndroidNotificationDetails(
+            channelId,
+            channelName,
+            channelDescription: 'Notifications for task reminders',
+            importance: Importance.max,
+            priority: Priority.high,
+            visibility: NotificationVisibility.public,
+            groupKey: 'pastel_tasks_group',
+            playSound: playSound,
+            sound: soundName != null ? RawResourceAndroidNotificationSound(soundName) : null,
+            enableVibration: enableVibration,
+            actions: const <AndroidNotificationAction>[
+              AndroidNotificationAction(
+                'action_complete',
+                'Complete',
+                showsUserInterface: false,
+              ),
+              AndroidNotificationAction(
+                'action_snooze',
+                'Snooze',
+                showsUserInterface: true,
+              ),
+            ],
+          ),
+        ),
+        androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+        payload: payload,
+      );
+      appLogger.info('Scheduled inexact notification $id for $tzScheduledDate');
+    }
+  }
+
+  Future<void> showNotification({
+    required int id,
+    required String title,
+    required String body,
+    required String payload,
+  }) async {
+    await _flutterLocalNotificationsPlugin.show(
       id: id,
       title: title,
       body: body,
-      scheduledDate: tzScheduledDate,
-      notificationDetails: NotificationDetails(
+      notificationDetails: const NotificationDetails(
         android: AndroidNotificationDetails(
-          channelId,
-          channelName,
+          'pastel_tasks_reminders',
+          'Reminders',
           channelDescription: 'Notifications for task reminders',
           importance: Importance.max,
           priority: Priority.high,
           visibility: NotificationVisibility.public,
-          groupKey: 'pastel_tasks_group',
-          playSound: playSound,
-          sound: soundName != null ? RawResourceAndroidNotificationSound(soundName) : null,
-          enableVibration: enableVibration,
-          actions: const <AndroidNotificationAction>[
-            AndroidNotificationAction(
-              'action_complete',
-              'Complete',
-              showsUserInterface: false,
-            ),
-            AndroidNotificationAction(
-              'action_snooze',
-              'Snooze',
-              showsUserInterface: true,
-            ),
-          ],
         ),
       ),
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       payload: payload,
     );
-    appLogger.info('Scheduled notification $id for $tzScheduledDate');
   }
 
   Future<void> cancelNotification(int id) async {

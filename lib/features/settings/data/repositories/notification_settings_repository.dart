@@ -10,7 +10,7 @@ class NotificationSettingsRepository {
   static const _keyEnableSounds = 'notif_sounds';
   static const _keyEnableVibration = 'notif_vibration';
   static const _keyEnableHeadsUp = 'notif_heads_up';
-  static const _keyShowDescription = 'notif_show_desc';
+  static const _keyShowNote = 'notif_show_desc';
   static const _keyShowTag = 'notif_show_tag';
   static const _keyShowPriority = 'notif_show_priority';
   static const _keyQuietHoursEnabled = 'notif_qh_enabled';
@@ -26,7 +26,7 @@ class NotificationSettingsRepository {
     final enableSounds = await _preferencesService.read(_keyEnableSounds) as bool? ?? true;
     final enableVibration = await _preferencesService.read(_keyEnableVibration) as bool? ?? true;
     final enableHeadsUp = await _preferencesService.read(_keyEnableHeadsUp) as bool? ?? true;
-    final showDescription = await _preferencesService.read(_keyShowDescription) as bool? ?? true;
+    final showNote = await _preferencesService.read(_keyShowNote) as bool? ?? true;
     final showTag = await _preferencesService.read(_keyShowTag) as bool? ?? true;
     final showPriority = await _preferencesService.read(_keyShowPriority) as bool? ?? true;
     final quietHoursEnabled = await _preferencesService.read(_keyQuietHoursEnabled) as bool? ?? false;
@@ -42,7 +42,7 @@ class NotificationSettingsRepository {
       enableSounds: enableSounds,
       enableVibration: enableVibration,
       enableHeadsUp: enableHeadsUp,
-      showDescription: showDescription,
+      showNote: showNote,
       showTag: showTag,
       showPriority: showPriority,
       quietHoursEnabled: quietHoursEnabled,
@@ -60,7 +60,7 @@ class NotificationSettingsRepository {
     await _preferencesService.write(_keyEnableSounds, settings.enableSounds);
     await _preferencesService.write(_keyEnableVibration, settings.enableVibration);
     await _preferencesService.write(_keyEnableHeadsUp, settings.enableHeadsUp);
-    await _preferencesService.write(_keyShowDescription, settings.showDescription);
+    await _preferencesService.write(_keyShowNote, settings.showNote);
     await _preferencesService.write(_keyShowTag, settings.showTag);
     await _preferencesService.write(_keyShowPriority, settings.showPriority);
     await _preferencesService.write(_keyQuietHoursEnabled, settings.quietHoursEnabled);

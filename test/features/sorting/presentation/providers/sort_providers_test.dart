@@ -57,7 +57,7 @@ Task _createTask(String title, Priority priority, double position) {
   return Task(
     id: const Uuid().v4(),
     title: title,
-    description: '',
+    note: '',
     status: TaskStatus.pending,
     priority: priority,
     tags: const [],

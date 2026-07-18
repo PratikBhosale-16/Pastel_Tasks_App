@@ -9,7 +9,7 @@ extension TaskMapper on Task {
     return TaskCollection()
       ..uuid = id
       ..title = title
-      ..description = description
+      ..note = note
       ..status = status
       ..priority = priority
       ..tags = tags
@@ -39,7 +39,7 @@ extension TaskCollectionMapper on TaskCollection {
     return Task(
       id: uuid,
       title: title,
-      description: description,
+      note: note,
       status: status,
       priority: priority,
       tags: tags,

@@ -56,7 +56,7 @@ class TaskCreationHelper {
     final task = Task(
       id: taskId,
       title: formData.title,
-      description: formData.description,
+      note: formData.note,
       status: TaskStatus.pending,
       priority: formData.priority,
       tags: formData.tag != null ? [formData.tag!] : [],

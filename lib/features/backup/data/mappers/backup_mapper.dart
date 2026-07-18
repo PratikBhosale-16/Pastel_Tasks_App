@@ -37,7 +37,7 @@ class BackupMapper {
       'id': task.id,
       'uuid': task.uuid,
       'title': task.title,
-      'description': task.description,
+      'note': task.note,
       'status': task.status.name,
       'priority': task.priority.name,
       'tags': task.tags,
@@ -59,7 +59,7 @@ class BackupMapper {
     return TaskCollection()
       ..uuid = json['uuid'] as String? ?? const Uuid().v4()
       ..title = json['title'] as String
-      ..description = json['description'] as String
+      ..note = json['note'] as String
       ..status = TaskStatus.values.firstWhere((e) => e.name == json['status'], orElse: () => TaskStatus.pending)
       ..priority = Priority.values.firstWhere((e) => e.name == json['priority'], orElse: () => Priority.medium)
       ..tags = (json['tags'] as List).cast<String>()

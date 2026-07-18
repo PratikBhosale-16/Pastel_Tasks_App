@@ -423,8 +423,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                     ),
                   ),
-                  if (_isCompletedExpanded)
-                  SliverReorderableList(
+                  if (_isCompletedExpanded) ...[
+                    SliverReorderableList(
                     proxyDecorator: _proxyDecorator,
                     itemCount: completedTasks.length,
                     onReorder: isManualSort ? (oldIndex, newIndex) {
@@ -452,6 +452,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       );
                     },
                   ),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 16.0, bottom: 24.0),
+                      child: Center(
+                        child: TextButton(
+                          onPressed: () {
+                            context.push(RouteNames.completedTasksPath);
+                          },
+                          child: Text(
+                            'Check all completed tasks',
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              decoration: TextDecoration.underline,
+                              color: colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
                 ],
                 const SliverPadding(padding: EdgeInsets.only(bottom: 100)),
               ],

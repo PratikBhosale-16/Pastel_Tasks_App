@@ -10,12 +10,14 @@ import 'package:uuid/uuid.dart';
 import 'package:pastel_tasks/features/tags/presentation/widgets/tag_form_bottom_sheet.dart';
 import 'package:pastel_tasks/features/tasks/presentation/widgets/add_task_bottom_sheet/tag_selector_dropdown.dart';
 import 'package:pastel_tasks/features/tasks/presentation/widgets/add_task_bottom_sheet/date_time_picker_bottom_sheet.dart';
+import 'package:speech_to_text/speech_to_text.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:pastel_tasks/core/providers/core_providers.dart';
 
 class AddTaskFormData {
   const AddTaskFormData({
     required this.title,
-    required this.description,
+    required this.note,
     required this.priority,
     required this.subTasks,
     this.tag,
@@ -32,7 +34,7 @@ class AddTaskFormData {
   });
 
   final String title;
-  final String description; // Kept for backwards compatibility
+  final String note; // Kept for backwards compatibility
   final Priority priority;
   final List<SubTask> subTasks;
   final String? tag;
@@ -87,10 +89,10 @@ class AddTaskBottomSheet extends ConsumerStatefulWidget {
 
 class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
   final _titleController = TextEditingController();
-  final _descriptionController = TextEditingController();
+  final _noteController = TextEditingController();
   final List<TextEditingController> _subTaskControllers = [];
   
-  bool _showDescription = false;
+  bool _showNote = false;
   Priority _priority = Priority.medium;
   String? _tagId;
   DateTime? _dueDate;
@@ -103,14 +105,19 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
 
   bool _showColors = false;
 
+  final SpeechToText _speechToText = SpeechToText();
+  bool _isListening = false;
+  String _lastRecognizedWords = "";
+
   @override
   void initState() {
     super.initState();
+    _initSpeech();
     final task = widget.existingTask;
     if (task != null) {
       _titleController.text = task.title;
-      _descriptionController.text = task.description;
-      _showDescription = task.description.isNotEmpty;
+      _noteController.text = task.note;
+      _showNote = task.note.isNotEmpty;
       _priority = task.priority;
       _tagId = task.tags.isNotEmpty ? task.tags.first : null;
       _dueDate = task.dueDate;
@@ -133,6 +140,45 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
       _tagId = widget.initialTagId;
       _loadDefaults();
     }
+  }
+
+  void _initSpeech() async {
+    try {
+      await _speechToText.initialize(
+        onStatus: (status) {
+          if (mounted) {
+            setState(() {
+              _isListening = status == 'listening';
+            });
+          }
+        },
+      );
+    } catch (e) {
+      // Ignore
+    }
+  }
+
+  void _startListening() async {
+    if (await Permission.microphone.request().isGranted) {
+      _lastRecognizedWords = _titleController.text;
+      await _speechToText.listen(
+        onResult: (result) {
+          setState(() {
+            final newText = _lastRecognizedWords.isNotEmpty 
+              ? '$_lastRecognizedWords ${result.recognizedWords}'
+              : result.recognizedWords;
+            _titleController.text = newText;
+            _titleController.selection = TextSelection.fromPosition(TextPosition(offset: _titleController.text.length));
+          });
+        },
+      );
+      setState(() => _isListening = true);
+    }
+  }
+
+  void _stopListening() async {
+    await _speechToText.stop();
+    setState(() => _isListening = false);
   }
 
   Future<void> _loadDefaults() async {
@@ -166,7 +212,7 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
   @override
   void dispose() {
     _titleController.dispose();
-    _descriptionController.dispose();
+    _noteController.dispose();
     for (var c in _subTaskControllers) {
       c.dispose();
     }
@@ -211,7 +257,7 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
     final now = DateTime.now();
     final formData = AddTaskFormData(
       title: _titleController.text.trim(),
-      description: _descriptionController.text.trim(), 
+      note: _noteController.text.trim(), 
       priority: _priority,
       subTasks: finalSubTasks,
       tag: _tagId,
@@ -245,7 +291,7 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
     final result = await DateTimePickerBottomSheet.show(
       context,
       initialDueDate: _dueDate,
-      initialTime: _dueDate != null ? TimeOfDay.fromDateTime(_dueDate!) : null,
+      initialTime: (_dueDate != null && (_dueDate!.hour != 0 || _dueDate!.minute != 0 || _reminder != null)) ? TimeOfDay.fromDateTime(_dueDate!) : null,
       initialReminderTime: _reminder,
       initialRepeatRule: _repeatRule,
       initialRepeatEndDate: _repeatEndDate,
@@ -325,26 +371,24 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.mic_none),
-                      onPressed: () {
-                        // Voice input stub
-                      },
-                      color: theme.colorScheme.onSurfaceVariant,
+                      icon: Icon(_isListening ? Icons.mic : Icons.mic_none),
+                      color: _isListening ? theme.colorScheme.primary : theme.colorScheme.onSurfaceVariant,
+                      onPressed: _isListening ? _stopListening : _startListening,
                     )
                   ],
                 ),
               ),
 
-              // Description
-              if (_showDescription)
+              // Note
+              if (_showNote)
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
                   child: TextField(
-                    controller: _descriptionController,
+                    controller: _noteController,
                     style: theme.textTheme.bodyMedium,
                     maxLines: null,
                     decoration: InputDecoration(
-                      hintText: 'Add details...',
+                      hintText: 'Add notes...',
                       border: InputBorder.none,
                       isDense: true,
                       hintStyle: theme.textTheme.bodyMedium?.copyWith(
@@ -573,7 +617,7 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
                       constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
                     ),
                     
-                    // Subtask / Description
+                    // Subtask / Note
                     PopupMenuButton<String>(
                       icon: Icon(
                         Icons.subdirectory_arrow_right,
@@ -585,9 +629,9 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
                       onSelected: (String value) {
                         if (value == 'subtask') {
                           _addSubTask();
-                        } else if (value == 'description') {
+                        } else if (value == 'note') {
                           setState(() {
-                            _showDescription = true;
+                            _showNote = true;
                           });
                         }
                       },
@@ -597,8 +641,8 @@ class _AddTaskBottomSheetState extends ConsumerState<AddTaskBottomSheet> {
                           child: Text('Add Subtask'),
                         ),
                         const PopupMenuItem<String>(
-                          value: 'description',
-                          child: Text('Add Description'),
+                          value: 'note',
+                          child: Text('Add Note'),
                         ),
                       ],
                     ),

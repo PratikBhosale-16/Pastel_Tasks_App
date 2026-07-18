@@ -14,7 +14,8 @@ class TaskCollection {
 
   late String title;
 
-  late String description;
+  @Name('description')
+  late String note;
 
   List<String> tags = [];
 

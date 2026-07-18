@@ -26,7 +26,7 @@ class MergeTagDialog extends StatelessWidget {
     final validTargets = allTags.where((t) => t.id != sourceTag.id).toList();
 
     return AlertDialog(
-      title: const Text('Merge Tag Into...'),
+      title: const Text('Merge Category Into...'),
       content: SizedBox(
         width: double.maxFinite,
         child: validTargets.isEmpty

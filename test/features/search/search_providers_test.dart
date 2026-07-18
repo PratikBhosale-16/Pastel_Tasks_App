@@ -15,7 +15,7 @@ void main() {
       Task(
         id: '1',
         title: 'Buy groceries',
-        description: 'Milk, Eggs, Bread',
+        note: 'Milk, Eggs, Bread',
         status: TaskStatus.pending,
         priority: Priority.medium,
         tags: ['shopping', 'home'],
@@ -31,7 +31,7 @@ void main() {
       Task(
         id: '2',
         title: 'Team Meeting',
-        description: 'Discuss Q3 goals',
+        note: 'Discuss Q3 goals',
         status: TaskStatus.pending,
         priority: Priority.high,
         tags: ['work'],
@@ -47,7 +47,7 @@ void main() {
       Task(
         id: '3',
         title: 'Doctor Appointment',
-        description: '',
+        note: '',
         status: TaskStatus.pending,
         priority: Priority.low,
         tags: ['health'],
@@ -89,7 +89,7 @@ void main() {
       expect(searchedTasks.value!.first.title, 'Buy groceries');
     });
 
-    test('searchedTasksProvider matches description', () {
+    test('searchedTasksProvider matches note', () {
       container.read(debouncedSearchQueryProvider.notifier).state = 'Q3 goals';
       final searchedTasks = container.read(searchedTasksProvider);
       
@@ -113,7 +113,7 @@ void main() {
       expect(searchedTasks.value!.first.title, 'Buy groceries');
     });
     
-    test('searchedTasksProvider handles tasks with null description gracefully', () {
+    test('searchedTasksProvider handles tasks with empty note gracefully', () {
       container.read(debouncedSearchQueryProvider.notifier).state = 'appointment';
       final searchedTasks = container.read(searchedTasksProvider);
       

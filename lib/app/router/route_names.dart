@@ -20,6 +20,12 @@ abstract final class RouteNames {
   /// Archive route path.
   static const archivePath = '/archive';
 
+  /// Completed tasks route name.
+  static const completedTasks = 'completed_tasks';
+
+  /// Completed tasks route path.
+  static const completedTasksPath = '/completed_tasks';
+
   /// Tags route name.
   static const tags = 'tags';
 
@@ -37,4 +43,10 @@ abstract final class RouteNames {
 
   /// Settings route path.
   static const settingsPath = '/settings';
+
+  /// Task details route name.
+  static const taskDetails = 'taskDetails';
+
+  /// Task details route path.
+  static const taskDetailsPath = '/task/:id';
 }

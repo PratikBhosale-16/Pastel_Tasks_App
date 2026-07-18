@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-07-18
+
+### Completed
+- **UI Overhaul (Task Details)**:
+  - Redesigned `TaskDetailsScreen` to support inline editing for Title and Notes dynamically within the page context.
+  - Replaced the previous `_editTask` form behavior for Date, Time, Reminder, and Repeat with native, inline `DateTimePickerBottomSheet` interactions.
+  - Implemented Attachment picking leveraging `file_picker` and `path_provider`, saving attachments locally to the app's document directory and visually rendering them on the task detail view.
+  - Replaced all user-facing instances of "Tag" with "Category" across the codebase without migrating the underlying domain/database schema, preventing costly data migrations.
+  - Built a new `CategorySelectionBottomSheet` tailored for assigning existing or creating new categories from within `TaskDetailsScreen`.
+
 ## 2026-07-16
 
 ### Fixed

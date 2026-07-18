@@ -181,7 +181,7 @@ class SortBottomSheet extends ConsumerWidget {
       case TaskSortOption.color:
         return 'Color';
       case TaskSortOption.tag:
-        return 'Tag';
+        return 'Category';
     }
   }
 }

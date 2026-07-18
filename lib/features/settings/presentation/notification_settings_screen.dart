@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pastel_tasks/features/settings/presentation/providers/notification_settings_provider.dart';
+import 'package:pastel_tasks/core/services/notification_service.dart';
 
 class NotificationSettingsScreen extends ConsumerWidget {
   const NotificationSettingsScreen({super.key});
@@ -53,20 +54,41 @@ class NotificationSettingsScreen extends ConsumerWidget {
                     notifier.updateSettings(settings.copyWith(enableHeadsUp: val));
                   },
                 ),
-                const Divider(),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: Text('Content', style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
-                SwitchListTile(
-                  title: const Text('Show Description'),
-                  value: settings.showDescription,
-                  onChanged: (val) {
-                    notifier.updateSettings(settings.copyWith(showDescription: val));
+                ListTile(
+                  title: const Text('Test Notification'),
+                  subtitle: const Text('Tap to show an immediate test notification'),
+                  trailing: const Icon(Icons.notifications_active),
+                  onTap: () async {
+                    try {
+                      await NotificationService.instance.showNotification(
+                        id: 99999,
+                        title: 'Test Notification',
+                        body: 'This is a test notification to verify sounds and visibility.',
+                        payload: 'test',
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Test notification sent!')),
+                      );
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Failed: $e')),
+                      );
+                    }
                   },
                 ),
                 SwitchListTile(
-                  title: const Text('Show Tag'),
+                  title: const Text('Show Note'),
+                  value: settings.showNote,
+                  onChanged: (val) {
+                    notifier.updateSettings(settings.copyWith(showNote: val));
+                  },
+                ),
+                SwitchListTile(
+                  title: const Text('Show Category'),
                   value: settings.showTag,
                   onChanged: (val) {
                     notifier.updateSettings(settings.copyWith(showTag: val));

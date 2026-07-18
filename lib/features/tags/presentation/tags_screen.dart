@@ -84,7 +84,7 @@ class _TagsScreenState extends ConsumerState<TagsScreen> with SingleTickerProvid
   Future<void> _deleteTag(Tag tag, int taskCount) async {
     final confirmed = await ConfirmationDialog.show(
       context: context,
-      title: 'Delete Tag?',
+      title: 'Delete Category?',
       message: 'This tag is used by $taskCount task(s). Deleting it will remove it from all tasks.',
       confirmText: 'Delete',
       cancelText: 'Cancel',
@@ -216,7 +216,7 @@ class _TagsScreenState extends ConsumerState<TagsScreen> with SingleTickerProvid
               childAspectRatio: 0.9,
             ),
             onReorder: (oldIndex, newIndex) {
-              // 'New Tag' card is at the end, prevent moving it or moving over it.
+              // 'New Category' card is at the end, prevent moving it or moving over it.
               if (oldIndex == tags.length || newIndex == tags.length) return;
               HapticFeedback.lightImpact();
               ref.read(tagNotifierProvider.notifier).reorder(oldIndex, newIndex);
@@ -230,7 +230,7 @@ class _TagsScreenState extends ConsumerState<TagsScreen> with SingleTickerProvid
                 child: child,
               );
             },
-            itemCount: tags.length + 1, // +1 for "New Tag" tile
+            itemCount: tags.length + 1, // +1 for "New Category" tile
             itemBuilder: (context, index) {
               if (index == tags.length) {
                 return _buildNewTagCard();

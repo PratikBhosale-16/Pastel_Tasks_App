@@ -10,7 +10,7 @@ class Task extends Equatable {
   const Task({
     required this.id,
     required this.title,
-    required this.description,
+    required this.note,
     required this.status,
     required this.priority,
     required this.tags,
@@ -37,8 +37,8 @@ class Task extends Equatable {
   /// The title of the task.
   final String title;
 
-  /// A short description.
-  final String description;
+  /// A short note.
+  final String note;
 
   /// Current task status.
   final TaskStatus status;
@@ -97,7 +97,7 @@ class Task extends Equatable {
   Task copyWith({
     String? id,
     String? title,
-    String? description,
+    String? note,
     TaskStatus? status,
     Priority? priority,
     List<String>? tags,
@@ -123,7 +123,7 @@ class Task extends Equatable {
     return Task(
       id: id ?? this.id,
       title: title ?? this.title,
-      description: description ?? this.description,
+      note: note ?? this.note,
       status: status ?? this.status,
       priority: priority ?? this.priority,
       tags: tags ?? this.tags,
@@ -149,7 +149,7 @@ class Task extends Equatable {
   List<Object?> get props => [
         id,
         title,
-        description,
+        note,
         status,
         priority,
         tags,

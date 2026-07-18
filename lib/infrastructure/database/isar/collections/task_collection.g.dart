@@ -265,7 +265,7 @@ int _taskCollectionEstimateSize(
     }
   }
   bytesCount += 3 + object.color.length * 3;
-  bytesCount += 3 + object.description.length * 3;
+  bytesCount += 3 + object.note.length * 3;
   {
     final value = object.richText;
     if (value != null) {
@@ -303,7 +303,7 @@ void _taskCollectionSerialize(
   writer.writeString(offsets[1], object.color);
   writer.writeDateTime(offsets[2], object.completedAt);
   writer.writeDateTime(offsets[3], object.createdAt);
-  writer.writeString(offsets[4], object.description);
+  writer.writeString(offsets[4], object.note);
   writer.writeDateTime(offsets[5], object.dueDate);
   writer.writeLong(offsets[6], object.estimatedMinutes);
   writer.writeBool(offsets[7], object.isArchived);
@@ -339,7 +339,7 @@ TaskCollection _taskCollectionDeserialize(
   object.color = reader.readString(offsets[1]);
   object.completedAt = reader.readDateTimeOrNull(offsets[2]);
   object.createdAt = reader.readDateTime(offsets[3]);
-  object.description = reader.readString(offsets[4]);
+  object.note = reader.readString(offsets[4]);
   object.dueDate = reader.readDateTimeOrNull(offsets[5]);
   object.estimatedMinutes = reader.readLongOrNull(offsets[6]);
   object.id = id;
@@ -1938,7 +1938,7 @@ extension TaskCollectionQueryFilter
   }
 
   QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
-      descriptionEqualTo(
+      noteEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1952,7 +1952,7 @@ extension TaskCollectionQueryFilter
   }
 
   QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
-      descriptionGreaterThan(
+      noteGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1968,7 +1968,7 @@ extension TaskCollectionQueryFilter
   }
 
   QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
-      descriptionLessThan(
+      noteLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1984,7 +1984,7 @@ extension TaskCollectionQueryFilter
   }
 
   QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
-      descriptionBetween(
+      noteBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -2004,7 +2004,7 @@ extension TaskCollectionQueryFilter
   }
 
   QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
-      descriptionStartsWith(
+      noteStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2018,7 +2018,7 @@ extension TaskCollectionQueryFilter
   }
 
   QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
-      descriptionEndsWith(
+      noteEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2032,7 +2032,7 @@ extension TaskCollectionQueryFilter
   }
 
   QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
-      descriptionContains(String value, {bool caseSensitive = true}) {
+      noteContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'description',
@@ -2043,7 +2043,7 @@ extension TaskCollectionQueryFilter
   }
 
   QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
-      descriptionMatches(String pattern, {bool caseSensitive = true}) {
+      noteMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'description',
@@ -2054,7 +2054,7 @@ extension TaskCollectionQueryFilter
   }
 
   QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
-      descriptionIsEmpty() {
+      noteIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'description',
@@ -2064,7 +2064,7 @@ extension TaskCollectionQueryFilter
   }
 
   QueryBuilder<TaskCollection, TaskCollection, QAfterFilterCondition>
-      descriptionIsNotEmpty() {
+      noteIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'description',
@@ -3603,15 +3603,13 @@ extension TaskCollectionQuerySortBy
     });
   }
 
-  QueryBuilder<TaskCollection, TaskCollection, QAfterSortBy>
-      sortByDescription() {
+  QueryBuilder<TaskCollection, TaskCollection, QAfterSortBy> sortByNote() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'description', Sort.asc);
     });
   }
 
-  QueryBuilder<TaskCollection, TaskCollection, QAfterSortBy>
-      sortByDescriptionDesc() {
+  QueryBuilder<TaskCollection, TaskCollection, QAfterSortBy> sortByNoteDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'description', Sort.desc);
     });
@@ -3858,15 +3856,13 @@ extension TaskCollectionQuerySortThenBy
     });
   }
 
-  QueryBuilder<TaskCollection, TaskCollection, QAfterSortBy>
-      thenByDescription() {
+  QueryBuilder<TaskCollection, TaskCollection, QAfterSortBy> thenByNote() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'description', Sort.asc);
     });
   }
 
-  QueryBuilder<TaskCollection, TaskCollection, QAfterSortBy>
-      thenByDescriptionDesc() {
+  QueryBuilder<TaskCollection, TaskCollection, QAfterSortBy> thenByNoteDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'description', Sort.desc);
     });
@@ -4114,7 +4110,7 @@ extension TaskCollectionQueryWhereDistinct
     });
   }
 
-  QueryBuilder<TaskCollection, TaskCollection, QDistinct> distinctByDescription(
+  QueryBuilder<TaskCollection, TaskCollection, QDistinct> distinctByNote(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'description', caseSensitive: caseSensitive);
@@ -4262,7 +4258,7 @@ extension TaskCollectionQueryProperty
     });
   }
 
-  QueryBuilder<TaskCollection, String, QQueryOperations> descriptionProperty() {
+  QueryBuilder<TaskCollection, String, QQueryOperations> noteProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'description');
     });

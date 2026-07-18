@@ -16,8 +16,8 @@ class TaskValidator {
       throw ArgumentError('Title length cannot exceed 150 characters.');
     }
 
-    if (task.description.length > 5000) {
-      throw ArgumentError('Description length cannot exceed 5000 characters.');
+    if (task.note.length > 5000) {
+      throw ArgumentError('Note length cannot exceed 5000 characters.');
     }
 
     if (task.dueDate != null) {

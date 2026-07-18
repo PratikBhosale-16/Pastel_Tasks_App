@@ -6,7 +6,7 @@ class NotificationSettings extends Equatable {
     this.enableSounds = true,
     this.enableVibration = true,
     this.enableHeadsUp = true,
-    this.showDescription = true,
+    this.showNote = true,
     this.showTag = true,
     this.showPriority = true,
     this.quietHoursEnabled = false,
@@ -22,7 +22,7 @@ class NotificationSettings extends Equatable {
   final bool enableSounds;
   final bool enableVibration;
   final bool enableHeadsUp;
-  final bool showDescription;
+  final bool showNote;
   final bool showTag;
   final bool showPriority;
   final bool quietHoursEnabled;
@@ -38,7 +38,7 @@ class NotificationSettings extends Equatable {
     bool? enableSounds,
     bool? enableVibration,
     bool? enableHeadsUp,
-    bool? showDescription,
+    bool? showNote,
     bool? showTag,
     bool? showPriority,
     bool? quietHoursEnabled,
@@ -54,7 +54,7 @@ class NotificationSettings extends Equatable {
       enableSounds: enableSounds ?? this.enableSounds,
       enableVibration: enableVibration ?? this.enableVibration,
       enableHeadsUp: enableHeadsUp ?? this.enableHeadsUp,
-      showDescription: showDescription ?? this.showDescription,
+      showNote: showNote ?? this.showNote,
       showTag: showTag ?? this.showTag,
       showPriority: showPriority ?? this.showPriority,
       quietHoursEnabled: quietHoursEnabled ?? this.quietHoursEnabled,
@@ -73,7 +73,7 @@ class NotificationSettings extends Equatable {
         enableSounds,
         enableVibration,
         enableHeadsUp,
-        showDescription,
+        showNote,
         showTag,
         showPriority,
         quietHoursEnabled,

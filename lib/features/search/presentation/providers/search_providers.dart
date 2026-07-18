@@ -57,8 +57,8 @@ final searchedTasksProvider = Provider<AsyncValue<List<Task>>>((ref) {
       // 1. Title
       if (task.title.toLowerCase().contains(searchQuery)) return true;
       
-      // 2. Description
-      if (task.description != null && task.description!.toLowerCase().contains(searchQuery)) return true;
+      // 2. Note
+      if (task.note.toLowerCase().contains(searchQuery)) return true;
       
       // 3. Tags
       if (task.tags.any((tag) => tag.toLowerCase().contains(searchQuery))) return true;
