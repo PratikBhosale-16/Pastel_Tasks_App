@@ -9,8 +9,8 @@
 
 # Architecture
 
-- **Current Milestone**: UI Overhaul (Task Details)
-- **Progress**: Redesigned TaskDetailsScreen to support inline editing for title and notes, direct bottom sheet interactions for Date/Time/Repeat, integrated attachment picking and storage, and renamed UI references from "Tag" to "Category" using a new CategorySelectionBottomSheet.
+- **Current Milestone**: UI Overhaul & Fixes (Task Details & Input)
+- **Progress**: Implemented speech-to-text in the Add Task bottom sheet and fixed time clearing logic. Redesigned TaskDetailsScreen to support inline editing for title and notes, direct bottom sheet interactions for Date/Time/Repeat, integrated attachment picking and storage, and renamed UI references from "Tag" to "Category" using a new CategorySelectionBottomSheet.
 - **Active Architecture**: Feature-First, Clean Architecture, MVVM, Riverpod, GoRouter, Isar. Data-driven UI for Settings module.
 
 - Feature First project organization.
@@ -38,10 +38,10 @@
 - Minimum Android API: Android 12, API 31.
 
 ## Current Milestone
-**UI Overhaul (Task Details)**
+**UI Overhaul & Fixes**
 - Status: Completed.
 - Next milestone: TBD
-- Focus: Implemented inline title/note editing, inline bottom sheets for category, date, time and repetition, and added an attachment picker.
+- Focus: Implemented inline title/note editing, inline bottom sheets for category, date, time and repetition, added an attachment picker, integrated speech-to-text for task titles, and fixed reminder clear logic.
 
 # Completed
 
